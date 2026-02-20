@@ -36,6 +36,9 @@ RUN dotnet publish "MiniTwit.Web.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 
+# folder for database
+RUN mkdir -p /app/Data
+
 #copy the publish from publish-stage into the final stage.
 COPY --from=publish /app/publish .
 
