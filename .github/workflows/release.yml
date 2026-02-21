@@ -37,9 +37,9 @@ jobs:
           release_name="App-$tag-linux-x64"
 
           # Build everything
-          dotnet publish src/Chirp.Web/Chirp.Web.csproj --framework net8.0 --runtime linux-x64 -c Release -o "Linux-release" -p:PublishSingleFile=true
+          dotnet publish src/MiniTwit.Web/MiniTwit.Web.csproj --framework net8.0 --runtime linux-x64 -c Release -o "Linux-release" -p:PublishSingleFile=true
           
-          7z a -tzip "Chirp-Linux-release.zip" "Linux-release"
+          7z a -tzip "MiniTwit-Linux-release.zip" "Linux-release"
 
           rm -r Linux-release
 
@@ -52,9 +52,9 @@ jobs:
           release_name="App-$tag-osx-x64"
 
           # Build everything
-          dotnet publish src/Chirp.Web/Chirp.Web.csproj --framework net8.0 --runtime osx-x64 -c Release -o "MacOS-release" -p:PublishSingleFile=true
+          dotnet publish src/MiniTwit.Web/MiniTwit.Web.csproj --framework net8.0 --runtime osx-x64 -c Release -o "MacOS-release" -p:PublishSingleFile=true
           
-          7z a -tzip "Chirp-MacOS-release.zip" "MacOS-release"
+          7z a -tzip "MiniTwit-MacOS-release.zip" "MacOS-release"
 
           rm -r MacOS-release
 
@@ -68,9 +68,9 @@ jobs:
           release_name="App-$tag-win-x64"
 
           # Build everything
-          dotnet publish src/Chirp.Web/Chirp.Web.csproj --framework net8.0 --runtime win-x64 -c Release -o "Windows-release" -p:PublishSingleFile=true
+          dotnet publish src/MiniTwit.Web/MiniTwit.Web.csproj --framework net8.0 --runtime win-x64 -c Release -o "Windows-release" -p:PublishSingleFile=true
           
-          7z a -tzip "Chirp-Windows-release.zip" "./Windows-release/*"
+          7z a -tzip "MiniTwit-Windows-release.zip" "./Windows-release/*"
 
           rm -r Windows-release
 
@@ -78,8 +78,8 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
           files: |
-           Chirp-Linux-release.zip
-           Chirp-MacOS-release.zip
-           Chirp-Windows-release.zip
+           MiniTwit-Linux-release.zip
+           MiniTwit-MacOS-release.zip
+           MiniTwit-Windows-release.zip
             
           repo-token: ${{ secrets.GITHUB_TOKEN }}
