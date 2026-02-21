@@ -62,3 +62,5 @@ Header with Lecture number.
 - The general idea is as follows: We have the github workflow `cicd.yaml`, which is the general file that first creates the minitwit image that gets uploaded to Dockerhub (CI - Continuous Integration). Remember to setup secrets (look at our README.md or exercises for session04). The workflow then runs tests. This still needs to be setup. The workflow ssh into the server, and runs the `deploy.sh` script.
 - The `deploy.sh` script pulls the latest image of our minitwit and runs docker compose, using the `docker-compose.yml`file, which works the same way as before, now it, instead of building the image, uses the image we put on Dockerhub.
 - The Vagrantfile also changed. It not only syncs the `remote_files` directory, as it contains the `deploy.sh` and `docker-compose.yml` files.
+
+21/02: 14:20: Added `build_and_test` and `release` workflows (taken from Chirp). The `build_and_test` will run on pushes to main or by triggering it manually (mostly for testing purposes - which i will do now). When completed and if it succeeds, it will trigger the `release` and `cdcd` workflows, creating a release and staring the CI/CD pipeline.
