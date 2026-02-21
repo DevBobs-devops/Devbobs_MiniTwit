@@ -2,18 +2,14 @@
 name: cicd
 
 on:
-  push:
-    #Run workflow on a push to main
-    branches: 
-      - main
-
-  # manual triggers to debug
-  workflow_dispatch:
-    manual: true
+  workflow_run:
+    workflows: ["Build and Test"]
+    types: [completed]
 
 
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -39,7 +35,7 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwitimage:webbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwitimage:webbuildcache,mode=max
 
-      - name: Test minitwit
+      - name: Test minitwit #We run build and test workflow before this, but we could add something...?
         run: |
           echo "test"
         env:
