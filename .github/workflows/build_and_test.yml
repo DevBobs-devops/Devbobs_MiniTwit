@@ -19,9 +19,9 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore itu-minitwit
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build itu-minitwit --no-restore
     - name: Test
       run: |
-        dotnet test --filter FullyQualifiedName!~PlaywrightTests --configuration Release
+        dotnet test itu-minitwit --filter FullyQualifiedName!~PlaywrightTests --configuration Release

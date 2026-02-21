@@ -19,9 +19,9 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore itu-minitwit
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build itu-minitwit --no-restore
   
     - name: Setup
       uses: actions/setup-dotnet@v4
@@ -31,6 +31,7 @@ jobs:
     - name: Build Linux
       shell: bash
       run: |
+          cd itu-minitwit
           # Define some variables for things we need
           tag=$(git describe --tags --abbrev=0)
           release_name="App-$tag-linux-x64"
@@ -45,6 +46,7 @@ jobs:
     - name: Build MacOS
       shell: bash
       run: |
+          itu-minitwit
           # Define some variables for things we need
           tag=$(git describe --tags --abbrev=0)
           release_name="App-$tag-osx-x64"
@@ -60,6 +62,7 @@ jobs:
     - name: Build Windows
       shell: bash
       run: |
+          itu-minitwit
           # Define some variables for things we need
           tag=$(git describe --tags --abbrev=0)
           release_name="App-$tag-win-x64"
