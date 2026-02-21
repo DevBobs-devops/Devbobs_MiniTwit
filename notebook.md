@@ -56,3 +56,11 @@ Header with Lecture number.
 - Was because `rsync` was overwritting everything in /vagrant on the VM with the local folder - which meant the database too.
 - The Vagrantfile now creates a `/minitwit/data` folder, that will contains the database file. Then updated the docker compose file, such that it is mapping the database file in the Docker container to `/minitwit/data`. 
 - Current server: http://159.89.20.247:8080/
+
+# Lecture 04
+20/02: 12:30: Setup our ci/cd pipeline (not tested yet, needs to be in main). 
+- The general idea is as follows: We have the github workflow `cicd.yaml`, which is the general file that first creates the minitwit image that gets uploaded to Dockerhub (CI - Continuous Integration). Remember to setup secrets (look at our README.md or exercises for session04). The workflow then runs tests. This still needs to be setup. The workflow ssh into the server, and runs the `deploy.sh` script.
+- The `deploy.sh` script pulls the latest image of our minitwit and runs docker compose, using the `docker-compose.yml`file, which works the same way as before, now it, instead of building the image, uses the image we put on Dockerhub.
+- The Vagrantfile also changed. It not only syncs the `remote_files` directory, as it contains the `deploy.sh` and `docker-compose.yml` files.
+
+21/02: 14:20: Added `build_and_test` and `release` workflows (taken from Chirp). The `build_and_test` will run on pushes to main or by triggering it manually (mostly for testing purposes - which i will do now). When completed and if it succeeds, it will trigger the `release` and `cdcd` workflows, creating a release and staring the CI/CD pipeline.
