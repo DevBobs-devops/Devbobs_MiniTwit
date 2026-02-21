@@ -42,9 +42,25 @@ Header with Lecture number.
 
 
 # Lecture 04
+13/02: 11:45: Had problems with docker not being installed on VM on DigitalOcean. 
+- Fixed with using the same commands we used to install docker in session02 PREP.md. Had problem with missing commandline flag `-y` but fixed.
 
+13/02: 12:10: Fixed that `docker compose up`. Was not run from the right folder. That came with a new problem: the script would not recognize docker even though when manually ssh' into the VM, docker was installed.
+
+14/02: 13:46: Fixed problem with docker not being recoginzed
+- Explaned the problem to ChatGPT and it taught me that when a provisioner run (the script running after the server is created), it may not have updated the PATH, so docker is not recognised. It was therefore fixed by using two provisioner scripts, one for installing docker and one for running docker (each in their own shell).
+- To spin up new Droplet, run: `vagrant up`. To destroy the droplet, run: `vagrant destroy` . If we make changes to MiniTwit and want it on the server, run: `vagrant rsync`, then `vagrant ssh`, `cd /vagrant`, and then `docker compose up -d --build`.
+
+14/02: 14:25: Tested if database persisted when updating MiniTwit, it did not.
+- Was because `rsync` was overwritting everything in /vagrant on the VM with the local folder - which meant the database too.
+- The Vagrantfile now creates a `/minitwit/data` folder, that will contains the database file. Then updated the docker compose file, such that it is mapping the database file in the Docker container to `/minitwit/data`. 
+- Current server: http://159.89.20.247:8080/
+
+17/02 13:11
 To run the Server with minimal API, from the itu-minitwit/src/MiniTwit.Web run `dotnet run`
 The API can be observed on http://localhost:5221/swagger/index.html
 To run the simulator against the API, find the simulator at BSc_lecture_notes/sessions/session_03/API_Spec and run `python3 minitwit_simulator.py http://localhost:5221/` (while the server is running)
 To fit the 'minitwit_sim_api_test.py' tests to the application, set the BASE_URL at line 10 to 'http://127.0.0.1:5221', and out-comment lines 30 and 31. 
 To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while the server is running)
+12/02: 11:00: Put database into folder. So we later can use this folder as our Docker Volume
+12/02: 11:27:  Created docker compose file, such that we can persists out database. The docker container is linked to our /src/MiniTwit.Web/Data folder - so when we close and open the container the data persists. Can run it with `docker compose up`.

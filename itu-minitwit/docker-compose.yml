@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    build: . # build the image from the Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - /minitwit/data:/app/Data  # mount database folder on vm to : our workdir in Dockerfile is /app, and the rest need to match our connectionstring
+      
+
+#Inspiration/guide: https://medium.com/@Shamimw/docker-a-complete-tutorial-part3-docker-compose-2e3b2f568a6f

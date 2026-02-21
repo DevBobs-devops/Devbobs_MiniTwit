@@ -11,6 +11,10 @@
 *.sln.docstates
 *.idea
 
+# vagrant files
+*.vagrant
+
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
