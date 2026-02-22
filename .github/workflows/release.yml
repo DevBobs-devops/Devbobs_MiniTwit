@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest #consider if this should match the linux enviroment we run in vm
+    runs-on: ubuntu-24.04 # matches version in droplets
 
     steps:
     - uses: actions/checkout@v4
