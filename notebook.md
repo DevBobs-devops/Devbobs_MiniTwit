@@ -40,9 +40,8 @@ Header with Lecture number.
 # Lecture 03
 10/02: 11:35: Refactord Chirp to be named MiniTwit & Moved legacy code to own branch.
 
-12/02: 11:00: Put database into folder. So we later can use this folder as our Docker Volume
-12/02: 11:27:  Created docker compose file, such that we can persists out database. The docker container is linked to our /src/MiniTwit.Web/Data folder - so when we close and open the container the data persists. Can run it with `docker compose up`.
 
+# Lecture 04
 13/02: 11:45: Had problems with docker not being installed on VM on DigitalOcean. 
 - Fixed with using the same commands we used to install docker in session02 PREP.md. Had problem with missing commandline flag `-y` but fixed.
 
@@ -57,7 +56,31 @@ Header with Lecture number.
 - The Vagrantfile now creates a `/minitwit/data` folder, that will contains the database file. Then updated the docker compose file, such that it is mapping the database file in the Docker container to `/minitwit/data`. 
 - Current server: http://159.89.20.247:8080/
 
+17/02 13:11
+To run the Server with minimal API, from the itu-minitwit/src/MiniTwit.Web run `dotnet run`
+The API can be observed on http://localhost:5221/swagger/index.html
+To run the simulator against the API, find the simulator at BSc_lecture_notes/sessions/session_03/API_Spec and run `python3 minitwit_simulator.py http://localhost:5221/` (while the server is running)
+To fit the 'minitwit_sim_api_test.py' tests to the application, set the BASE_URL at line 10 to 'http://127.0.0.1:5221', and out-comment lines 30 and 31. 
+To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while the server is running)
+12/02: 11:00: Put database into folder. So we later can use this folder as our Docker Volume
+12/02: 11:27:  Created docker compose file, such that we can persists out database. The docker container is linked to our /src/MiniTwit.Web/Data folder - so when we close and open the container the data persists. Can run it with `docker compose up`.
+=======
 # Lecture 04
+12/02: 11:00: Put database into folder. So we later can use this folder as our Docker Volume
+12/02: 11:27:  Created docker compose file, such that we can persists out database. The docker container is linked to our /src/MiniTwit.Web/Data folder - so when we close and open the container the data persists. Can run it with `docker compose up`.
+
+17/02 13:11
+To run the Server with minimal API, from the itu-minitwit/src/MiniTwit.Web run `dotnet run`
+The API can be observed on http://localhost:5221/swagger/index.html
+To run the simulator against the API, find the simulator at BSc_lecture_notes/sessions/session_03/API_Spec and run `python3 minitwit_simulator.py http://localhost:5221/` (while the server is running)
+To fit the 'minitwit_sim_api_test.py' tests to the application, set the BASE_URL at line 10 to 'http://127.0.0.1:5221', and out-comment lines 30 and 31.
+To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while the server is running)
+
+20/02: 12:30: Setup our ci/cd pipeline (not tested yet, needs to be in main). 
+- The general idea is as follows: We have the github workflow `cicd.yaml`, which is the general file that first creates the minitwit image that gets uploaded to Dockerhub (CI - Continuous Integration). Remember to setup secrets (look at our README.md or exercises for session04). The workflow then runs tests. This still needs to be setup. The workflow ssh into the server, and runs the `deploy.sh` script.
+- The `deploy.sh` script pulls the latest image of our minitwit and runs docker compose, using the `docker-compose.yml`file, which works the same way as before, now it, instead of building the image, uses the image we put on Dockerhub.
+- The Vagrantfile also changed. It not only syncs the `remote_files` directory, as it contains the `deploy.sh` and `docker-compose.yml` files.
+
 20/02: 12:30: Setup our ci/cd pipeline (not tested yet, needs to be in main). 
 - The general idea is as follows: We have the github workflow `cicd.yaml`, which is the general file that first creates the minitwit image that gets uploaded to Dockerhub (CI - Continuous Integration). Remember to setup secrets (look at our README.md or exercises for session04). The workflow then runs tests. This still needs to be setup. The workflow ssh into the server, and runs the `deploy.sh` script.
 - The `deploy.sh` script pulls the latest image of our minitwit and runs docker compose, using the `docker-compose.yml`file, which works the same way as before, now it, instead of building the image, uses the image we put on Dockerhub.

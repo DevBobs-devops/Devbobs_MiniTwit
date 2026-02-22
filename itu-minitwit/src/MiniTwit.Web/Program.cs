@@ -2,6 +2,7 @@ using Chirp.Core;
 using Chirp.Infrastructure.Chirp.Repositories;
 using Chirp.Infrastructure.Chirp.Services;
 using Chirp.Infrastructure.data;
+using Chirp.Web;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,9 +28,16 @@ builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IFollowRepository, FollowRepository>();
 builder.Services.AddScoped<IChirpService, ChirpService>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 using ( var serviceScope = app.Services.CreateScope() )
 {
@@ -59,6 +67,8 @@ app.UseAuthorization();
 app.UseSession();
 
 app.MapRazorPages();
+
+app.MapProductEndpoints();
 
 app.Run(); 
 
