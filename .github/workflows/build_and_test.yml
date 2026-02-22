@@ -37,7 +37,7 @@ jobs:
           pip install requests
     - name: Run MiniTwit
       run: |
-        dotnet run itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj
+        dotnet run --project itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj
     - name: Test Pytest
       run: | 
         pytest itu-minitwit/test/minitwit_sim_api_test.py
