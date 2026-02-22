@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # matches version in droplets
 
     steps:
     - uses: actions/checkout@v4
