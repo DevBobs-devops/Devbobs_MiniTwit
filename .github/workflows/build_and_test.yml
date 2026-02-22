@@ -36,7 +36,7 @@ jobs:
           pip install pytest
     - name: Test Pytest
       run: | 
-        pytest itu-miniwtwit/test/minitwit_sim_api_test.py
+        pytest itu-minitwit/test/minitwit_sim_api_test.py
       
 
     
