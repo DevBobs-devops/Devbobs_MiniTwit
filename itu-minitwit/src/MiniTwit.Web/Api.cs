@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Web;
 
-//API, made (shoddily) after the specification in the Stub API.
+//API, made after the specification in the Stub API.
 public static class Api
 {
     private static int Latest;
@@ -17,8 +17,6 @@ public static class Api
 
     public record GetFollowsRequest(List<string> follows);
     
-    //TODO: For the whole Api, 'latests' (Optional: latest value to update) and 'no' (Optional: no limits result count) is not implemented.
-    //TODO: Authorization is (possibly?) not handled. At least not handled here, should not be part of a minimal API, specified elsewere.
     public static void MapProductEndpoints(this WebApplication app)
     {
         app.MapGet("/fllws/{username}",
@@ -83,7 +81,7 @@ public static class Api
                 }
             });
         
-        //TODO: Set the password of the new author
+  
         app.MapPost("/register",
             ([FromQuery (Name = "latest")] int? latests,[FromBody] SignUpRequest request, IAuthorRepository authorRepository) =>
             {
