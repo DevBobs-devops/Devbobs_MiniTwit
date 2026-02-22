@@ -64,3 +64,26 @@ To fit the 'minitwit_sim_api_test.py' tests to the application, set the BASE_URL
 To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while the server is running)
 12/02: 11:00: Put database into folder. So we later can use this folder as our Docker Volume
 12/02: 11:27:  Created docker compose file, such that we can persists out database. The docker container is linked to our /src/MiniTwit.Web/Data folder - so when we close and open the container the data persists. Can run it with `docker compose up`.
+=======
+# Lecture 04
+12/02: 11:00: Put database into folder. So we later can use this folder as our Docker Volume
+12/02: 11:27:  Created docker compose file, such that we can persists out database. The docker container is linked to our /src/MiniTwit.Web/Data folder - so when we close and open the container the data persists. Can run it with `docker compose up`.
+
+17/02 13:11
+To run the Server with minimal API, from the itu-minitwit/src/MiniTwit.Web run `dotnet run`
+The API can be observed on http://localhost:5221/swagger/index.html
+To run the simulator against the API, find the simulator at BSc_lecture_notes/sessions/session_03/API_Spec and run `python3 minitwit_simulator.py http://localhost:5221/` (while the server is running)
+To fit the 'minitwit_sim_api_test.py' tests to the application, set the BASE_URL at line 10 to 'http://127.0.0.1:5221', and out-comment lines 30 and 31.
+To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while the server is running)
+
+20/02: 12:30: Setup our ci/cd pipeline (not tested yet, needs to be in main). 
+- The general idea is as follows: We have the github workflow `cicd.yaml`, which is the general file that first creates the minitwit image that gets uploaded to Dockerhub (CI - Continuous Integration). Remember to setup secrets (look at our README.md or exercises for session04). The workflow then runs tests. This still needs to be setup. The workflow ssh into the server, and runs the `deploy.sh` script.
+- The `deploy.sh` script pulls the latest image of our minitwit and runs docker compose, using the `docker-compose.yml`file, which works the same way as before, now it, instead of building the image, uses the image we put on Dockerhub.
+- The Vagrantfile also changed. It not only syncs the `remote_files` directory, as it contains the `deploy.sh` and `docker-compose.yml` files.
+
+20/02: 12:30: Setup our ci/cd pipeline (not tested yet, needs to be in main). 
+- The general idea is as follows: We have the github workflow `cicd.yaml`, which is the general file that first creates the minitwit image that gets uploaded to Dockerhub (CI - Continuous Integration). Remember to setup secrets (look at our README.md or exercises for session04). The workflow then runs tests. This still needs to be setup. The workflow ssh into the server, and runs the `deploy.sh` script.
+- The `deploy.sh` script pulls the latest image of our minitwit and runs docker compose, using the `docker-compose.yml`file, which works the same way as before, now it, instead of building the image, uses the image we put on Dockerhub.
+- The Vagrantfile also changed. It not only syncs the `remote_files` directory, as it contains the `deploy.sh` and `docker-compose.yml` files.
+
+21/02: 14:20: Added `build_and_test` and `release` workflows (taken from Chirp). The `build_and_test` will run on pushes to main or by triggering it manually (mostly for testing purposes - which i will do now). When completed and if it succeeds, it will trigger the `release` and `cdcd` workflows, creating a release and staring the CI/CD pipeline.
