@@ -6,7 +6,7 @@ DevOps, Software Evolution and Software Maintenance, BSc (Spring 2026) - Group "
 > refactor and migrate it to the languages and technologies of their liking. All subsequent DevOps, software evolution and software maintenance activities will be performed directly on the systems of the students.
 
 # Link to MiniTwit
-[link](http://157.245.27.199:8080/)
+[link](http://209.38.230.113:8080/)
 
 # Clone, deploy and setting up our CI/CD pipeline
 The following explains how to go from cloning to deploying minitwit.
