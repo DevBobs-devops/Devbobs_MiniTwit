@@ -39,14 +39,30 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using ( var serviceScope = app.Services.CreateScope() )
+//If we are in production, seed with an empty dump, else seed with template data
+if (app.Environment.IsProduction())
 {
-    var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
+    using ( var serviceScope = app.Services.CreateScope() )
+    {
+        var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
 
-    context.Database.EnsureCreated();
+        context.Database.EnsureCreated();
     
-    DbInitializer.SeedDatabase(context);
+        Prod_DbInitializer.SeedDatabase(context);
+    }  
 }
+else
+{
+    using ( var serviceScope = app.Services.CreateScope() )
+    {
+        var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
+
+        context.Database.EnsureCreated();
+    
+        DbInitializer.SeedDatabase(context);
+    }    
+}
+
 
 
 // Configure the HTTP request pipeline.
