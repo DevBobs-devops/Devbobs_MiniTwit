@@ -88,7 +88,7 @@ public class CheepRepository : ICheepRepository
         
         if(_context.Cheeps.Count() == 0)
         {
-            maxId = -1; //-1 so it gets assigned to 0
+            maxId = 0; //-1 so it gets assigned to 0
         }
         else
         {

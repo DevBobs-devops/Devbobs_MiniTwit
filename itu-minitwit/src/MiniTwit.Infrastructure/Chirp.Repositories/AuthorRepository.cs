@@ -68,7 +68,7 @@ public class AuthorRepository : IAuthorRepository
         
         if(_context.Authors.Count() == 0)
         {
-            maxId = -1; //-1 so it gets assigned to 0
+            maxId = 0; //-1 so it gets assigned to 0
         }
         else
         {
