@@ -64,21 +64,9 @@ public class AuthorRepository : IAuthorRepository
             return;
         }
         
-        int maxId; 
-        
-        if(_context.Authors.Count() == 0)
-        {
-            maxId = 0; //-1 so it gets assigned to 0
-        }
-        else
-        {
-            maxId = _context.Authors.Max(author => author.Id);     
-        }
-        
         //Create new author
         var newAuthor = new Author()
         {
-            Id = maxId + 1,
             Name = authorName,
             Email = email
         };
