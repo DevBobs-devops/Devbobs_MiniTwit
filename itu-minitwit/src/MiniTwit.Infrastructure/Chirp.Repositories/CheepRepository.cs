@@ -83,7 +83,17 @@ public class CheepRepository : ICheepRepository
         {
             throw new ArgumentException("Text must be between 0 and 160 characters");
         }
-        int maxId = _context.Cheeps.Max(cheep => cheep.CheepId); 
+
+        int maxId; 
+
+        if(_context.Cheeps.Count() == 0)
+        {
+            maxId = -1; //-1 so it gets assigned to 0
+        }
+        else
+        {
+            maxId = _context.Cheeps.Max(cheep => cheep.CheepId);     
+        }
         
         
         Cheep cheep = new Cheep()
