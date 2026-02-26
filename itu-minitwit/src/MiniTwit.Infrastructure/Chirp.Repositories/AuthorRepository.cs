@@ -64,13 +64,9 @@ public class AuthorRepository : IAuthorRepository
             return;
         }
         
-        //Should get id for new author 1 bigger than the current max 
-        int maxId = _context.Authors.Max(author => author.Id);
-        
         //Create new author
         var newAuthor = new Author()
         {
-            Id = maxId + 1,
             Name = authorName,
             Email = email
         };
