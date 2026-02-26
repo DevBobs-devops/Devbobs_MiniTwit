@@ -66,13 +66,13 @@ public class AuthorRepository : IAuthorRepository
         
         int maxId; 
         
-        if(_context.Cheeps.Count() == 0)
+        if(_context.Authors.Count() == 0)
         {
             maxId = -1; //-1 so it gets assigned to 0
         }
         else
         {
-            maxId = _context.Cheeps.Max(cheep => cheep.CheepId);     
+            maxId = _context.Authors.Max(author => author.Id);     
         }
         
         //Create new author
