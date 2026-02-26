@@ -64,8 +64,16 @@ public class AuthorRepository : IAuthorRepository
             return;
         }
         
-        //Should get id for new author 1 bigger than the current max 
-        int maxId = _context.Authors.Max(author => author.Id);
+        int maxId; 
+        
+        if(_context.Cheeps.Count() == 0)
+        {
+            maxId = -1; //-1 so it gets assigned to 0
+        }
+        else
+        {
+            maxId = _context.Cheeps.Max(cheep => cheep.CheepId);     
+        }
         
         //Create new author
         var newAuthor = new Author()
