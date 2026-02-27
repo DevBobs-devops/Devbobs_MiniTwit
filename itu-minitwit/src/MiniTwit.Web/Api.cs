@@ -26,6 +26,7 @@ public static class Api
                     Latest = latests.Value;
 
                 var res = followRepository.GetFollowed(username).Result.Select(follow => follow.Followed).ToList();
+                
                 return new GetFollowsRequest(res);
             });
             
@@ -87,7 +88,17 @@ public static class Api
             {
                 if (latests.HasValue)
                     Latest = latests.Value;
-                return authorRepository.CreateAuthor(request.Username, request.Email);
+
+                var res = authorRepository.CreateAuthor(request.Username, request.Email);
+
+                /*returns 400 HTTP code if createAuthor Fails*/
+                if(res == null)
+                {
+                    return Results.BadRequest("Possible reasons:\n - missing username \n- invalid email \n- password missing \n- username already taken");
+                }
+
+                /*returns 204 HTTP code*/
+                return  Results.NoContent();
             });
     }
 }
