@@ -68,20 +68,28 @@ public static class Api
                 return cheepRepository.GetAllCheepsFromAuthor(username).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Author.Name));
             });
         
+        
         app.MapPost("/msgs/{username}",
-            (string username,[FromQuery (Name = "latest")] int? latests,[FromBody] MessageRequest msgRequest, ICheepRepository cheepRepository, IAuthorRepository authorRepository) =>
+            (string username,[FromHeader (Name = "Authorization")] string authorization, [FromQuery (Name = "latest")] int? latests,[FromBody] MessageRequest msgRequest, ICheepRepository cheepRepository, IAuthorRepository authorRepository) =>
             {
                 if (latests.HasValue)
-                    Latest = latests.Value;
-                var author = authorRepository.GetAuthorByName(username).Result;
-                if (author != null)
-                    return cheepRepository.AddCheep(msgRequest.Content, author);
-                else
                 {
-                    return Task.FromResult(Results.BadRequest("Author does not exist"));
+                    Latest = latests.Value;
                 }
+
+                if (authorization != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+                {
+                    return Results.StatusCode(403);
+            
+                }    
+
+
+                var author = authorRepository.GetAuthorByName(username).Result;
+                
+                cheepRepository.AddCheep(msgRequest.Content, author);
+                return Results.NoContent();
+                
             });
-        
   
         app.MapPost("/register",
             ([FromQuery (Name = "latest")] int? latests,[FromBody] SignUpRequest request, IAuthorRepository authorRepository) =>
