@@ -24,7 +24,7 @@ public static class Api
     
     public static void MapProductEndpoints(this WebApplication app)
     {
-        /* Returns list of author followed by username*/
+        /* Returns list of authors followed by username*/
         app.MapGet("/fllws/{username}",
             (string username,[FromHeader (Name = "Authorization")] string authorization, [FromQuery (Name = "latest")] int? latests,[FromQuery (Name = "no")] int? no, IFollowRepository followRepository,  IAuthorRepository authorRepository) =>
             {
@@ -33,54 +33,64 @@ public static class Api
 
                 if (authorization != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
                 {
-                    return Results.StatusCode(403);
+                    return Results.Forbid(); //returns status code 403 
                 } 
 
                 var author = authorRepository.GetAuthorByName(username).Result;
                 if (author == null)
                 {
-                    return Results.StatusCode(404);
+                    return Results.NotFound("User not found (no response body)"); //returns status code 404
                 }
 
                 var res = followRepository.GetFollowed(username).Result.Select(follow => follow.Followed).ToList();
-                return Results.Ok(res);
+                return Results.Ok(res); // returns status code 200 
             });
 
         /* User follows/unfollows author*/    
         app.MapPost("/fllws/{username}",
-            (string username, [FromHeader (Name = "Authorization")] string authorization, [FromQuery (Name = "latest")] int? latests ,[FromBody] FollowRequest request, IFollowRepository followRepository, IAuthorRepository authorRepository) =>
+            (string username, [FromHeader (Name = "Authorization")] string authorization, [FromQuery (Name = "latest")] int? latests ,[FromBody] FollowRequest request, IFollowRepository followRepository) =>
             {
                 if (latests.HasValue)
                     Latest = latests.Value;
 
                 if (authorization != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
                 {
-                    return Results.StatusCode(403);
+                    return Results.Forbid(); //returns status code 403 
                 } 
 
                 if (!string.IsNullOrEmpty(request.Follow))
                 {
                     var res = followRepository.AddFollowing(username,request.Follow);
-                    return Results.NoContent();
+                    return Results.NoContent(); //returns status code 204 
+                    
                 }
 
                 if (!string.IsNullOrEmpty(request.Unfollow))
                 {
                     var res = followRepository.RemoveFollowing(username,request.Unfollow);
-                    return Results.NoContent();
+
+                    return Results.NoContent(); //returns status code 204 
+                    
                 }
                 
-                return Results.BadRequest("Must specify either 'Follow' or 'Unfollow'");
+                return Results.NotFound("Must specify either 'Follow' or 'Unfollow'"); //returns status code 404
             });
         
         app.MapGet("/latest",() => new {Latest});
         
         app.MapGet("/msgs",
-            ([FromQuery (Name = "latest")] int? latests,[FromQuery (Name = "no")] int? no, ICheepRepository  cheepRepository) =>
+            ([FromHeader (Name = "Authorization")] string authorization, [FromQuery (Name = "latest")] int? latests,[FromQuery (Name = "no")] int? no, ICheepRepository  cheepRepository) =>
             {
                 if (latests.HasValue)
                     Latest = latests.Value;
-                return cheepRepository.GetCheeps(0).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Author.Name));
+
+                if (authorization != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
+                {
+                    return Results.Forbid(); //returns status code 403
+                }  
+
+                var res = cheepRepository.GetCheeps(0).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Author.Name));
+                return Results.Ok(res); //returns status code 200 and res
             });
         
         app.MapGet("/msgs/{username}",
@@ -93,11 +103,11 @@ public static class Api
 
                 if (authorization != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
                 {
-                    return Results.StatusCode(403);
+                    return Results.Forbid(); //returns status code 403
                 }  
                 
                 var res = cheepRepository.GetAllCheepsFromAuthor(username).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Author.Name));
-                return Results.Ok(res);
+                return Results.Ok(res); //returns status code 200 and res
             });
         
         
@@ -111,13 +121,13 @@ public static class Api
 
                 if (authorization != "Basic c2ltdWxhdG9yOnN1cGVyX3NhZmUh")
                 {
-                    return Results.StatusCode(403);
+                    return Results.Forbid(); //returns status code 403
                 }    
 
                 var author = authorRepository.GetAuthorByName(username).Result;
                 cheepRepository.AddCheep(msgRequest.Content, author);
 
-                return Results.NoContent();
+                return Results.NoContent(); //returns status code 204
                 
             });
   
