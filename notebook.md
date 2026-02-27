@@ -87,3 +87,7 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - The Vagrantfile also changed. It not only syncs the `remote_files` directory, as it contains the `deploy.sh` and `docker-compose.yml` files.
 
 21/02: 14:20: Added `build_and_test` and `release` workflows (taken from Chirp). The `build_and_test` will run on pushes to main or by triggering it manually (mostly for testing purposes - which i will do now). When completed and if it succeeds, it will trigger the `release` and `cdcd` workflows, creating a release and staring the CI/CD pipeline.
+
+27/02: 17:30: Trying to fix our simulator API by adding response codes 
+- Discovered we may have misintepreted what the terminal outputs of the minitwit_sim.py meant. They are giving us information on the http responses that doesn't match the expected http codes. Have refactored our simulator API endpoints in MiniTwit.Web/Api.cs to handle the appropriate response codes. Now when the simulator runs, no further output in the terminal appears when the simulator is run. 
+- It is still unclear if this will have fixed the errors shown at http://64.226.108.122/status.html. We will probably need to deploy to find out for certain.
