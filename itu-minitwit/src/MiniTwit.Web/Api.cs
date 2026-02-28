@@ -17,10 +17,8 @@ public static class Api
     public record FollowRequest(string? Follow, string? Unfollow);
     public record MessageRequest(string Content);
     public record SignUpRequest(string Username, string Email, string Pwd);
-
-    public record GetMessagesRequest(string Content, string User);
-
-    public record GetFollowsResponse(List<string> follows);
+    public record GetMessagesRequest(string Content, string Pub_Date, string User);
+    public record GetFollowsResponse(List<string> Follows);
     
     public static void MapProductEndpoints(this WebApplication app)
     {
@@ -42,7 +40,7 @@ public static class Api
                     return Results.NotFound("User not found (no response body)"); //returns status code 404
                 }
 
-                var res = new GetFollowsResponse(follows: followRepository.GetFollowed(username).Result.Select(follow => follow.Followed).ToList()); 
+                var res = new GetFollowsResponse(Follows: followRepository.GetFollowed(username).Result.Select(follow => follow.Followed).ToList()); 
                 return Results.Ok(res); // returns status code 200 
             });
 
@@ -89,7 +87,7 @@ public static class Api
                     return Results.Forbid(); //returns status code 403
                 }  
 
-                var res = cheepRepository.GetCheeps(0).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Author.Name));
+                var res = cheepRepository.GetCheeps(0).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Timestamp.ToString(), cheep.Author.Name));
                 return Results.Ok(res); //returns status code 200 and res
             });
         
@@ -106,7 +104,7 @@ public static class Api
                     return Results.Forbid(); //returns status code 403
                 }  
                 
-                var res = cheepRepository.GetAllCheepsFromAuthor(username).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Author.Name));
+                var res = cheepRepository.GetAllCheepsFromAuthor(username).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Timestamp.ToString(), cheep.Author.Name));
                 return Results.Ok(res); //returns status code 200 and res
             });
         
