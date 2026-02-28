@@ -81,4 +81,4 @@ jobs:
            MiniTwit-MacOS-release.zip
            MiniTwit-Windows-release.zip
             
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
