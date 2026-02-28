@@ -20,7 +20,7 @@ public static class Api
 
     public record GetMessagesRequest(string Content, string User);
 
-    public record GetFollowsRequest(List<string> follows);
+    public record GetFollowsResponse(List<string> follows);
     
     public static void MapProductEndpoints(this WebApplication app)
     {
@@ -42,7 +42,7 @@ public static class Api
                     return Results.NotFound("User not found (no response body)"); //returns status code 404
                 }
 
-                var res = followRepository.GetFollowed(username).Result.Select(follow => follow.Followed).ToList();
+                var res = new GetFollowsResponse(follows: followRepository.GetFollowed(username).Result.Select(follow => follow.Followed).ToList()); 
                 return Results.Ok(res); // returns status code 200 
             });
 
