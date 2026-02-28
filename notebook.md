@@ -87,3 +87,7 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - The Vagrantfile also changed. It not only syncs the `remote_files` directory, as it contains the `deploy.sh` and `docker-compose.yml` files.
 
 21/02: 14:20: Added `build_and_test` and `release` workflows (taken from Chirp). The `build_and_test` will run on pushes to main or by triggering it manually (mostly for testing purposes - which i will do now). When completed and if it succeeds, it will trigger the `release` and `cdcd` workflows, creating a release and staring the CI/CD pipeline.
+
+
+# Lecture 05
+28/02: 12:40: Fixed that the CI/CD pipeline and our release workflows no longer run on pull-requests, as they now check if the event was a 'push'.
