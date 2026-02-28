@@ -91,3 +91,7 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 27/02: 17:30: Trying to fix our simulator API by adding response codes 
 - Discovered we may have misintepreted what the terminal outputs of the minitwit_sim.py meant. They are giving us information on the http responses that doesn't match the expected http codes. Have refactored our simulator API endpoints in MiniTwit.Web/Api.cs to handle the appropriate response codes. Now when the simulator runs, no further output in the terminal appears when the simulator is run. 
 - It is still unclear if this will have fixed the errors shown at http://64.226.108.122/status.html. We will probably need to deploy to find out for certain.
+
+
+28/02: 12:30: Fixing Api-response branch so it passes the all the simulator api tests
+- Failed two of the tests due to a type error concerning the response object to a GetFollowers request. Code returned the list of followers, but said list needed to be wrapped inside the FollowsResponse object from the API specification. Easy fix
