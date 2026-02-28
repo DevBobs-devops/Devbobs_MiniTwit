@@ -65,7 +65,6 @@ jobs:
     - name: Build Windows
       shell: bash
       run: |
-          itu-minitwit
           release_name="App-$TAG-win-x64"
 
           dotnet publish itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj --framework net8.0 --runtime win-x64 -c Release -o "Windows-release" -p:PublishSingleFile=true
