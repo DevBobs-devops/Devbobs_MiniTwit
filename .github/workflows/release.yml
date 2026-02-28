@@ -25,8 +25,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore itu-minitwit
 
-    - name: Set realease tag
-      run: echo "TAG=0.0.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
 
     - name: Build
       run: dotnet build itu-minitwit --no-restore
@@ -42,8 +40,6 @@ jobs:
     - name: Build Linux
       shell: bash
       run: |
-          release_name="App-$TAG-linux-x64"
-
           dotnet publish itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj --framework net8.0 --runtime linux-x64 -c Release -o "Linux-release" -p:PublishSingleFile=true
           
           7z a -tzip "MiniTwit-Linux-release.zip" "Linux-release"
@@ -53,8 +49,6 @@ jobs:
     - name: Build MacOS
       shell: bash
       run: |
-          release_name="App-$TAG-osx-x64"
-
           dotnet publish itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj --framework net8.0 --runtime osx-x64 -c Release -o "MacOS-release" -p:PublishSingleFile=true
           
           7z a -tzip "MiniTwit-MacOS-release.zip" "MacOS-release"
@@ -65,8 +59,6 @@ jobs:
     - name: Build Windows
       shell: bash
       run: |
-          release_name="App-$TAG-win-x64"
-
           dotnet publish itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj --framework net8.0 --runtime win-x64 -c Release -o "Windows-release" -p:PublishSingleFile=true
           
           7z a -tzip "MiniTwit-Windows-release.zip" "./Windows-release/*"
@@ -76,9 +68,10 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
-          files: |
+        tag_name: "0.0.${{ github.run_number }}"
+        name: "MiniTwit Release 0.0.${{ github.run_number }}"
+        files: |
            MiniTwit-Linux-release.zip
            MiniTwit-MacOS-release.zip
            MiniTwit-Windows-release.zip
-            
-          token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
