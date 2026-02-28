@@ -99,3 +99,5 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - Failed two of the tests due to a type error concerning the response object to a GetFollowers request. Code returned the list of followers, but said list needed to be wrapped inside the FollowsResponse object from the API specification. Easy fix
 
 28/02: 12:40: Fixed that the CI/CD pipeline and our release workflows no longer run on pull-requests, as they now check if the event was a 'push'.
+
+28/02: 20:49: fixed permissions so workflows can readn and write to files and not on read-only mode
