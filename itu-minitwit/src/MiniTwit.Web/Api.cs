@@ -125,6 +125,12 @@ public static class Api
                 }    
 
                 var author = authorRepository.GetAuthorByName(username).Result;
+
+                if(author is null)
+                {
+                    return Results.NotFound();
+                }
+                
                 cheepRepository.AddCheep(msgRequest.Content, author);
 
                 return Results.NoContent(); //returns status code 204
