@@ -44,34 +44,33 @@ Vagrant.configure("2") do |config|
         echo "Docker already installed"
       fi
 
+      echo -e "\nOpening port for minitwit ...\n"
+      ufw allow 5000 && \
+      ufw allow 22/tcp
 
-        echo -e "\nOpening port for minitwit ...\n"
-        ufw allow 5000 && \
-        ufw allow 22/tcp
 
+      if ! grep -qF ". $HOME/.bashrc" $HOME/.bash_profile; then 
+        echo "Adding to bash profile"
+        echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+      else
+        echo "Already added to bash profile"
+      fi
 
-        if ! grep -qF ". $HOME/.bashrc" $HOME/.bash_profile; then 
-          echo "Adding to bash profile"
-          echo ". $HOME/.bashrc" >> $HOME/.bash_profile
-        else
-          echo "Already added to bash profile"
-        fi
+      echo -e "\nConfiguring credentials as environment variables...\n"
 
-        echo -e "\nConfiguring credentials as environment variables...\n"
+      source $HOME/.bash_profile
 
-        source $HOME/.bash_profile
+      if ! grep -qF "cd /minitwit" ~/.bash_profile; then
+        echo -e "\nSelecting Minitwit Folder as default folder when you ssh into the server...\n"
+        echo "cd /minitwit" >> ~/.bash_profile
+      else 
+        echo "Already selected MiniTwit folder as default when ssh into the server"
+      fi
 
-        if ! grep -qF "cd /minitwit" ~/.bash_profile; then
-          echo -e "\nSelecting Minitwit Folder as default folder when you ssh into the server...\n"
-          echo "cd /minitwit" >> ~/.bash_profile
-        else 
-          echo "Already selected MiniTwit folder as default when ssh into the server"
-        fi
+      chmod +x /minitwit/deploy.sh
 
-        chmod +x /minitwit/deploy.sh
-
-        echo -e "\nVagrant setup done ..."
-        echo -e "minitwit will later be accessible at http://$(hostname -I | awk '{print $1}'):8080"    
+      echo -e "\nVagrant setup done ..."
+      echo -e "minitwit will later be accessible at http://$(hostname -I | awk '{print $1}'):8080"    
    SHELL
   end
 end
