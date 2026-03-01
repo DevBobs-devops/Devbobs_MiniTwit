@@ -51,15 +51,22 @@ Vagrant.configure("2") do |config|
 
 
         if ! grep -qF ". $HOME/.bashrc" $HOME/.bash_profile; then 
+          echo "Adding to bash profile"
           echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+        else
+          echo "Already added to bash profile"
         fi
 
         echo -e "\nConfiguring credentials as environment variables...\n"
 
         source $HOME/.bash_profile
 
-        echo -e "\nSelecting Minitwit Folder as default folder when you ssh into the server...\n"
-        echo "cd /minitwit" >> ~/.bash_profile
+        if ! grep -qF "cd /minitwit" ~/.bash_profile; then
+          echo -e "\nSelecting Minitwit Folder as default folder when you ssh into the server...\n"
+          echo "cd /minitwit" >> ~/.bash_profile
+        else 
+          echo "Already selected MiniTwit folder as default when ssh into the server"
+        fi
 
         chmod +x /minitwit/deploy.sh
 
