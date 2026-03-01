@@ -31,8 +31,17 @@ public class CheepRepository : ICheepRepository
         return result;
     }
 
+    public async Task<List<Cheep>> GetCheepsLimited(int amount)
+    {
+        var query = (from cheep in _context.Cheeps
+                orderby cheep.Timestamp descending
+                select cheep)
+            .Include(c => c.Author).Take(amount);
+        var result = await query.ToListAsync();
+        return result;
+    }
 
- 
+
     public async Task<List<Cheep>> GetCheepsFromAuthor(int page, string authorName)
     {
         var query = (from cheep in _context.Cheeps
@@ -43,12 +52,21 @@ public class CheepRepository : ICheepRepository
             .Skip((page - 1) * 32).Take(32);
         var result = await query.ToListAsync();
         
+        return result;
+    }
+
+    public async Task<List<Cheep>> GetCheepsFromAuthorLimited(int amount, string authorName)
+    {
+        var query = (from cheep in _context.Cheeps
+                where cheep.Author.Name == authorName
+                orderby cheep.Timestamp descending
+                select cheep)
+            .Include(c => c.Author).Take(amount);
+        var result = await query.ToListAsync();
         
         return result;
     }
-    
-    
-    
+
     public async Task<List<Cheep>> GetAllCheepsFromAuthor(string authorName)
     {
         var query = ( from cheep in _context.Cheeps
