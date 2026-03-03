@@ -87,7 +87,7 @@ public static class Api
                     return Results.Forbid(); //returns status code 403
                 }  
 
-                var res = cheepRepository.GetCheeps(0).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Timestamp.ToString(), cheep.Author.Name));
+                var res = cheepRepository.GetCheepsLimited(no ?? 32).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Timestamp.ToString(), cheep.Author.Name));
                 return Results.Ok(res); //returns status code 200 and res
             });
         
@@ -108,7 +108,7 @@ public static class Api
                     return Results.NotFound("User not found (no response body)");
                 }  
                 
-                var res = cheepRepository.GetAllCheepsFromAuthor(username).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Timestamp.ToString(), cheep.Author.Name));
+                var res = cheepRepository.GetCheepsFromAuthorLimited(no ?? 32, username).Result.Select(cheep => new GetMessagesRequest(cheep.Text, cheep.Timestamp.ToString(), cheep.Author.Name));
                 return Results.Ok(res); //returns status code 200 and res
             });
         
