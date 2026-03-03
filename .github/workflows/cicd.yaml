@@ -5,6 +5,7 @@ on:
   workflow_run:
     workflows: ["Build and Test"] #Consider if this should only run if a release has been made
     types: [completed]
+  workflow_dispatch: #Allow manual trigger of workflow
 
 
 jobs:
