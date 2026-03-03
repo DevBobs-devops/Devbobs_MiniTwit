@@ -101,3 +101,6 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 28/02: 12:40: Fixed that the CI/CD pipeline and our release workflows no longer run on pull-requests, as they now check if the event was a 'push'.
 
 28/02: 20:49: fixed permissions so workflows can readn and write to files and not on read-only mode
+
+01/03: 12:00: Made our Vagrantfile idempotent. The provisioner script can be run with `vagrant provision`. 
+- While doing it i looked at [https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) and https://arslan.io/2019/07/03/how-to-write-idempotent-bash-scripts/.
