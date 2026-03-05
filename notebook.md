@@ -109,9 +109,36 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 03/03: We decided to use the database manger provided by DigitalOcean, more specifically Postgres
 
 05/03: To migrate we needed to provide the database server with a postgres dump. However, our current database is sqlite, so it would create a sqlite dump, which we did:
-```sqlite3 chirp.db .dump > chirp.sql ```
-We use following command to convert the sqlite3 dump to a postgres dump. The command was privided by DevelCuy here [https://stackoverflow.com/questions/4581727/how-to-convert-sqlite-sql-dump-file-to-postgresql]
-```sed -e 's/INTEGER PRIMARY KEY AUTOINCREMENT/SERIAL PRIMARY KEY/g;s/PRAGMA foreign_keys=OFF;//;s/unsigned big int/BIGINT/g;s/UNSIGNED BIG INT/BIGINT/g;s/BIG INT/BIGINT/g;s/UNSIGNED INT(10)/BIGINT/g;s/BOOLEAN/SMALLINT/g;s/boolean/SMALLINT/g;s/UNSIGNED BIG INT/INTEGER/g;s/INT(3)/INT2/g;s/DATETIME/TIMESTAMP/g' chirp.sql > minitwitdb.sql```
+- Copy from server
+``` scp root@209.38.230.113:/minitwit/data/chirp.db <your location>```
+- make dump
+```sqlite3 chirp.db .dump > minitwitdb.sql ```
+- We use following command to convert the sqlite3 dump to a postgres dump. The command was privided by DevelCuy here [https://stackoverflow.com/questions/4581727/how-to-convert-sqlite-sql-dump-file-to-postgresql]
+  ```
+  sed -e 's/INTEGER PRIMARY KEY AUTOINCREMENT/SERIAL PRIMARY KEY/g
+        s/PRAGMA foreign_keys=OFF;//
+        s/unsigned big int/BIGINT/g
+        s/UNSIGNED BIG INT/BIGINT/g
+        s/BIG INT/BIGINT/g
+        s/UNSIGNED INT(10)/BIGINT/g
+        s/BOOLEAN/SMALLINT/g
+        s/boolean/SMALLINT/g
+        s/UNSIGNED BIG INT/INTEGER/g
+        s/INT(3)/INT2/g
+        s/DATETIME/TIMESTAMP/g
+        s/AUTOINCREMENT//g
+        s/AspNetUsers/aspnetusers/g
+        s/AspNetRoles/aspnetroles/g
+        s/Follows/follows/g
+        s/AspNetUserClaims/aspnetuserclaims/g
+        s/AspNetRoleClaims/aspnetroleclaims/g
+        s/AspNetUserLogins/aspnetuserlogins/g
+        s/AspNetUserRoles/aspnetuserroles/g
+        s/AspNetUserTokens/aspnetusertokens/g
+        s/Cheeps/cheeps/g
+        /sqlite_sequence/d' \
+    chirp.sql > minitwitdb.sql```
 
-Then we migrate the dump to the database:
+
+Then we migrate the dump to the database. Remember to have downloaded the certifcates from digitalOcean:
 ```psql "sslmode=require host=db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com port=25060 dbname=minitwitdb user=doadmin sslrootcert=ca-certificate.crt" < minitwit_pg.sql```
