@@ -1,6 +1,6 @@
 # Devbobs's Notebook 
 **Team:** Devbobs  
-**Contributors:** Marius, Morten, Jonas & Laura
+**Contributors:** Marius, Morten, Jonas, Torkil & Laura
 
 ---
 
