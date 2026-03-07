@@ -146,5 +146,12 @@ Then we migrate the dump to the database. Remember to have downloaded the certif
 Updates for project
 To switch from Sqlite to postgres we install a postgres package in Minitwit.Web.
 ```dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.4```
-We also added the connection string to github secrets, which for obvious reason im not going to show. 
+We also added the connection string to github secrets, which for obvious reason im not going to show. We use this conncetionstring to deploy from gihub actions, as we were already doing. Now it should connect to the database server. The connection string will point to our new database.
+
+We also updated the cicd workflow and docker compose, so they now hav an environment variable pointing to our connectionstring. CONNECTION_STRING  CONNECTION_STRING 
+
+
+
+You can connect to the database if you have postgres installed and use following command:
+```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
 
