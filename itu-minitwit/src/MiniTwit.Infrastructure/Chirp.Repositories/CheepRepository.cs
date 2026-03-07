@@ -97,7 +97,7 @@ public class CheepRepository : ICheepRepository
 
         await _context.Cheeps.AddAsync(cheep);
         await _context.SaveChangesAsync();
-        _metrics.RecordCheepCreated();
+        _metrics.RecordCheep(author.Name);
     }
 
 
