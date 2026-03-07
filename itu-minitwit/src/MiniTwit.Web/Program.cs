@@ -35,12 +35,8 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseMetricServer();
+Metrics.SuppressDefaultMetrics();
 
-// Collect HTTP request metrics automatically
-app.UseHttpMetrics(options =>
-{
-    options.AddCustomLabel("service", context => "my-api");
-});
 
 if (app.Environment.IsDevelopment())
 {
