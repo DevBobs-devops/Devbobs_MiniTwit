@@ -148,7 +148,7 @@ To switch from Sqlite to postgres we install a postgres package in Minitwit.Web.
 ```dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.4```
 We also added the connection string to github secrets, which for obvious reason im not going to show. We use this conncetionstring to deploy from gihub actions, as we were already doing. Now it should connect to the database server. The connection string will point to our new database.
 
-We also updated the cicd workflow and docker compose, so they now hav an environment variable pointing to our connectionstring. CONNECTION_STRING  CONNECTION_STRING 
+We also updated the cicd workflow and docker compose, so they now hav an environment variable pointing to our connectionstring.
 
 
 
