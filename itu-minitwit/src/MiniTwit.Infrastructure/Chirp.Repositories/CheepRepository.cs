@@ -107,7 +107,7 @@ public class CheepRepository : ICheepRepository
             Author = author,
             AuthorId = author.Id,
             Text = text,
-            Timestamp = DateTime.Now
+            Timestamp = DateTime.UtcNow
         };
 
         await _context.Cheeps.AddAsync(cheep);

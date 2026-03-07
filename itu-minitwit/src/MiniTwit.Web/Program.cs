@@ -11,16 +11,24 @@ var builder = WebApplication.CreateBuilder(args);
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); //Takes default connection from appsettings.json to use for db
 
 
-builder.Services.AddDbContext<CheepDbContext>(options => options.UseNpgsql(connectionString));
+
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddDbContext<CheepDbContext>(options =>
+        options.UseNpgsql(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<CheepDbContext>(options =>
+        options.UseSqlite("Data Source=Data/chirp.db"));
+}
+
 
 builder.Services.AddDefaultIdentity<Author>(options =>   
         options.SignIn.RequireConfirmedAccount = true)            
     .AddEntityFrameworkStores<CheepDbContext>(); 
 
 builder.Services.AddSession();
-
-
-
 
 // Add services to the container.
 builder.Services.AddRazorPages();
