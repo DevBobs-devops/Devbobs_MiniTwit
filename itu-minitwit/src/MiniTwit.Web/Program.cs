@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); //Takes default connection from appsettings.json to use for db
 
 
-builder.Services.AddDbContext<CheepDbContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContext<CheepDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddDefaultIdentity<Author>(options =>   
         options.SignIn.RequireConfirmedAccount = true)            
