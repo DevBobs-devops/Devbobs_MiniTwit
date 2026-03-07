@@ -142,3 +142,9 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 Then we migrate the dump to the database. Remember to have downloaded the certifcates from digitalOcean:
 ```psql "sslmode=require host=db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com port=25060 dbname=minitwitdb user=doadmin sslrootcert=ca-certificate.crt" < minitwit_pg.sql```
+
+Updates for project
+To switch from Sqlite to postgres we install a postgres package in Minitwit.Web.
+```dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.4```
+We also added the connection string to github secrets, which for obvious reason im not going to show. 
+
