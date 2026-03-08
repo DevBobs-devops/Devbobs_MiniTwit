@@ -104,3 +104,10 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 01/03: 12:00: Made our Vagrantfile idempotent. The provisioner script can be run with `vagrant provision`. 
 - While doing it i looked at [https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) and https://arslan.io/2019/07/03/how-to-write-idempotent-bash-scripts/.
+
+
+# Lecture 6
+
+08/03: 12:00: Setup Promethues and Grafana to do visualization of our application. The idea is that we in out .NET MiniTwit application expose /metrics, which is out "in memory" current view of the system (or whatever we expose). We then use Promethues to scrape this data and safe it. Grafana then uses what Promethues scrape and visualize it.
+- To expose more, see the MiniTwit.Infrastructure/Metrics.
+- To Visualize it, go to grafana at localhost/3000 and find the dashboard, click edit, click add visualiztion. When you have added something copy the json file into /monitoring/grafana/dashboard/dashboard.json
