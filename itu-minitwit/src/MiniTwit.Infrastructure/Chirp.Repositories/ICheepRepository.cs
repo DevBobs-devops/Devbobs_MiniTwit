@@ -16,12 +16,27 @@ public interface ICheepRepository
     public Task<List<Cheep>> GetCheeps(int page);
     
     /// <summary>
+    /// Gets a given number of cheeps
+    /// </summary>
+    /// <param name="amount">The number of cheeps</param>
+    /// <returns>List of cheeps</returns>
+    public Task<List<Cheep>> GetCheepsLimited(int amount);
+    
+    /// <summary>
     /// Gets cheeps made by a specific author and page
     /// </summary>
     /// <param name="page">The given page</param>
     /// <param name="authorName">The given Author </param>
     /// <returns>List of cheeps made the author for the specific page</returns>
     public Task<List<Cheep>> GetCheepsFromAuthor(int page, string authorName);
+    
+    /// <summary>
+    /// Gets cheeps made by a specific author
+    /// </summary>
+    /// <param name="amount">The number of cheeps</param>
+    /// <param name="authorName">The given Author </param>
+    /// <returns>List of cheeps made the author for the specific page</returns>
+    public Task<List<Cheep>> GetCheepsFromAuthorLimited(int amount, string authorName);
 
     /// <summary>
     /// Gets all cheeps from an author
