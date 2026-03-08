@@ -36,6 +36,26 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwitimage:webbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwitimage:webbuildcache,mode=max
 
+      - name: Build and push Promethues image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./itu-minitwit
+          file: ./itu-minitwit/monitoring/prometheus/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/minitwit/prometheus:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit/prometheus:webbuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit/prometheus:webbuildcache,mode=max
+
+      - name: Build and push Grafana image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./itu-minitwit
+          file: ./itu-minitwit/monitoring/grafana/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/minitwit/grafana:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit/grafana:webbuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit/grafana:webbuildcache,mode=max
+
       - name: Test minitwit #We run build and test workflow before this, but we could add something...?
         run: |
           echo "test"
