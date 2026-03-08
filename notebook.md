@@ -109,11 +109,11 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 03/03: We decided to use the database manger provided by DigitalOcean, more specifically Postgres
 
 05/03: To migrate we needed to provide the database server with a postgres dump. However, our current database is sqlite, so it would create a sqlite dump, which we did:
-- Copy from server
-``` scp root@209.38.230.113:/minitwit/data/chirp.db <your location>```
-- make dump
+- Copy sqlite db from server
+``` scp root@209.38.230.113:/minitwit/data/chirp.db <location you want it to be put in>```
+- make sqlite dump
 ```sqlite3 chirp.db .dump > minitwitdb.sql ```
-- We use following command to convert the sqlite3 dump to a postgres dump. The command was privided by DevelCuy here [https://stackoverflow.com/questions/4581727/how-to-convert-sqlite-sql-dump-file-to-postgresql]
+- We use following command to convert the sqlite3 dump to a postgres dump. The command is an altered version of the command provided in the response by DevelCuy here [https://stackoverflow.com/questions/4581727/how-to-convert-sqlite-sql-dump-file-to-postgresql]. The sed command is used for text tranformations, based upon the specification given.
   ```
   sed -e 's/INTEGER PRIMARY KEY AUTOINCREMENT/SERIAL PRIMARY KEY/g
         s/PRAGMA foreign_keys=OFF;//
@@ -141,17 +141,15 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 
 Then we migrate the dump to the database. Remember to have downloaded the certifcates from digitalOcean:
-```psql "sslmode=require host=db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com port=25060 dbname=minitwitdb user=doadmin sslrootcert=ca-certificate.crt" < minitwit_pg.sql```
+```psql "sslmode=require host=db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com port=25060 dbname=minitwitdb user=doadmin sslrootcert=<path tp>ca-certificate.crt" < minitwitdb.sql```
 
 Updates for project
-To switch from Sqlite to postgres we install a postgres package in Minitwit.Web.
+To switch from Sqlite to postgres we install a postgres package in the Minitwit.Web project. Version 8.0.4, since we are usinge .Net 8.
 ```dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.4```
-We also added the connection string to github secrets, which for obvious reason im not going to show. We use this conncetionstring to deploy from gihub actions, as we were already doing. Now it should connect to the database server. The connection string will point to our new database.
+We also added the connectionstring to github secrets, which for obvious reason im not going to show. We use this conncetionstring to deploy from gihub actions, as we have already been doing. Now it should connect to the database server. The connection string will point to our new database.
 
 We also updated the cicd workflow and docker compose, so they now hav an environment variable pointing to our connectionstring.
 
-
-
-You can connect to the database if you have postgres installed and use following command:
+Note: You can connect to the database if you have postgres installed and use following command:
 ```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
 
