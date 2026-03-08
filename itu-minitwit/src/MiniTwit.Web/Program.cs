@@ -35,7 +35,6 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseMetricServer();
-Metrics.SuppressDefaultMetrics();
 
 
 if (app.Environment.IsDevelopment())
