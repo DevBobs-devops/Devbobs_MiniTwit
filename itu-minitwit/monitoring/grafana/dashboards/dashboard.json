@@ -26,7 +26,94 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
-      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.1.8",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "topk(10, sum by(user) (cheeps_per_user))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Cheeps per user",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "panels": [],
+      "title": "Row title",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P1809F7CD0C75ACF3"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -56,7 +143,6 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -73,6 +159,10 @@
               {
                 "color": "green",
                 "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           }
@@ -83,14 +173,12 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 2,
       "options": {
         "legend": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
@@ -101,28 +189,21 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.1.8",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "fegat3x6evklcc"
-          },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "minitwit_http_responses_total",
+          "expr": "cheeps_created_total",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": true,
-          "instant": false,
-          "interval": "",
-          "legendFormat": "Total Message Posts",
+          "legendFormat": "__auto",
           "range": true,
-          "refId": "B",
+          "refId": "A",
           "useBackend": false
         }
       ],
-      "title": "Total HTTP Responses",
+      "title": "New panel",
       "type": "timeseries"
     },
     {
@@ -172,7 +253,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 1
       },
       "id": 1,
       "options": {
@@ -192,7 +273,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.1.8",
       "targets": [
         {
           "datasource": {
@@ -200,7 +281,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "up{instance=\"minitwit:5000\"}",
+          "expr": "up{instance=\"minittwit:8080\"}",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
@@ -214,7 +295,7 @@
   ],
   "preload": false,
   "refresh": "",
-  "schemaVersion": 42,
+  "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": []
@@ -225,7 +306,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Minitwit Example Dashboard",
+  "title": "Minitwit Dashboard",
   "uid": "fegau3n6gywaoa",
-  "version": 1
+  "version": 2
 }
