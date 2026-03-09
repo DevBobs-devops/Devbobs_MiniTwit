@@ -2,6 +2,8 @@ version: '3'
 services:    
   minitwitimage:
     image: ${DOCKER_USERNAME}/minitwitimage
+    envionment:
+        ConnectionStrings__DefaultConnection: ${{ secrets.CONNECTION_STRING }} #env for database
     ports:
       - "8080:8080"
     volumes:
