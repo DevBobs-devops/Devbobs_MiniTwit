@@ -39,7 +39,7 @@ jobs:
       - name: Build and push Promethues image
         uses: docker/build-push-action@v6
         with:
-          context: ./itu-minitwit
+          context: ./itu-minitwit/monitoring/prometheus/
           file: ./itu-minitwit/monitoring/prometheus/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/minitwit/prometheus:latest
@@ -49,7 +49,7 @@ jobs:
       - name: Build and push Grafana image
         uses: docker/build-push-action@v6
         with:
-          context: ./itu-minitwit
+          context: ./itu-minitwit/monitoring/grafana/
           file: ./itu-minitwit/monitoring/grafana/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/minitwit/grafana:latest
