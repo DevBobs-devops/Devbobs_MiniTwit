@@ -39,7 +39,7 @@ To destroy the droplet, run: `vagrant destroy`.
 - First register at [Docker Hub](https://hub.docker.com/), which will be where we store the docker image of minitwit.
 - Then setup the environment variables `DOCKER_USERNAME` and `DOCKER_PASSWORD`, as you did with your SSH key. These will be used to acces DockerHub. See `cicd.yaml`, `Vagrantfile` and `Deploy.sh`.
 - Instead of using your actual DockerHub password, you can setup a [Access Token](https://docs.docker.com/security/access-tokens/) for DockerHub.
-- Lastly, create a [repository](https://docs.docker.com/docker-hub/repos/create/) named `minitwitimage`.
+- Lastly, create a [repository](https://docs.docker.com/docker-hub/repos/create/) named `minitwitimage`, one named `minitwit-grafana` and one named `minitwit-prometheus`.
 
 ## Configure Secrets on Github repository.
 Setup the following secrets on github, see [here](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets) for how.

@@ -153,3 +153,8 @@ We also updated the cicd workflow and docker compose, so they now hav an environ
 Note: You can connect to the database if you have postgres installed and use following command:
 ```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
 
+08/03: 12:00: Setup Promethues and Grafana to do visualization of our application. The idea is that we in out .NET MiniTwit application expose /metrics, which is out "in memory" current view of the system (or whatever we expose). We then use Promethues to scrape this data and safe it. Grafana then uses what Promethues scrape and visualize it.
+- To expose more, see the MiniTwit.Infrastructure/Metrics.
+- To Visualize it, go to grafana at localhost/3000 and find the dashboard, click edit, click add visualiztion. When you have added something copy the json file into /monitoring/grafana/dashboard/dashboard.json
+
+09/02: 18:00: Ran into uses with the github actions not being able to find the dockerfiles - because of the context being setup wrong. Also forgot to create two new repositories on Dockerhub for the new images.

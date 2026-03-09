@@ -23,6 +23,8 @@
       </PackageReference>
       <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.49.0" />
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+      <PackageReference Include="prometheus-net" Version="8.2.1" />
+      <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.2" />
     </ItemGroup>

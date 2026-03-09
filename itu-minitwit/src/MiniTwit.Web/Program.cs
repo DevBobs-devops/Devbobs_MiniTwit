@@ -4,6 +4,7 @@ using Chirp.Infrastructure.Chirp.Services;
 using Chirp.Infrastructure.data;
 using Chirp.Web;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseMetricServer();
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -69,6 +73,8 @@ else
         DbInitializer.SeedDatabase(context);
     }    
 }
+
+
 
 
 
