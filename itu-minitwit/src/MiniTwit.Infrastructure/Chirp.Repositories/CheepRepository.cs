@@ -1,4 +1,5 @@
 ﻿using Chirp.Core;
+using Chirp.Infrastructure.Metrics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure.Chirp.Repositories;
@@ -11,11 +12,13 @@ public class CheepRepository : ICheepRepository
 {
     
     private readonly CheepDbContext _context;
+    private readonly CheepMetrics _metrics;
 
 
     public CheepRepository(CheepDbContext context)
     {
         this._context = context;
+        this._metrics = new CheepMetrics();
     }
     
     
@@ -112,6 +115,7 @@ public class CheepRepository : ICheepRepository
 
         await _context.Cheeps.AddAsync(cheep);
         await _context.SaveChangesAsync();
+        _metrics.RecordCheep(author.Name);
     }
 
 

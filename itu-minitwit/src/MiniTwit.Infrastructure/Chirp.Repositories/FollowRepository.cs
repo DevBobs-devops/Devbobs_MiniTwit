@@ -1,4 +1,5 @@
 ﻿using Chirp.Core;
+using Chirp.Infrastructure.Metrics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure.Chirp.Repositories;
@@ -10,11 +11,13 @@ namespace Chirp.Infrastructure.Chirp.Repositories;
 public class FollowRepository : IFollowRepository
 {
     private readonly CheepDbContext _context;
+    private readonly FollowMetrics _metrics;
 
 
     public FollowRepository(CheepDbContext context)
     {
         _context = context;
+        _metrics = new FollowMetrics();
     }
     
     
@@ -33,6 +36,7 @@ public class FollowRepository : IFollowRepository
         
         await _context.Follows.AddAsync(newFollow);
         await _context.SaveChangesAsync();
+        _metrics.IncrementFollower(followedName);
     }
 
 
@@ -47,6 +51,7 @@ public class FollowRepository : IFollowRepository
         {
             _context.Follows.Remove(follow);
             await _context.SaveChangesAsync();
+            _metrics.DecrementFollower(followedName);
         }
         
     }
