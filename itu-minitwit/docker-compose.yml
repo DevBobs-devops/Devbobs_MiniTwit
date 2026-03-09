@@ -3,7 +3,7 @@ services:
   minittwit:
     build: . # build the image from the Dockerfile
     environment:
-      ConnectionStrings__DefaultConnection: ${CONNECTION_STRING} # connect to database
+      ConnectionStrings__DefaultConnection: "Data/chirp.db" # connect to database
     ports:
       - "8080:8080"
     volumes:
