@@ -1,6 +1,6 @@
 version: '3'
 services:
-  minittwit:
+  minitwit:
     build: . # build the image from the Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development #Ensure that locally run env is Development. Fix found here: https://oneuptime.com/blog/post/2026-01-25-docker-compose-development-environments/view & here https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-10.0

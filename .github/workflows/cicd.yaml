@@ -1,12 +1,11 @@
 #edited yaml from: https://github.com/itu-devops/itu-minitwit-ci/blob/master/.github/workflows/continous-deployment.yml
 name: cicd
 
-on: 
+on:
   workflow_run:
     workflows: ["Build and Test"] #Consider if this should only run if a release has been made
     types: [completed]
   workflow_dispatch: #Allow manual trigger of workflow
-
 
 jobs:
   build:
@@ -57,12 +56,6 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/minitwit-grafana:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit-grafana:webbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit-grafana:webbuildcache,mode=max
-
-      - name: Test minitwit #We run build and test workflow before this, but we could add something...?
-        run: |
-          echo "test"
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
       - name: Configure SSH
         run: |
