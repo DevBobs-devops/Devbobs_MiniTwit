@@ -1,12 +1,12 @@
 version: '3'
 services:    
-  minittwit:
+  minitwit:
     image: ${DOCKER_USERNAME}/minitwitimage
     ports:
       - "8080:8080"
     volumes:
       - /minitwit/data:/app/Data  # mount database folder on vm to : our workdir in Dockerfile is /app, and the rest need to match our connectionstring
-      
+
   prometheus:
     image: ${DOCKER_USERNAME}/minitwit-prometheus
     container_name: prometheus
