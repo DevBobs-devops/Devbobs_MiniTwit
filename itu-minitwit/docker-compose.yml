@@ -1,6 +1,6 @@
 version: '3'
 services:
-  minittwit:
+  minitwit:
     build: . # build the image from the Dockerfile
     ports:
       - "8080:8080"
