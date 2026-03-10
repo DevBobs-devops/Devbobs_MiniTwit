@@ -1,6 +1,6 @@
 # Devbobs's Notebook 
 **Team:** Devbobs  
-**Contributors:** Marius, Morten, Jonas & Laura
+**Contributors:** Marius, Morten, Jonas, Torkil & Laura
 
 ---
 
@@ -105,8 +105,53 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 01/03: 12:00: Made our Vagrantfile idempotent. The provisioner script can be run with `vagrant provision`. 
 - While doing it i looked at [https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) and https://arslan.io/2019/07/03/how-to-write-idempotent-bash-scripts/.
 
+# Lecture 06
+03/03: We decided to use the database manger provided by DigitalOcean, more specifically Postgres
 
-# Lecture 6
+05/03: To migrate we needed to provide the database server with a postgres dump. However, our current database is sqlite, so it would create a sqlite dump, which we did:
+- Copy sqlite db from server
+``` scp root@209.38.230.113:/minitwit/data/chirp.db <location you want it to be put in>```
+- make sqlite dump
+```sqlite3 chirp.db .dump > minitwitdb.sql ```
+- We use following command to convert the sqlite3 dump to a postgres dump. The command is an altered version of the command provided in the response by DevelCuy here [https://stackoverflow.com/questions/4581727/how-to-convert-sqlite-sql-dump-file-to-postgresql]. The sed command is used for text tranformations, based upon the specification given.
+  ```
+  sed -e 's/INTEGER PRIMARY KEY AUTOINCREMENT/SERIAL PRIMARY KEY/g
+        s/PRAGMA foreign_keys=OFF;//
+        s/unsigned big int/BIGINT/g
+        s/UNSIGNED BIG INT/BIGINT/g
+        s/BIG INT/BIGINT/g
+        s/UNSIGNED INT(10)/BIGINT/g
+        s/BOOLEAN/SMALLINT/g
+        s/boolean/SMALLINT/g
+        s/UNSIGNED BIG INT/INTEGER/g
+        s/INT(3)/INT2/g
+        s/DATETIME/TIMESTAMP/g
+        s/AUTOINCREMENT//g
+        s/AspNetUsers/aspnetusers/g
+        s/AspNetRoles/aspnetroles/g
+        s/Follows/follows/g
+        s/AspNetUserClaims/aspnetuserclaims/g
+        s/AspNetRoleClaims/aspnetroleclaims/g
+        s/AspNetUserLogins/aspnetuserlogins/g
+        s/AspNetUserRoles/aspnetuserroles/g
+        s/AspNetUserTokens/aspnetusertokens/g
+        s/Cheeps/cheeps/g
+        /sqlite_sequence/d' \
+    chirp.sql > minitwitdb.sql```
+
+
+Then we migrate the dump to the database. Remember to have downloaded the certifcates from digitalOcean:
+```psql "sslmode=require host=db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com port=25060 dbname=minitwitdb user=doadmin sslrootcert=<path tp>ca-certificate.crt" < minitwitdb.sql```
+
+Updates for project
+To switch from Sqlite to postgres we install a postgres package in the Minitwit.Web project. Version 8.0.4, since we are usinge .Net 8.
+```dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.4```
+We also added the connectionstring to github secrets, which for obvious reason im not going to show. We use this conncetionstring to deploy from gihub actions, as we have already been doing. Now it should connect to the database server. The connection string will point to our new database.
+
+We also updated the cicd workflow and docker compose, so they now hav an environment variable pointing to our connectionstring.
+
+Note: You can connect to the database if you have postgres installed and use following command:
+```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
 
 08/03: 12:00: Setup Promethues and Grafana to do visualization of our application. The idea is that we in out .NET MiniTwit application expose /metrics, which is out "in memory" current view of the system (or whatever we expose). We then use Promethues to scrape this data and safe it. Grafana then uses what Promethues scrape and visualize it.
 - To expose more, see the MiniTwit.Infrastructure/Metrics.

@@ -2,6 +2,9 @@ version: '3'
 services:    
   minittwit:
     image: ${DOCKER_USERNAME}/minitwitimage
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production #specified for clarity
+      - ConnectionStrings__DefaultConnection: ${{ secrets.CONNECTION_STRING }} #env for database
     ports:
       - "8080:8080"
     volumes:
