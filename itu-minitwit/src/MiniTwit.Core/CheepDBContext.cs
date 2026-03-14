@@ -43,6 +43,7 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
         );
 
         //Specifying the table and column names, to match up with the ones in postgres
+        //https://learn.microsoft.com/en-us/ef/core/modeling/ and help from chatgpt with structure (the  'cheep => {}' part)
         modelBuilder.Entity<Cheep>(cheep =>
         {
             cheep.ToTable("cheeps");
