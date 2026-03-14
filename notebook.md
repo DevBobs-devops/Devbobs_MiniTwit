@@ -108,53 +108,37 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 # Lecture 06
 03/03: We decided to use the database manger provided by DigitalOcean, more specifically Postgres
 
-05/03: To migrate we needed to provide the database server with a postgres dump. However, our current database is sqlite, so it would create a sqlite dump, which we did:
+05/03 - edited (14/03): To migrate we needed to provide the database server with a postgres dump. However, our current database is sqlite, so it would create a sqlite dump, which we did:
 - Copy sqlite db from server
 ``` scp root@209.38.230.113:/minitwit/data/chirp.db <location you want it to be put in>```
 - make sqlite dump
 ```sqlite3 chirp.db .dump > minitwitdb.sql ```
-- We use following command to convert the sqlite3 dump to a postgres dump. The command is an altered version of the command provided in the response by DevelCuy here [https://stackoverflow.com/questions/4581727/how-to-convert-sqlite-sql-dump-file-to-postgresql]. The sed command is used for text tranformations, based upon the specification given.
-  ```
-  sed -e 's/INTEGER PRIMARY KEY AUTOINCREMENT/SERIAL PRIMARY KEY/g
-        s/PRAGMA foreign_keys=OFF;//
-        s/unsigned big int/BIGINT/g
-        s/UNSIGNED BIG INT/BIGINT/g
-        s/BIG INT/BIGINT/g
-        s/UNSIGNED INT(10)/BIGINT/g
-        s/BOOLEAN/SMALLINT/g
-        s/boolean/SMALLINT/g
-        s/UNSIGNED BIG INT/INTEGER/g
-        s/INT(3)/INT2/g
-        s/DATETIME/TIMESTAMP/g
-        s/AUTOINCREMENT//g
-        s/AspNetUsers/aspnetusers/g
-        s/AspNetRoles/aspnetroles/g
-        s/Follows/follows/g
-        s/AspNetUserClaims/aspnetuserclaims/g
-        s/AspNetRoleClaims/aspnetroleclaims/g
-        s/AspNetUserLogins/aspnetuserlogins/g
-        s/AspNetUserRoles/aspnetuserroles/g
-        s/AspNetUserTokens/aspnetusertokens/g
-        s/Cheeps/cheeps/g
-        /sqlite_sequence/d' \
-    chirp.sql > minitwitdb.sql```
 
+- We create a postgres database locally to help with the dump
+```createdb -U postgres tempdb```
 
-Then we migrate the dump to the database. Remember to have downloaded the certifcates from digitalOcean:
-```psql "sslmode=require host=db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com port=25060 dbname=minitwitdb user=doadmin sslrootcert=<path tp>ca-certificate.crt" < minitwitdb.sql```
+- Then using PGloader, we load the sqlite dump into the postgres tempdb
+```pgloader sqlite://chirp.db postgresql://postgres:miniDBTwit@localhost/tempd```
 
-Updates for project
-To switch from Sqlite to postgres we install a postgres package in the Minitwit.Web project. Version 8.0.4, since we are usinge .Net 8.
-```dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.4```
-We also added the connectionstring to github secrets, which for obvious reason im not going to show. We use this conncetionstring to deploy from gihub actions, as we have already been doing. Now it should connect to the database server. The connection string will point to our new database.
+- Then we create the dump. The reason for --no-owner and --no-acl, is that we had a conflict between the user on digtal ocean, giving errors, because it was not marked as owner, the local postgres user was. Setting it to no owner, removed the conflicts.
+```sudo -u postgres pg_dump --no-owner --no-acl tempdb > minitwitdb.sql```
 
-We also updated the cicd workflow and docker compose, so they now hav an environment variable pointing to our connectionstring.
-
-Note: You can connect to the database if you have postgres installed and use following command:
-```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
+- Then we upload the dump to the digital ocean database
+```psql "postgresql://doadmin:...@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
 
 08/03: 12:00: Setup Promethues and Grafana to do visualization of our application. The idea is that we in out .NET MiniTwit application expose /metrics, which is out "in memory" current view of the system (or whatever we expose). We then use Promethues to scrape this data and safe it. Grafana then uses what Promethues scrape and visualize it.
 - To expose more, see the MiniTwit.Infrastructure/Metrics.
 - To Visualize it, go to grafana at localhost/3000 and find the dashboard, click edit, click add visualiztion. When you have added something copy the json file into /monitoring/grafana/dashboard/dashboard.json
 
-09/02: 18:00: Ran into uses with the github actions not being able to find the dockerfiles - because of the context being setup wrong. Also forgot to create two new repositories on Dockerhub for the new images.
+09/03: 18:00: Ran into uses with the github actions not being able to find the dockerfiles - because of the context being setup wrong. Also forgot to create two new repositories on Dockerhub for the new images.
+
+
+11/03: Updates for project
+- To switch from Sqlite to postgres we install a postgres package in the Minitwit.Web project. Version 8.0.4, since we are usinge .Net 8.
+```dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.4```
+- We also added the connectionstring to github secrets, which for obvious reason im not going to show. We use this conncetionstring to deploy from gihub actions, as we have already been doing. Now it should connect to the database server. The connection string will point to our new database.
+
+- We also updated the cicd workflow and docker compose, so they now hav an environment variable pointing to our connectionstring.
+
+- Note: You can connect to the database if you have postgres installed and use following command:
+```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
