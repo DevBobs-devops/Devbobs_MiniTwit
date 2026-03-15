@@ -15,12 +15,12 @@ jobs:
       pull-requests: write
     steps:
       - name: CSharpier Linter
-        uses: guibranco/github-csharpier-linter-action@v1.0.5
+        uses: guibranco/github-csharpier-linter-action@a5214a476742ce4a0f755611581276c50081527a
   hadolint-dockerfile:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v3
-    - uses: hadolint/hadolint-action@v3.1.0
+    - uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5
       with:
         dockerfile: itu-minitwit/Dockerfile
   
