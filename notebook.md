@@ -113,3 +113,11 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - To Visualize it, go to grafana at localhost/3000 and find the dashboard, click edit, click add visualiztion. When you have added something copy the json file into /monitoring/grafana/dashboard/dashboard.json
 
 09/02: 18:00: Ran into uses with the github actions not being able to find the dockerfiles - because of the context being setup wrong. Also forgot to create two new repositories on Dockerhub for the new images.
+
+
+# Lecture 7
+
+15/03 13:45: Research on which linter(s) and codeformatter to use. 
+- For our C# codebase we will use ["dotnet/roslynator: Roslynator is a set of code analysis tools for C#, powered by Roslyn."](https://github.com/dotnet/roslynator?tab=readme-ov-file#command-line-tool). To use this tool locally `dotnet tool install -g roslynator.dotnet.cli` in `/itu-minitwit`. After that run e.g: `roslynator analyze .\MiniTwit.sln`. Need to figure out how to use in github actions.
+- For the code formatter we will use [CSharpier | CSharpier](https://csharpier.com/docs/About), which has the following github for github actions:  [guibranco/github-csharpier-linter-action: 🎯 A reusable GitHub Action to automatically check and enforce C# code formatting using CSharpier](https://github.com/guibranco/github-csharpier-linter-action). IMPORTANT: this automatically inforces the code-formatting.
+- 
