@@ -307,12 +307,12 @@ public class UnitTests : IAsyncLifetime
         }
         
         //Arrange
-        var likesBefore = _context.Cheeps.ToList()[1].Likes.Count();
+        var likesBefore = _context.Cheeps.ToList()[1].Likes.Count;
         
         //Act
         await _cheepRepository.AddLike("Mellie Yost", 2);
         await _context.SaveChangesAsync();
-        var likesAfter = _context.Cheeps.ToList()[1].Likes.Count();
+        var likesAfter = _context.Cheeps.ToList()[1].Likes.Count;
         
         //Assert
         Assert.True(likesAfter == likesBefore +1);
@@ -341,11 +341,11 @@ public class UnitTests : IAsyncLifetime
         
         //Arrange
         _context.Cheeps.ToList()[1].Likes.Add("Mellie Yost");
-        var likesBefore = _context.Cheeps.ToList()[1].Likes.Count();
+        var likesBefore = _context.Cheeps.ToList()[1].Likes.Count;
         
         //Act
         await _cheepRepository.RemoveLike("Mellie Yost", 2);
-        var likesAfter = _context.Cheeps.ToList()[1].Likes.Count();
+        var likesAfter = _context.Cheeps.ToList()[1].Likes.Count;
        
         //Assert
         Assert.True(likesAfter == likesBefore -1);
@@ -362,10 +362,10 @@ public class UnitTests : IAsyncLifetime
         //Arrange
         var cheep = _context.Cheeps.ToList()[1];
         cheep.Likes.Add("Mellie Yost");
-        var before = cheep.Likes.Count();
+        var before = cheep.Likes.Count;
         //Act
         await _cheepRepository.RemoveLike("TestAuthor", cheep.CheepId);
-        var after = cheep.Likes.Count();
+        var after = cheep.Likes.Count;
        
         //Assert
         Assert.Equal(before, after);
@@ -466,11 +466,11 @@ public class UnitTests : IAsyncLifetime
         currentLikes.Likes.Add("Mellie Yost");
         await _context.SaveChangesAsync();
         var cheep = await _context.Cheeps.FirstAsync(cheep =>cheep.CheepId == 5);
-        var before = cheep.Likes.Count();
+        var before = cheep.Likes.Count;
         
         //Act
         await _cheepRepository.DeleteAllLikes("Mellie Yost");
-        var after = cheep.Likes.Count();
+        var after = cheep.Likes.Count;
         
         //Assert
         Assert.NotEqual(before, after);
@@ -1145,7 +1145,7 @@ public class UnitTests : IAsyncLifetime
         
         var cheeps = await _chirpService.GetCheepsForTimeline("Octavio Wagganer",1);
    
-        Assert.Equal(15, cheeps.Count());
+        Assert.Equal(15, cheeps.Count);
         
     }
     

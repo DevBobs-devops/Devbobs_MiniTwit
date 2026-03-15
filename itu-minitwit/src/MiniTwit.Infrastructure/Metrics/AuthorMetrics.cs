@@ -8,7 +8,7 @@ public class AuthorMetrics
         "total_users",
         "Total number of users");
     
-    public void IncrementAuthors()
+    public static void IncrementAuthors()
     {
         TotalAuthors.Inc();
     }

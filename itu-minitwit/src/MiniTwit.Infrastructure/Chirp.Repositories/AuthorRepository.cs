@@ -12,13 +12,11 @@ public class AuthorRepository : IAuthorRepository
 {
     
     private readonly CheepDbContext _context;
-    private readonly AuthorMetrics _metrics;
 
 
     public AuthorRepository(CheepDbContext context)
     {
         _context = context;
-        _metrics = new AuthorMetrics();
     }
     
     
@@ -76,7 +74,7 @@ public class AuthorRepository : IAuthorRepository
         
         await _context.Authors.AddAsync(newAuthor);
         await _context.SaveChangesAsync();
-        _metrics.IncrementAuthors();
+        AuthorMetrics.IncrementAuthors();
     }
     
 }

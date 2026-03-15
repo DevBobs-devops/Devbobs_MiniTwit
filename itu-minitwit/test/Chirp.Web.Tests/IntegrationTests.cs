@@ -101,7 +101,7 @@ public class IntegrationTests : IAsyncLifetime
         await _service.AddFollowing(authorname1, authorname2);
         var cheeps = await _service.GetCheepsForTimeline(authorname1, 1);
         
-        Assert.Equal(22, cheeps.Count());
+        Assert.Equal(22, cheeps.Count);
 
     }
 
@@ -221,7 +221,7 @@ public class IntegrationTests : IAsyncLifetime
         var authorCheepsBefore = await _service.GetAllCheepsFromAuthor(author.Name);
         var cheep = authorCheepsBefore.First();
         
-        Assert.True(1 == authorCheepsBefore.Count());
+        Assert.True(1 == authorCheepsBefore.Count);
 
         
 
@@ -257,7 +257,7 @@ public class IntegrationTests : IAsyncLifetime
         var author1CheepsBefore = await _service.GetCheepsFromAuthor(0, author.Name, author2.Name);
         var cheepBefore = author1CheepsBefore.First();
         
-        Assert.True(1 == author1CheepsBefore.Count());
+        Assert.True(1 == author1CheepsBefore.Count);
         Assert.Equal("tester", cheepBefore.Message);
         
         await _service.DeleteCheep(cheepBefore.Id);

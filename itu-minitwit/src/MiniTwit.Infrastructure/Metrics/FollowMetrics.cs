@@ -11,12 +11,12 @@ public class FollowMetrics
             LabelNames = new[] { "user" }
         });
     
-    public void IncrementFollower(string user)
+    public static void IncrementFollower(string user)
     {
         FollowersPerUser.WithLabels(user).Inc();
     }
     
-    public void DecrementFollower(string user)
+    public static void DecrementFollower(string user)
     {
         FollowersPerUser.WithLabels(user).Dec();
     }

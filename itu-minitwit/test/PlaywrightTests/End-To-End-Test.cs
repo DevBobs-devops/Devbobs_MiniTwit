@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
-public class EndToEnd : PageTest
+public partial class EndToEnd : PageTest
 {
     [Test]
     public async Task HasTitle()
@@ -17,7 +17,7 @@ public class EndToEnd : PageTest
         await Page.GotoAsync("http://localhost:5221");
 
         // Expect a title "to contain" a substring.
-        await Expect(Page).ToHaveTitleAsync(new Regex("Chirp!"));
+        await Expect(Page).ToHaveTitleAsync(MyRegex());
     }
     
     [Test]
@@ -997,6 +997,7 @@ public class EndToEnd : PageTest
         await Page.GetByPlaceholder("Please enter your password.").FillAsync("Testkode0!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Delete data and close my" }).ClickAsync();
     }
-    
-    
+
+    [GeneratedRegex("Chirp!")]
+    private static partial Regex MyRegex();
 }

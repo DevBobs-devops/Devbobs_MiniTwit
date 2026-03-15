@@ -17,7 +17,7 @@ public class CheepMetrics
             LabelNames = new[] { "user" }
         });
     
-    public void RecordCheep(string? user)
+    public static void RecordCheep(string? user)
     {
         CheepsCreated.Inc();
         
