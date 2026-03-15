@@ -9,9 +9,15 @@ on:
   workflow_dispatch: #Allow manual trigger of workflow
 
 jobs:
+  linter-format:
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
+    steps:
+      - name: CSharpier Linter
+        uses: guibranco/github-csharpier-linter-action@v1.0.5
   build:
     runs-on: ubuntu-24.04 # matches version in droplets
-
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -22,10 +28,6 @@ jobs:
       run: dotnet restore itu-minitwit
     - name: Build
       run: dotnet build itu-minitwit --no-restore
-    - name: Code Analysis 
-      run: |
-        dotnet tool install -g roslynator.dotnet.cli
-        roslynator analyze ./MiniTwit.sln
     - name: Test Dotnet
       run: |
         dotnet test itu-minitwit --filter FullyQualifiedName!~PlaywrightTests --configuration Release
@@ -47,7 +49,7 @@ jobs:
     - name: Test Pytest
       run: | 
         pytest itu-minitwit/test/minitwit_sim_api_test.py
-      
+  
 
     
     
