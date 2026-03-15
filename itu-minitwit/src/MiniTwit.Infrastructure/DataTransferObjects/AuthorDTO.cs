@@ -1,5 +1,4 @@
-﻿
-namespace Chirp.Infrastructure.DataTransferObjects;
+﻿namespace Chirp.Infrastructure.DataTransferObjects;
 
 /// <summary>
 /// Used to transfer author data to the frontend.

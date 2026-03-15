@@ -5,11 +5,10 @@ namespace Chirp.Core;
 
 /// <summary>
 /// Author represents a user in the chirp application
-/// Author inherits from IdentityUser where an int is used as the key* 
+/// Author inherits from IdentityUser where an int is used as the key*
 /// </summary>
 public class Author : IdentityUser<int>
 {
-    
     [StringLength(100)]
     [RegularExpression(@"^[^\/]*$")]
     [Required]
@@ -18,5 +17,4 @@ public class Author : IdentityUser<int>
     [StringLength(100)]
     [Required]
     public new required string Email { get; set; }
-    
 }

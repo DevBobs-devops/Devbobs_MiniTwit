@@ -16,13 +16,14 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<Author> _userManager;
         private readonly SignInManager<Author> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
-        private readonly IChirpService  _chirpService;
+        private readonly IChirpService _chirpService;
 
         public DeletePersonalDataModel(
             UserManager<Author> userManager,
             SignInManager<Author> signInManager,
             ILogger<DeletePersonalDataModel> logger,
-            IChirpService chirpService)
+            IChirpService chirpService
+        )
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -87,19 +88,17 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
-            
-            
+
             await _chirpService.DeleteFromFollows(author.Name);
             await _chirpService.DeleteAllLikes(author.Name);
-            
+
             var result = await _userManager.DeleteAsync(author);
             var userId = await _userManager.GetUserIdAsync(author);
             if (!result.Succeeded)
             {
                 throw new InvalidOperationException($"Unexpected error occurred deleting user.");
             }
-            
-            
+
             await _signInManager.SignOutAsync();
 
             _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);

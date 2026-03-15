@@ -12,19 +12,17 @@ namespace Chirp.Core.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Follows_AspNetUsers_AuthorId",
-                table: "Follows");
+                table: "Follows"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Follows_AspNetUsers_FollowsId",
-                table: "Follows");
+                table: "Follows"
+            );
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Follows",
-                table: "Follows");
+            migrationBuilder.DropPrimaryKey(name: "PK_Follows", table: "Follows");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Follows_FollowsId",
-                table: "Follows");
+            migrationBuilder.DropIndex(name: "IX_Follows_FollowsId", table: "Follows");
 
             migrationBuilder.AddColumn<string>(
                 name: "AuthorName",
@@ -32,7 +30,8 @@ namespace Chirp.Core.Migrations
                 type: "TEXT",
                 maxLength: 100,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: ""
+            );
 
             migrationBuilder.AddColumn<string>(
                 name: "FollowsAuthorName",
@@ -40,38 +39,36 @@ namespace Chirp.Core.Migrations
                 type: "TEXT",
                 maxLength: 100,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: ""
+            );
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Follows",
                 table: "Follows",
-                columns: new[] { "AuthorId", "FollowsId", "AuthorName" });
+                columns: new[] { "AuthorId", "FollowsId", "AuthorName" }
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Follows",
-                table: "Follows");
+            migrationBuilder.DropPrimaryKey(name: "PK_Follows", table: "Follows");
 
-            migrationBuilder.DropColumn(
-                name: "AuthorName",
-                table: "Follows");
+            migrationBuilder.DropColumn(name: "AuthorName", table: "Follows");
 
-            migrationBuilder.DropColumn(
-                name: "FollowsAuthorName",
-                table: "Follows");
+            migrationBuilder.DropColumn(name: "FollowsAuthorName", table: "Follows");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Follows",
                 table: "Follows",
-                columns: new[] { "AuthorId", "FollowsId" });
+                columns: new[] { "AuthorId", "FollowsId" }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Follows_FollowsId",
                 table: "Follows",
-                column: "FollowsId");
+                column: "FollowsId"
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Follows_AspNetUsers_AuthorId",
@@ -79,7 +76,8 @@ namespace Chirp.Core.Migrations
                 column: "AuthorId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Follows_AspNetUsers_FollowsId",
@@ -87,7 +85,8 @@ namespace Chirp.Core.Migrations
                 column: "FollowsId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
         }
     }
 }
