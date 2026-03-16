@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Chirp.Core;
 
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 
@@ -27,31 +29,39 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
 
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    {   
+        base.OnModelCreating(modelBuilder);
         // TODO: Handle likes aswell somehow :/
 
-        //adding convertes for datetime and booleans
+        //adding convertes for likes and booleans
         //Based on the codumentation for ValueConverter found here here: https://learn.microsoft.com/en-us/ef/core/modeling/value-conversions?tabs=data-annotations
-        var timeToDateTimeConverter = new ValueConverter<DateTime, string>( //First = .Net datatype Second = db provider type.
-            date => date.ToString(),         
-            date => DateTime.Parse(date) 
-        );
-
-        var bigintToBoolConverter = new ValueConverter<bool, long>(
+        var bigintToBoolConverter = new ValueConverter<bool, long>(//First = .Net datatype Second = db provider type.
             v => boolToInt(v),
             v => intToBool(v)
         );
 
+
+        var likesConverter = new ValueConverter<List<string>, string>(
+            v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+            v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>()
+        );
+
+        var likesComparer = new ValueComparer<List<string>>(
+            (c1, c2) => c1!.SequenceEqual(c2!),
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+            c => c.ToList() // deep copy
+        );
+
         //Specifying the table and column names, to match up with the ones in postgres
-        //https://learn.microsoft.com/en-us/ef/core/modeling/ and help from chatgpt with structure (the  'cheep => {}' part)
+        //https://learn.microsoft.com/en-us/ef/core/modeling/ and help from chatgpt with structure (the  'cheep => {}' part and how to handle the efcore stuff)
         modelBuilder.Entity<Cheep>(cheep =>
         {
             cheep.ToTable("cheeps");
             cheep.Property(c => c.CheepId).HasColumnName("cheepid");
             cheep.Property(c => c.AuthorId).HasColumnName("authorid");
             cheep.Property(c => c.Text).HasColumnName("text");
-            cheep.Property(c => c.Timestamp).HasColumnName("timestamp").HasConversion(timeToDateTimeConverter); //convert to DateTime
-            cheep.Property(c=> c.Likes).HasColumnName("likes");
+            cheep.Property(c => c.Timestamp).HasColumnName("timestamp");//.HasConversion(timeToDateTimeConverter); //convert to DateTime
+            cheep.Property(c=> c.Likes).HasColumnName("likes").HasConversion(likesConverter).Metadata.SetValueComparer(likesComparer);
         });
 
         modelBuilder.Entity<Follow>(follow =>
@@ -78,14 +88,14 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
             author.Property(a => a.PhoneNumber).HasColumnName("phonenumber");
             author.Property(a => a.PhoneNumberConfirmed).HasColumnName("phonenumberconfirmed").HasConversion(bigintToBoolConverter);
             author.Property(a => a.SecurityStamp).HasColumnName("securitystamp");
-            author.Property(a => a.TwoFactorEnabled).HasColumnName("twSSofactorenabled").HasConversion(bigintToBoolConverter);
+            author.Property(a => a.TwoFactorEnabled).HasColumnName("twofactorenabled").HasConversion(bigintToBoolConverter);
             author.Property(a => a.UserName).HasColumnName("username");
             author.Property(a => a.NormalizedUserName).HasColumnName("normalizedusername");
         });
 
         modelBuilder.Entity<IdentityRole<int>>(EFC =>
         {
-            EFC.ToTable("apnetroles");
+            EFC.ToTable("aspnetroles");
             EFC.Property(e=>e.Id).HasColumnName("id");
             EFC.Property(e=>e.Name).HasColumnName("name");
             EFC.Property(e=>e.NormalizedName).HasColumnName("normalizedname");
@@ -131,7 +141,7 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
 
         modelBuilder.Entity<IdentityUserToken<int>>(EFC =>
         {
-            EFC.ToTable("aspnetuseryokens");
+            EFC.ToTable("aspnetusertokens");
             EFC.Property(e=> e.LoginProvider).HasColumnName("loginprovider");
             EFC.Property(e=> e.Name).HasColumnName("name");
             EFC.Property(e=> e.Value).HasColumnName("value");
