@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Experimental.ProjectCache;
-using SQLitePCL;
 
 
 namespace Chirp.Web;
