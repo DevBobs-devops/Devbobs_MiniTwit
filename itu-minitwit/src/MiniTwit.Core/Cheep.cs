@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 /// </summary>
 public class Cheep
 {
-    public int CheepId { get; set; }
+    public long CheepId { get; set; }
     [StringLength(160)]
     [Required]
     public required string Text { get; set; }
