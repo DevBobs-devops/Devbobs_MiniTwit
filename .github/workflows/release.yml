@@ -4,7 +4,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["Build and Test"]
+    workflows: ["cicd"]
     types: [completed]
   workflow_dispatch: #Allow manual trigger of workflow
 
