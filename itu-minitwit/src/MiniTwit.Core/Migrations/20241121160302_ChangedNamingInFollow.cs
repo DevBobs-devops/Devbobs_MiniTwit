@@ -13,12 +13,14 @@ namespace Chirp.Core.Migrations
             migrationBuilder.RenameColumn(
                 name: "FollowsAuthorName",
                 table: "Follows",
-                newName: "Followed");
+                newName: "Followed"
+            );
 
             migrationBuilder.RenameColumn(
                 name: "AuthorName",
                 table: "Follows",
-                newName: "Follower");
+                newName: "Follower"
+            );
         }
 
         /// <inheritdoc />
@@ -27,12 +29,14 @@ namespace Chirp.Core.Migrations
             migrationBuilder.RenameColumn(
                 name: "Followed",
                 table: "Follows",
-                newName: "FollowsAuthorName");
+                newName: "FollowsAuthorName"
+            );
 
             migrationBuilder.RenameColumn(
                 name: "Follower",
                 table: "Follows",
-                newName: "AuthorName");
+                newName: "AuthorName"
+            );
         }
     }
 }

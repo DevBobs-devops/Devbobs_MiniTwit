@@ -15,7 +15,7 @@ namespace Chirp.Core.Migrations
                 columns: table => new
                 {
                     AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
-                    FollowsId = table.Column<int>(type: "INTEGER", nullable: false)
+                    FollowsId = table.Column<int>(type: "INTEGER", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -25,26 +25,29 @@ namespace Chirp.Core.Migrations
                         column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "FK_Follows_AspNetUsers_FollowsId",
                         column: x => x.FollowsId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Follows_FollowsId",
                 table: "Follows",
-                column: "FollowsId");
+                column: "FollowsId"
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Follows");
+            migrationBuilder.DropTable(name: "Follows");
         }
     }
 }

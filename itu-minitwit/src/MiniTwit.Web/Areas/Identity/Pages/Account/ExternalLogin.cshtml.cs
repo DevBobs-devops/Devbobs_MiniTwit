@@ -31,7 +31,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             UserManager<Author> userManager,
             IUserStore<Author> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender
+        )
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -80,24 +81,34 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
-            
+
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Username")]
             public string Name { get; set; }
         }
-        
+
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            var redirectUrl = Url.Page(
+                "./ExternalLogin",
+                pageHandler: "Callback",
+                values: new { returnUrl }
+            );
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(
+                provider,
+                redirectUrl
+            );
             return new ChallengeResult(provider, properties);
         }
 
-        public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> OnGetCallbackAsync(
+            string returnUrl = null,
+            string remoteError = null
+        )
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
@@ -113,12 +124,20 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            var result = await _signInManager.ExternalLoginSignInAsync(
+                info.LoginProvider,
+                info.ProviderKey,
+                isPersistent: false,
+                bypassTwoFactor: true
+            );
             if (result.Succeeded)
             {
                 if (info.Principal.Identity != null)
-                    _logger.LogInformation("{Name} logged in with {LoginProvider} provider.",
-                        info.Principal.Identity.Name, info.LoginProvider);
+                    _logger.LogInformation(
+                        "{Name} logged in with {LoginProvider} provider.",
+                        info.Principal.Identity.Name,
+                        info.LoginProvider
+                    );
                 return LocalRedirect(returnUrl);
             }
             if (result.IsLockedOut)
@@ -133,20 +152,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 Input = new InputModel();
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
-                    
                     Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
-
                 }
-                
+
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
                 {
-
                     Input.Name = info.Principal.FindFirstValue(ClaimTypes.Name);
-
                 }
 
                 return await OnPostConfirmationAsync();
-                
             }
         }
 
@@ -179,8 +193,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                     {
                         var claim = new Claim("Username", author.Name);
                         await _userManager.AddClaimAsync(author, claim);
-                        
-                        _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+
+                        _logger.LogInformation(
+                            "User created an account using {Name} provider.",
+                            info.LoginProvider
+                        );
 
                         var authorName = await _userManager.GetUserIdAsync(author);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(author);
@@ -188,12 +205,21 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         var callbackUrl = Url.Page(
                             "/Account/ConfirmEmail",
                             pageHandler: null,
-                            values: new { area = "Identity", authorName, code },
-                            protocol: Request.Scheme);
+                            values: new
+                            {
+                                area = "Identity",
+                                authorName,
+                                code,
+                            },
+                            protocol: Request.Scheme
+                        );
 
                         if (callbackUrl != null)
-                            await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                            await _emailSender.SendEmailAsync(
+                                Input.Email,
+                                "Confirm your email",
+                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
+                            );
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
@@ -201,7 +227,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                             return RedirectToPage("./RegisterConfirmation", new { Input.Email });
                         }
 
-                        await _signInManager.SignInAsync(author, isPersistent: false, info.LoginProvider);
+                        await _signInManager.SignInAsync(
+                            author,
+                            isPersistent: false,
+                            info.LoginProvider
+                        );
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -224,9 +254,11 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(Author)}'. " +
-                    $"Ensure that '{nameof(Author)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml");
+                throw new InvalidOperationException(
+                    $"Can't create an instance of '{nameof(Author)}'. "
+                        + $"Ensure that '{nameof(Author)}' is not an abstract class and has a parameterless constructor, or alternatively "
+                        + $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml"
+                );
             }
         }
 
@@ -234,7 +266,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         {
             if (!_userManager.SupportsUserEmail)
             {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
+                throw new NotSupportedException(
+                    "The default UI requires a user store with email support."
+                );
             }
             return (IUserEmailStore<Author>)_userStore;
         }

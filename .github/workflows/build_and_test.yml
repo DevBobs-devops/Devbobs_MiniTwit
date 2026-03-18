@@ -9,9 +9,23 @@ on:
   workflow_dispatch: #Allow manual trigger of workflow
 
 jobs:
+  linter-codeformat:
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
+    steps:
+      - name: CSharpier Linter
+        uses: guibranco/github-csharpier-linter-action@a5214a476742ce4a0f755611581276c50081527a
+  hadolint-dockerfile:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v3
+    - uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5
+      with:
+        dockerfile: itu-minitwit/Dockerfile
+  
   build:
     runs-on: ubuntu-24.04 # matches version in droplets
-
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -43,7 +57,7 @@ jobs:
     - name: Test Pytest
       run: | 
         pytest itu-minitwit/test/minitwit_sim_api_test.py
-      
+  
 
     
     

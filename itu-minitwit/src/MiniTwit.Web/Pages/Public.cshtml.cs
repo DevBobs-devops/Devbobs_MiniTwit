@@ -6,19 +6,15 @@ namespace Chirp.Web.Pages;
 
 public class PublicModel : TimelineModel
 {
+    public PublicModel(IChirpService service)
+        : base(service) { }
 
-    public PublicModel(IChirpService service) : base(service)
-    {
-        
-    }
-    
     public async Task<ActionResult> OnGet([FromQuery] int page)
     {
-        
         var authorName = User.Identity?.Name;
         PageNumber = page;
         await HandlePageNumber();
-        if ( authorName == null )
+        if (authorName == null)
         {
             Cheeps = await Service.GetCheeps(PageNumber);
         }
@@ -28,5 +24,4 @@ public class PublicModel : TimelineModel
         }
         return Page();
     }
-    
 }

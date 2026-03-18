@@ -1,11 +1,9 @@
-﻿
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Chirp.Core;
 
 using Microsoft.EntityFrameworkCore;
-
 
 /// <summary>
 /// Used to connect to the database.
@@ -17,10 +15,7 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Follow> Follows { get; set; }
 
-
     //Constructor
-    public CheepDbContext(DbContextOptions<CheepDbContext> options) : base(options)
-    {   
-        
-    }
+    public CheepDbContext(DbContextOptions<CheepDbContext> options)
+        : base(options) { }
 }
