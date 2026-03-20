@@ -1,0 +1,29 @@
+//Inspiration/Guide: https://kycha-blog.org/posts/practical-guide-grafana-alloy-loki-docker
+
+
+// 1. Fetch logs coming from all your Docker containers
+discovery.docker "local" {
+  host = "unix:///var/run/docker.sock"
+}
+
+// 2.
+// https://grafana.com/docs/alloy/latest/reference/components/loki/loki.source.docker/
+loki.source.docker "app_logs" {
+  host    = "unix:///var/run/docker.sock"
+  targets = discovery.docker.local.targets
+
+  // IMPORTANT: at least one label must be defined on every entry
+  labels = {
+    app = "minitwit",
+  }
+
+  forward_to = [loki.write.grafana_loki.receiver]
+}
+
+// 3.
+loki.write "grafana_loki" {
+  endpoint {
+    // Your Docker network will resolve "loki" to the proper IP address of the Loki container on the internal network
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

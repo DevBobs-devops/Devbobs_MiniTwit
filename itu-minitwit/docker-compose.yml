@@ -17,19 +17,19 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - "9090:9090"
-    
 
-  grafana:
-    build: 
-      dockerfile: ./Dockerfile
-      context: ./monitoring/grafana
-    image: grafana_image
-    container_name: grafana
-    ports:
-      - "3000:3000"
+  alloy:
+    image: grafana/alloy:latest
     volumes:
-      - grafana-storage:/var/lib/grafana
-  
+      # IMPORTANT: This actually allows Alloy to connect to the docker.sock file which exists on your container's host machine
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./monitoring/alloy/config.alloy:/etc/alloy/config.alloy
+    command: 
+      - "run"
+      - "/etc/alloy/config.alloy"
+    depends_on:
+      - loki    
+
   loki:
     build: 
       dockerfile: ./Dockerfile
@@ -40,10 +40,23 @@ services:
       - "3100:3100"
     volumes:
       - loki-data:/loki
-    command: -config.file=/etc/loki/local-config.yaml
+    command: "--config.file=/etc/loki/loki.yml"
+
+  grafana:
+    build: 
+      dockerfile: ./Dockerfile
+      context: ./monitoring/grafana
+    image: grafana_image
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana 
 
 volumes:
   loki-data:
   grafana-storage: {} 
 
 #Inspiration/guide: https://medium.com/@Shamimw/docker-a-complete-tutorial-part3-docker-compose-2e3b2f568a6f
+
+#Inspiration/guide: https://kycha-blog.org/posts/practical-guide-grafana-alloy-loki-docker
