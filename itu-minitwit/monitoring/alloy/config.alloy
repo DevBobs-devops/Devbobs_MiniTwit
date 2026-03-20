@@ -1,29 +1,37 @@
-//Inspiration/Guide: https://kycha-blog.org/posts/practical-guide-grafana-alloy-loki-docker
 
+//converted config file (promtail -> alloy) from the exercises
 
-// 1. Fetch logs coming from all your Docker containers
-discovery.docker "local" {
-  host = "unix:///var/run/docker.sock"
+discovery.docker "docker" {
+	host             = "unix:///var/run/docker.sock"
+	refresh_interval = "5s"
 }
 
-// 2.
-// https://grafana.com/docs/alloy/latest/reference/components/loki/loki.source.docker/
-loki.source.docker "app_logs" {
-  host    = "unix:///var/run/docker.sock"
-  targets = discovery.docker.local.targets
+discovery.relabel "docker" {
+	targets = []
 
-  // IMPORTANT: at least one label must be defined on every entry
-  labels = {
-    app = "minitwit",
-  }
+	rule {
+		source_labels = ["__meta_docker_container_name"]
+		regex         = "/(.*)"
+		target_label  = "container"
+	}
 
-  forward_to = [loki.write.grafana_loki.receiver]
+	rule {
+		source_labels = ["__meta_docker_container_log_stream"]
+		target_label  = "stream"
+	}
 }
 
-// 3.
-loki.write "grafana_loki" {
-  endpoint {
-    // Your Docker network will resolve "loki" to the proper IP address of the Loki container on the internal network
-    url = "http://loki:3100/loki/api/v1/push"
-  }
+loki.source.docker "docker" {
+	host             = "unix:///var/run/docker.sock"
+	targets          = discovery.docker.docker.targets
+	forward_to       = [loki.write.default.receiver]
+	relabel_rules    = discovery.relabel.docker.rules
+	refresh_interval = "5s"
+}
+
+loki.write "default" {
+	endpoint {
+		url = "http://loki:3100/loki/api/v1/push"
+	}
+	external_labels = {}
 }
