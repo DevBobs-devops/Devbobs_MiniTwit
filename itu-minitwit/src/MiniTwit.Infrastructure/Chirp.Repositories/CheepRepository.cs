@@ -152,7 +152,12 @@ public class CheepRepository : ICheepRepository
     
     public async Task<List<Cheep>> GetAllLiked(string authorName)
     {
-        var likedCheeps = await _context.Cheeps.Where(cheep => cheep.Likes.Contains(authorName)).Include(c => c.Author).ToListAsync();
+        //Fetch in memory, might be bad
+        var Cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
+        
+        //var likedCheeps = await _context.Cheeps.Where(cheep => cheep.Likes.Contains(authorName)).Include(c => c.Author).ToListAsync();
+
+        var likedCheeps = Cheeps.Where(c => c.Likes.Contains(authorName)).ToList();
         
         return likedCheeps;
         
