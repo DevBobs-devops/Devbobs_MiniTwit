@@ -142,3 +142,12 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 - Note: You can connect to the database if you have postgres installed and use following command:
 ```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
+
+17/03 15:43: Added our connectionstring to the postgres database to the server as an environment variable.
+- Commands used: 
+    edit evironment variables
+    ```nano ~/.bashrc```  
+    Insterted following into the file.
+    ``` export ConnectionStrings__DefaultConnection="our_connectionstring"``` 
+    Confirm
+    ```source ~/.bashrc```
