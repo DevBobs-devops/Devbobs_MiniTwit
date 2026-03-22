@@ -19,11 +19,12 @@ services:
       - "9090:9090"
 
   alloy:
-    image: grafana/alloy:latest
+    build:
+      dockerfile: ./Dockerfile
+      context: ./monitoring/alloy
     volumes:
-      # IMPORTANT: This actually allows Alloy to connect to the docker.sock file which exists on your container's host machine
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./monitoring/alloy/config.alloy:/etc/alloy/config.alloy
+      - /var/run/docker.sock:/var/run/docker.sock # IMPORTANT: This actually allows Alloy to connect to the docker.sock file which exists on your container's host machine
+    container_name: alloy
     command: 
       - "run"
       - "/etc/alloy/config.alloy"
@@ -54,7 +55,7 @@ services:
       - grafana-storage:/var/lib/grafana 
 
 volumes:
-  loki-data:
+  loki-data: 
   grafana-storage: {} 
 
 #Inspiration/guide: https://medium.com/@Shamimw/docker-a-complete-tutorial-part3-docker-compose-2e3b2f568a6f

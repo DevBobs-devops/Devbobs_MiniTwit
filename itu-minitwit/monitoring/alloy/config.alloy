@@ -40,5 +40,5 @@ loki.write "default" {
 	endpoint {
 		url = "http://loki:3100/loki/api/v1/push"
 	}
-	external_labels = {} //custom labels that are attached to every log that is sent by the component
+	external_labels = {} //custom labels that are attached to every log that is handled by the component
 }
