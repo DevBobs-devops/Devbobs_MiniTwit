@@ -157,5 +157,7 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 - 15:09: We also had an issue with people accessing their own timeline. This was due to some misplaced "awaits" (awaits within awaits) that led to conflicting executions, mainly being an issues with follows. 
 
+- 15:41: We also had issues with some typeErrors with our ids which we had updated to longs instead of ints, missing some places. We also did a possible suboptimal fix to our GetAllLikes, where we fetch the all cheeps and filter them, based on wether or an author has liked them. This is suboptimal, and in a different scenario, not be a good solution.
+
 
 
