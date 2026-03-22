@@ -329,7 +329,7 @@ public class ChirpService : IChirpService
         {
             bool isFollowing = false;
             bool isLiking = false;
-            int likesamount = cheep.Likes.Count;
+            //int likesamount = cheep.Likes.Count;
             foreach ( var follow in follows ) // this could be more efficient
             {
                 if ( follow.Followed == cheep.Author.Name )
@@ -350,7 +350,7 @@ public class ChirpService : IChirpService
                 Timestamp = cheep.Timestamp,
                 Follows = isFollowing,
                 Liked = isLiking,
-                Likes = likesamount,
+                Likes = cheep.NrLikes,
                 Id = cheep.CheepId
             };
             result.Add(dto);
