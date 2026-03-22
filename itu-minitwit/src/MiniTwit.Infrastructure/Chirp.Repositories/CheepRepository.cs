@@ -187,7 +187,7 @@ public class CheepRepository : ICheepRepository
     }
 
 
-    public async Task DeleteCheep(int cheepId)
+    public async Task DeleteCheep(long cheepId)
     {
         var cheep = await _context.Cheeps.FindAsync(cheepId);
         if (cheep != null)
