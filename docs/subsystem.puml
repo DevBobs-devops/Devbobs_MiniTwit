@@ -1,10 +1,10 @@
 @startuml
 
-cloud "DigitalOcean Droplet" {
-  node "Docker Engine" {
+cloud "DigitalOcean" {
+  node "Droplet" {
 
     component "MiniTwit API" as minitwit {
-      interface "GET /metrics" as mt_metrics
+      interface "GET /metrics" as minitwit_metrics
     }
 
     component "Prometheus" as prometheus {
@@ -13,10 +13,25 @@ cloud "DigitalOcean Droplet" {
 
     component "Grafana" as grafana
   }
+  
+  database "PostgreSQL" as db
 }
 
-cloud "DigitalOcean Database" {
-  database "PostgreSQL" as db
+
+cloud "DockerHub" {
+  component "Repositories" {
+      interface "powsdaws/minitwitimage" as mt_repo
+      interface "powsdaws/minitwit-prometheus" as prom_repo
+      interface "powsdaws/minitwit-grafana" as grafana_repo
+  }
+  
+}
+
+cloud "Github Actions" {
+    [CI/CD]
+    [Release]
+    [Build & Test]
+    [Runner]
 }
 
 actor Author
@@ -24,7 +39,14 @@ actor Author
 Author --> minitwit : HTTP requests
 minitwit --> db : SQL queries
 
-prometheus --> mt_metrics : scrape metrics
+prometheus --> minitwit_metrics : scrape metrics
 grafana --> prom_api : query metrics
 
+[CI/CD] --> [Runner]
+[Release] --> [Runner]
+[Build & Test] --> [Runner]
+
+
+
 @enduml
+
