@@ -34,7 +34,7 @@ cicd --> vm : SSH
 vm ..> repositories : pull images
 release ..> cicd : success
 actor Dev 
-Dev --> build_test : push / pull request to main
+build_test ..> Dev : push / pull request to main
 Author --> minitwit : HTTP requests
 minitwit --> db : SQL queries
 prometheus --> minitwit_metrics : scrape metrics
