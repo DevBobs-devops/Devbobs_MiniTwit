@@ -62,4 +62,4 @@ To make work more visible, we have decided to create `notebook.md`. Here changes
 
 # Architecture
 The following diagram shows an high level view of our architecture using a component diagram
-![Component Diagram](docs\UML_Component_Diagram.png)
+![Component Diagram](./docs/UML_Component_Diagram.png)
