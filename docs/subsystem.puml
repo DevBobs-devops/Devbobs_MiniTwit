@@ -1,0 +1,30 @@
+@startuml
+
+cloud "DigitalOcean Droplet" {
+  node "Docker Engine" {
+
+    component "MiniTwit API" as minitwit {
+      interface "GET /metrics" as mt_metrics
+    }
+
+    component "Prometheus" as prometheus {
+      interface "GET /metrics" as prom_api
+    }
+
+    component "Grafana" as grafana
+  }
+}
+
+cloud "DigitalOcean Database" {
+  database "PostgreSQL" as db
+}
+
+actor Author
+
+Author --> minitwit : HTTP requests
+minitwit --> db : SQL queries
+
+prometheus --> mt_metrics : scrape metrics
+grafana --> prom_api : query metrics
+
+@enduml
