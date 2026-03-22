@@ -58,3 +58,8 @@ To see the workflow, see `cicd.yaml`.
 
 # The notebook
 To make work more visible, we have decided to create `notebook.md`. Here changes can be seen together with  **what went wrong**, **where** we found a **solution**.
+
+
+# Architecture
+The following diagram shows an high level view of our architecture using a component diagram
+![Component Diagram](docs\UML_Component_Diagram.png)
