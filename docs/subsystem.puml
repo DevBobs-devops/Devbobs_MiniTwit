@@ -1,0 +1,42 @@
+@startuml
+actor Author
+cloud "DigitalOcean" {
+  node "Droplet" as vm {
+    component "MiniTwit" as minitwit {
+      interface "GET /metrics" as minitwit_metrics
+    }
+    component "Prometheus" as prometheus {
+      interface "GET /metrics" as prom_api
+    }
+    component "Grafana" as grafana
+  }
+  
+  database "PostgreSQL" as db
+}
+cloud "DockerHub" {
+  component "Repositories" as repositories {
+      interface "powsdaws/minitwitimage" as mt_repo
+      interface "powsdaws/minitwit-prometheus" as prom_repo
+      interface "powsdaws/minitwit-grafana" as grafana_repo
+  }
+  
+}
+cloud "Github Actions" as github_actions {
+    component "CI/CD" as cicd
+    component "Build & Test" as build_test
+    component "Release" as release
+}
+cicd ..> build_test : success
+cicd --> mt_repo : push image
+cicd --> prom_repo : push image
+cicd --> grafana_repo : push image
+cicd --> vm : SSH
+vm ..> repositories : pull images
+release ..> cicd : success
+actor Dev 
+build_test ..> Dev : push / pull request to main
+Author --> minitwit : HTTP requests
+minitwit --> db : SQL queries
+prometheus --> minitwit_metrics : scrape metrics
+grafana --> prom_api : query metrics
+@enduml

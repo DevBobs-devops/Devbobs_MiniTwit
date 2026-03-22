@@ -51,10 +51,15 @@ Setup the following secrets on github, see [here](https://docs.github.com/en/act
   - `SSH_HOST` the IP address of the server (or DNS name) we created on DigitalOcean, which you noted down earlier.
 
 ## Trigger the workflow
-To trigger the workflow and start the pipeline, make a commit to the `main` branch, or [manually run the workflow](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
+To trigger the workflow and start the pipeline, make a pull-request to the `main` branch, or [manually run the workflow](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
 
 To see the workflow, see `cicd.yaml`. 
 - This will use the `Dockerfile` to create a docker image of minitwit, push it to Dockerhub, shh into the VM/Droplet and run the `deploy.sh` script, that runs the `docker-compose.yml`, which can be found in the directory `/remote_file`. 
 
 # The notebook
 To make work more visible, we have decided to create `notebook.md`. Here changes can be seen together with  **what went wrong**, **where** we found a **solution**.
+
+
+# Architecture
+The following diagram shows an high level view of our architecture using a component diagram
+![Component Diagram](./docs/UML_Component_Diagram.png)
