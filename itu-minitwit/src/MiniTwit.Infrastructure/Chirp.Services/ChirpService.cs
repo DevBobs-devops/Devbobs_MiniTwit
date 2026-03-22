@@ -162,9 +162,10 @@ public class ChirpService : IChirpService
            }
            var queryresult = await _cheepRepository.GetCheeps(page);
 
+            var follows = await _followRepository.GetFollowed("");
+
            
-           
-           var result = await ConvertCheepsToCheepDtos(queryresult, ""); // follower is empty since it doesnt matter for users that arent logged in
+           var result = await ConvertCheepsToCheepDtos(queryresult, "", follows); // follower is empty since it doesnt matter for users that arent logged in
            return result;
        }
     
@@ -176,8 +177,8 @@ public class ChirpService : IChirpService
             page = 1;
         }
         var queryresult = await _cheepRepository.GetCheeps(page);
-
-        var result = await ConvertCheepsToCheepDtos(queryresult, followerName);
+        var follows = await _followRepository.GetFollowed(followerName);
+        var result = await ConvertCheepsToCheepDtos(queryresult, followerName, follows);
         return result;
     }
 
@@ -188,7 +189,8 @@ public class ChirpService : IChirpService
             page = 1;
         }
         var queryresult = await _cheepRepository.GetCheepsFromAuthor(page, authorName);
-        var result = await ConvertCheepsToCheepDtos(queryresult, spectatingAuthorName);
+        var follows = await _followRepository.GetFollowed(spectatingAuthorName);
+        var result = await ConvertCheepsToCheepDtos(queryresult, spectatingAuthorName, follows);
         return result;
     }
     
@@ -273,29 +275,27 @@ public class ChirpService : IChirpService
     public async Task<List<CheepDto>> GetAllCheepsFromAuthor(string authorName)
     {
         var cheeps = await _cheepRepository.GetAllCheepsFromAuthor(authorName);
-        var dtos = await ConvertCheepsToCheepDtos(cheeps, authorName);
+        var follows = await _followRepository.GetFollowed(authorName);
+        var dtos = await ConvertCheepsToCheepDtos(cheeps, authorName, follows);
         return dtos;
     }
 
     //Gets a complete, sorted list of all cheeps that could go on a timeline
     private async Task<List<CheepDto>> GetAllCheepsForTimeline(string authorName)
     {
-        
-        var cheepsByAuthor = _cheepRepository.GetAllCheepsFromAuthor(authorName);
-        var cheepsByFollowed = _cheepRepository.GetAllCheepsFromFollowed(authorName);
-       
-        var cheepsByAuthorDtos = ConvertCheepsToCheepDtos(await cheepsByAuthor, authorName);
-        var cheepsByFollowedDtos = ConvertCheepsToCheepDtos(await cheepsByFollowed, authorName);
-        await Task.WhenAll(cheepsByAuthorDtos, cheepsByFollowedDtos);
-        
-        //combine the lists inelegantly
-        cheepsByAuthorDtos.Result.AddRange(cheepsByFollowedDtos.Result);
-        var allCheeps = cheepsByAuthorDtos.Result;
-        
-        //sort it by time
-        var result = allCheeps.OrderByDescending(c => c.Timestamp).ToList();
+        var follows = await _followRepository.GetFollowed(authorName);
+
+        var cheepsByAuthor = await _cheepRepository.GetAllCheepsFromAuthor(authorName);
+        var cheepsByFollowed = await _cheepRepository.GetAllCheepsFromFollowed(authorName);
+
+        var cheepsByAuthorDtos = await ConvertCheepsToCheepDtos(cheepsByAuthor, authorName, follows);
+        var cheepsByFollowedDtos = await ConvertCheepsToCheepDtos(cheepsByFollowed, authorName, follows);
+
+        // Combine lists
+        cheepsByAuthorDtos.AddRange(cheepsByFollowedDtos);
+
+        var result = cheepsByAuthorDtos.OrderByDescending(c => c.Timestamp).ToList();
         return result;
-        
     }
     public async Task<List<CheepDto>> GetCheepsForTimeline(string authorName, int page) //ensures only 32 cheeps are returned
     {
@@ -319,11 +319,8 @@ public class ChirpService : IChirpService
     /// <param name="cheeps"> The list of cheeps to be converted </param>
     /// <param name="authorName"> The name of the author who will view the cheeps</param>
     /// <returns> A list of cheepDTOs</returns>
-    private async Task<List<CheepDto>> ConvertCheepsToCheepDtos(List<Cheep> cheeps, string authorName)
-    {
-        //Gets a list over which Authors the current author follows
-        var follows = await _followRepository.GetFollowed(authorName);
-        
+    private async Task<List<CheepDto>> ConvertCheepsToCheepDtos(List<Cheep> cheeps, string authorName, List<Follow> follows)
+    {        
         var result = new List<CheepDto>();
         foreach (var cheep in cheeps)
         {
@@ -381,7 +378,8 @@ public class ChirpService : IChirpService
     public async Task<List<CheepDto>> GetAllLiked(string authorName)
     {
         var cheeps = await _cheepRepository.GetAllLiked(authorName);
-        var dtos = await ConvertCheepsToCheepDtos(cheeps, authorName);
+        var follows = await _followRepository.GetFollowed(authorName);
+        var dtos = await ConvertCheepsToCheepDtos(cheeps, authorName, follows);
         return dtos;
     }
 
@@ -394,7 +392,8 @@ public class ChirpService : IChirpService
     public async Task<List<CheepDto>> GetTopLikedCheeps(string authorName, int page)
     {
         var cheeps = await _cheepRepository.GetTopLikedCheeps(page);
-        var cheepDtos = await ConvertCheepsToCheepDtos(cheeps, authorName);
+        var follows = await _followRepository.GetFollowed(authorName);
+        var cheepDtos = await ConvertCheepsToCheepDtos(cheeps, authorName, follows);
         return cheepDtos;
     }
 
