@@ -1,3 +1,5 @@
+#This file was copied from the loki_grafana branch from the Exercise Repository
+
 auth_enabled: false
 
 server:

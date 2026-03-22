@@ -1,18 +1,22 @@
 
-//converted config file (promtail -> alloy) from the exercises
+// This code is the result of using the recommended conversion tool(promtail -> alloy) on the config file from the week 8 exercises
 
+
+/* Component that discovers docker containers on the host and exposes them as targets */
 discovery.docker "docker" {
-	host             = "unix:///var/run/docker.sock"
-	refresh_interval = "5s"
+	host             = "unix:///var/run/docker.sock" 		//Path of the Docker Daemon Socket 
+	refresh_interval = "5s"									//Frequency at which the list of containers is updated
 }
 
+/* Component that relabels the metrics, to improve readability */
+/* ie {stream=stderr} is logged rather than {__meta_docker_container_log_stream=stderr} */
 discovery.relabel "docker" {
 	targets = []
 
 	rule {
-		source_labels = ["__meta_docker_container_name"]
+		source_labels = ["__meta_docker_container_name"] 	
 		regex         = "/(.*)"
-		target_label  = "container"
+		target_label  = "container"							
 	}
 
 	rule {
@@ -21,6 +25,7 @@ discovery.relabel "docker" {
 	}
 }
 
+/* Component that reads logs from docker containers (targets) and forwards them to loki reciever component */
 loki.source.docker "docker" {
 	host             = "unix:///var/run/docker.sock"
 	targets          = discovery.docker.docker.targets
@@ -29,9 +34,11 @@ loki.source.docker "docker" {
 	refresh_interval = "5s"
 }
 
+
+/* Component that recieves logs and writes them to the specified location */
 loki.write "default" {
 	endpoint {
 		url = "http://loki:3100/loki/api/v1/push"
 	}
-	external_labels = {}
+	external_labels = {} //custom labels that are attached to every log that is sent by the component
 }
