@@ -151,3 +151,11 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
     ``` export ConnectionStrings__DefaultConnection="our_connectionstring"``` 
     Confirm
     ```source ~/.bashrc```
+
+21/03 14:22: 
+- fixed some issues with our backend relating to Likes. EFCore had trouble with converting ```Cheep.Likes.Count```into a correct query, giving us an error when we tried to access "top cheeps". We fixed this by editing our Cheep class to have the number of likes it has gotten (NrLikes), not just the list of those who have liked the cheep. This fixed the issue.
+
+- 15:09: We also had an issue with people accessing their own timeline. This was due to some misplaced "awaits" (awaits within awaits) that led to conflicting executions, mainly being an issues with follows. 
+
+
+
