@@ -120,3 +120,6 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - We use SonarQube Cloud (https://github.com/apps/sonarqubecloud). - We should look at if this is too much or not and if we can automate some of the fixes (it says there is ~600...)
 - For the code formatter we will use [CSharpier](https://csharpier.com/docs/About), which has the following github for github actions:  [guibranco/github-csharpier-linter-action](https://github.com/guibranco/github-csharpier-linter-action). To use locally: `dotnet csharpier format .`
 - For our Dockerfile(s) we will use  [hadolint/hadolint-action: GitHub action for Hadolint, A Dockerfile linting tool](https://github.com/hadolint/hadolint-action). To use locally first pull their docker image: `docker pull hadolint/hadolint` and then run `docker run --rm -i hadolint/hadolint < Dockerfile`, with 'Dockerfile' being our dockerfile.
+
+
+22/03: 14:20: Created a UML Component diagram of our architecture. Good source: https://plantuml.com/component-diagram. Used Microsoft Copilot to help with inital layout og uml "code".
