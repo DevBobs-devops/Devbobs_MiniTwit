@@ -35,6 +35,26 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwitimage:webbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwitimage:webbuildcache,mode=max
 
+      - name: Build and push Alloy image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./itu-minitwit/monitoring/alloy/
+          file: ./itu-minitwit/monitoring/alloy/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/minitwit-alloy:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit-alloy:webbuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit-alloy:webbuildcache,mode=max
+
+      - name: Build and push Loki image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./itu-minitwit/monitoring/loki/
+          file: ./itu-minitwit/monitoring/loki/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/minitwit-loki:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit-loki:webbuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwit-loki:webbuildcache,mode=max
+
       - name: Build and push Promethues image
         uses: docker/build-push-action@v6
         with:
