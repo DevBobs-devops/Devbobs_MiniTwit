@@ -12,6 +12,8 @@ services:
       dockerfile: ./Dockerfile
       context: ./monitoring/prometheus
     image: prometheus_image
+    volumes:
+      - prometheus_data:/prometheus
     container_name: prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -32,5 +34,6 @@ services:
 
 volumes:
   grafana-storage: {} 
+  prometheus_data: {}
 
 #Inspiration/guide: https://medium.com/@Shamimw/docker-a-complete-tutorial-part3-docker-compose-2e3b2f568a6f

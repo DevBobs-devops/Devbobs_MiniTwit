@@ -10,6 +10,8 @@ services:
   prometheus:
     image: ${DOCKER_USERNAME}/minitwit-prometheus
     container_name: prometheus
+    volumes:
+      - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
@@ -26,5 +28,6 @@ services:
 
 volumes:
   grafana-storage: {} 
+  prometheus_data: {}
 
 #Inspiration/guide: https://medium.com/@Shamimw/docker-a-complete-tutorial-part3-docker-compose-2e3b2f568a6f
