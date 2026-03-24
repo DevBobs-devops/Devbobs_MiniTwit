@@ -125,5 +125,22 @@ runs:
         do
           echo "Processing: $sarifFile"
           node convert.js "$sarifFile" "$sarifFile"
+          
+          # Add category to each SARIF file to avoid conflicts
+          node << 'NODEEOF'
+          const fs = require('fs');
+          const sarifFile = "$sarifFile";
+          const fileIndex = $i;
+          
+          const sarif = JSON.parse(fs.readFileSync(sarifFile, "utf8"));
+          for (run of sarif.runs) {
+            run.automationDetails = {
+              "id": "SecurityCodeScan/" + fileIndex
+            };
+          }
+          
+          fs.writeFileSync(sarifFile, JSON.stringify(sarif, null, 2));
+          NODEEOF
+          
           mv "$sarifFile" "$outputDir/$((i++)).sarif"
         done
