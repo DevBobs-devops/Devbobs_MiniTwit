@@ -46,6 +46,7 @@ if (app.Environment.IsDevelopment())
 //If we are in production, seed with an empty dump, else seed with template data
 if (app.Environment.IsProduction())
 {
+    Console.Write("Prod");
     using (var serviceScope = app.Services.CreateScope())
     {
         var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
@@ -56,13 +57,14 @@ if (app.Environment.IsProduction())
 }
 else
 {
+    Console.WriteLine("Dev");
     using (var serviceScope = app.Services.CreateScope())
     {
         var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
 
         //SQLite development db. Here we need to confirm it exists.
         context.Database.EnsureCreated();
-        DbInitializer.SeedDatabase(context);
+        //DbInitializer.SeedDatabase(context);
     }
 }
 

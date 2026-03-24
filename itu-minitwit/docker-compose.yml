@@ -3,11 +3,14 @@ services:
   minitwit:
     build: . # build the image from the Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production #Ensure that locally run env is Development. Fix found here: https://oneuptime.com/blog/post/2026-01-25-docker-compose-development-environments/view & here https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-10.0
+      - ASPNETCORE_ENVIRONMENT=Development #Ensure that locally run env is Development. Fix found here: https://oneuptime.com/blog/post/2026-01-25-docker-compose-development-environments/view & here https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-10.0
+      - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=default_database;Username=username;Password=password
     ports:
       - "8080:8080"
     volumes:
       - /minitwit/data:/app/Data  # mount database folder on vm to : our workdir in Dockerfile is /app, and the rest need to match our connectionstring
+    depends_on:
+      - database
 
   prometheus:
     build: 
@@ -19,6 +22,15 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - "9090:9090"
+
+  database:
+    image: "postgres:latest"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: username # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
     
 
   grafana:
