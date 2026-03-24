@@ -27,14 +27,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: nuget/setup-nuget@v1.0.5
+      - uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Set up projects
         uses: security-code-scan/security-code-scan-add-action@v1.2
 
       - name: Build
         run: |
-          dotnet restore itu-minitwit
-          dotnet build itu-minitwit
+          dotnet restore
+          dotnet build
 
       - name: Convert sarif for uploading to GitHub
         uses: security-code-scan/security-code-scan-results-action@v1
