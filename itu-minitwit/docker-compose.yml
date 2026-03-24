@@ -23,14 +23,15 @@ services:
     ports:
       - "9090:9090"
 
+ # taken from: https://github.com/gaelgthomas/docker-compose-with-postgresql/blob/main/docker-compose.yml
   database:
     image: "postgres:latest"
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: username # The PostgreSQL user (useful to connect to the database)
-      POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
-      POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
+      POSTGRES_USER: username 
+      POSTGRES_PASSWORD: password 
+      POSTGRES_DB: default_database 
     
 
   grafana:
