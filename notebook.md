@@ -120,3 +120,13 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - We use SonarQube Cloud (https://github.com/apps/sonarqubecloud). - We should look at if this is too much or not and if we can automate some of the fixes (it says there is ~600...)
 - For the code formatter we will use [CSharpier](https://csharpier.com/docs/About), which has the following github for github actions:  [guibranco/github-csharpier-linter-action](https://github.com/guibranco/github-csharpier-linter-action). To use locally: `dotnet csharpier format .`
 - For our Dockerfile(s) we will use  [hadolint/hadolint-action: GitHub action for Hadolint, A Dockerfile linting tool](https://github.com/hadolint/hadolint-action). To use locally first pull their docker image: `docker pull hadolint/hadolint` and then run `docker run --rm -i hadolint/hadolint < Dockerfile`, with 'Dockerfile' being our dockerfile.
+
+
+# Lecture 9
+24/03: 11:00: For now, we just install nginx & certbot directly on the server.
+- Bought free domain from https://controlpanel.tech/servlet/ListAllOrdersServlet?formaction=listOrders. "Devbobs.tech"
+- Followed the given tutorial: https://github.com/itu-devops/BSc_lecture_notes/blob/master/sessions/session_09/TLSTutorial.md
+- Ran into problem that dns providers could not see our name: https://dnschecker.org/#A/devbovs.tech. 
+- Ran into a problem where Certbot could not give an certifacate because Let's Encrypt tries to reach us on port 80 (which we block).
+
+
