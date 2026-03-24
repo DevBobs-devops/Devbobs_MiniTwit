@@ -41,13 +41,17 @@ runs:
               run.tool.driver.version = run.tool.version;
               delete run.tool.version;
             }
-            if (run.tool.fileVersion) {
-              run.tool.driver.fileVersion = run.tool.fileVersion;
-              delete run.tool.fileVersion;
-            }
             if (run.tool.semanticVersion) {
               run.tool.driver.semanticVersion = run.tool.semanticVersion;
               delete run.tool.semanticVersion;
+            }
+            
+            // Remove fileVersion as it's not valid in SARIF 2.1.0
+            if (run.tool.fileVersion) {
+              delete run.tool.fileVersion;
+            }
+            if (run.tool.driver.fileVersion) {
+              delete run.tool.driver.fileVersion;
             }
 
             // Move rules from run level to tool.driver level if they exist
