@@ -125,6 +125,7 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 # Lecture 9
 24/03: 11:00: For now, we just install nginx & certbot directly on the server.
 - Bought free domain from https://controlpanel.tech/servlet/ListAllOrdersServlet?formaction=listOrders. "Devbobs.tech"
+- Pointed the nameservers to Digitalocean.
 - Followed the given tutorial: https://github.com/itu-devops/BSc_lecture_notes/blob/master/sessions/session_09/TLSTutorial.md
 - Ran into problem that dns providers could not see our name: https://dnschecker.org/#A/devbovs.tech. 
 - Ran into a problem where Certbot could not give an certifacate because Let's Encrypt tries to reach us on port 80 (which we block).
