@@ -125,6 +125,7 @@ public class CheepRepository : ICheepRepository
         if (!currentLikes.Likes.Contains(authorName))
         {
             currentLikes.Likes.Add(authorName);
+            currentLikes.NrLikes +=1;
             _context.SaveChanges();
         }
         
@@ -137,6 +138,7 @@ public class CheepRepository : ICheepRepository
         if (currentLikes.Likes.Contains(authorName))
         {
             currentLikes.Likes.Remove(authorName);
+            currentLikes.NrLikes -=1;
             _context.SaveChanges();
         }
     }
@@ -144,13 +146,18 @@ public class CheepRepository : ICheepRepository
     
     public async Task<int> CountLikes(int cheepId)
     {
-        var likes = await _context.Cheeps.FirstAsync(cheep =>cheep.CheepId == cheepId);
-        return likes.Likes.Count;
+        var cheep = await _context.Cheeps.FirstAsync(cheep =>cheep.CheepId == cheepId);
+        return cheep.NrLikes;
     }
     
     public async Task<List<Cheep>> GetAllLiked(string authorName)
     {
-        var likedCheeps = await _context.Cheeps.Where(cheep => cheep.Likes.Contains(authorName)).Include(c => c.Author).ToListAsync();
+        //Fetch in memory, might be bad
+        var Cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
+        
+        //var likedCheeps = await _context.Cheeps.Where(cheep => cheep.Likes.Contains(authorName)).Include(c => c.Author).ToListAsync();
+
+        var likedCheeps = Cheeps.Where(c => c.Likes.Contains(authorName)).ToList();
         
         return likedCheeps;
         
@@ -165,7 +172,9 @@ public class CheepRepository : ICheepRepository
         foreach (var likes in likedCheeps)
         {
             likes.Likes.Remove(authorName);
+            likes.NrLikes -= 1;
         }
+
         _context.SaveChanges();
     }
 
@@ -174,16 +183,16 @@ public class CheepRepository : ICheepRepository
     {
         //https://stackoverflow.com/questions/5344805/linq-orderby-descending-query
         var query = (from cheep in _context.Cheeps
-                .OrderByDescending(cheep => cheep.Likes.Count)
+                .OrderByDescending(c => c.NrLikes)
             select cheep).Skip((page -1) * 32).Take(32).Include(c => c.Author);
-        
+
         var cheeps = await query.ToListAsync();
 
         return cheeps;
     }
 
 
-    public async Task DeleteCheep(int cheepId)
+    public async Task DeleteCheep(long cheepId)
     {
         var cheep = await _context.Cheeps.FindAsync(cheepId);
         if (cheep != null)

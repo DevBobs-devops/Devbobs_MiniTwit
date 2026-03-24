@@ -142,3 +142,22 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 - Note: You can connect to the database if you have postgres installed and use following command:
 ```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
+
+17/03 15:43: Added our connectionstring to the postgres database to the server as an environment variable.
+- Commands used: 
+    edit evironment variables
+    ```nano ~/.bashrc```  
+    Insterted following into the file.
+    ``` export ConnectionStrings__DefaultConnection="our_connectionstring"``` 
+    Confirm
+    ```source ~/.bashrc```
+
+21/03 14:22: 
+- fixed some issues with our backend relating to Likes. EFCore had trouble with converting ```Cheep.Likes.Count```into a correct query, giving us an error when we tried to access "top cheeps". We fixed this by editing our Cheep class to have the number of likes it has gotten (NrLikes), not just the list of those who have liked the cheep. This fixed the issue.
+
+- 15:09: We also had an issue with people accessing their own timeline. This was due to some misplaced "awaits" (awaits within awaits) that led to conflicting executions, mainly being an issues with follows. 
+
+- 15:41: We also had issues with some typeErrors with our ids which we had updated to longs instead of ints, missing some places. We also did a possible suboptimal fix to our GetAllLikes, where we fetch the all cheeps and filter them, based on wether or an author has liked them. This is suboptimal, and in a different scenario, not be a good solution.
+
+
+
