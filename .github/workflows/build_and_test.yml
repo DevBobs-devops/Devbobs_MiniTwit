@@ -33,6 +33,7 @@ jobs:
 
       - name: Build
         run: |
+          dotnet tool install --global dotnetarium-scs
           dotnet restore itu-minitwit
           dotnet build itu-minitwit
 
