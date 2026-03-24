@@ -64,7 +64,7 @@ else
 
         //SQLite development db. Here we need to confirm it exists.
         context.Database.EnsureCreated();
-        //DbInitializer.SeedDatabase(context);
+        DbInitializer.SeedDatabase(context);
     }
 }
 
