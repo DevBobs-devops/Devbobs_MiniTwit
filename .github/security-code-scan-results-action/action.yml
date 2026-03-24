@@ -70,7 +70,6 @@ runs:
         i=0
         for sarifFile in $(find ./ -name '*.sarif')
         do
-          sarif transform "$sarifFile" --output "$sarifFile" -f
           node convert.js "$sarifFile" "$sarifFile"
           mv "$sarifFile" "$outputDir/$((i++)).sarif"
         done
