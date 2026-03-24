@@ -34,8 +34,8 @@ jobs:
 
       - name: Build
         run: |
-          dotnet restore
-          dotnet build
+          dotnet restore itu-minitwit
+          dotnet build itu-minitwit
 
       - name: Convert sarif for uploading to GitHub
         uses: security-code-scan/security-code-scan-results-action@v1
