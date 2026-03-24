@@ -33,9 +33,14 @@ jobs:
 
       - name: Build
         run: |
-          dotnet tool install --global dotnetarium-scs
           dotnet restore itu-minitwit
           dotnet build itu-minitwit
+
+      - name: Convert sarif for uploading to GitHub
+        uses: security-code-scan/security-code-scan-results-action@v1
+
+      - name: Upload sarif
+        uses: github/codeql-action/upload-sarif@v1
 
   build:
     runs-on: ubuntu-24.04 # matches version in droplets
