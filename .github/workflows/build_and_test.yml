@@ -3,9 +3,9 @@ name: Build and Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch: #Allow manual trigger of workflow
 
 jobs:
@@ -19,45 +19,40 @@ jobs:
   hadolint-dockerfile:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v3
-    - uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5
-      with:
-        dockerfile: itu-minitwit/Dockerfile
-  
+      - uses: actions/checkout@v3
+      - uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5
+        with:
+          dockerfile: itu-minitwit/Dockerfile
   build:
     runs-on: ubuntu-24.04 # matches version in droplets
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore itu-minitwit
-    - name: Build
-      run: dotnet build itu-minitwit --no-restore
-    - name: Test Dotnet
-      run: |
-        dotnet test itu-minitwit --filter FullyQualifiedName!~PlaywrightTests --configuration Release
-# Inspired by this link https://docs.github.com/en/actions/tutorials/build-and-test-code/python
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-          python-version: '3.11'
-    - name: Install pip & Pytest
-      run: |
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore itu-minitwit
+      - name: Build
+        run: dotnet build itu-minitwit --no-restore
+      - name: Test Dotnet
+        run: |
+          dotnet test itu-minitwit --filter FullyQualifiedName!~PlaywrightTests --configuration Release
+      # Inspired by this link https://docs.github.com/en/actions/tutorials/build-and-test-code/python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pip & Pytest
+        run: |
           python -m pip install --upgrade pip
           pip install pytest
           pip install requests
-    - name: Run MiniTwit
-      run: |
-        dotnet run --project itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj &
-        sleep 5
-        echo "Server is up and running"
-    - name: Test Pytest
-      run: | 
-        pytest itu-minitwit/test/minitwit_sim_api_test.py
-  
-
-    
-    
+      - name: Run MiniTwit
+        run: |
+          dotnet run --project itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj &
+          sleep 5
+          echo "Server is up and running"
+      - name: Test Pytest
+        run: |
+          pytest itu-minitwit/test/minitwit_sim_api_test.py
