@@ -14,7 +14,7 @@ runs:
     - name: Convert sarif
       shell: bash
       run: |
-        dotnet tool install --global Sarif.Multitool --version 2.3.9
+        dotnet tool install --global Sarif.Multitool --version 4.6.0
         outputDir="${{ inputs.sarif_directory }}"
         mkdir $outputDir
 
