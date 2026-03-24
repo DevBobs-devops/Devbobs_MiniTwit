@@ -127,7 +127,7 @@ runs:
           node convert.js "$sarifFile" "$sarifFile"
           
           # Add category to each SARIF file to avoid conflicts
-          node << NODEEOF
+          node << 'NODEEOF'
           const fs = require('fs');
           const sarifFile = "$sarifFile";
           const fileIndex = $i;
