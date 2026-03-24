@@ -14,11 +14,11 @@ runs:
     - name: Convert sarif
       shell: bash
       run: |
-        dotnet tool install --global Sarif.Multitool --version 4.6.0
+        dotnet tool install --global Sarif.Multitool
         outputDir="${{ inputs.sarif_directory }}"
-        mkdir $outputDir
+        mkdir -p $outputDir
 
-        cat << EOF > convert.js
+        cat << 'EOF' > convert.js
           const fs = require('fs')
 
           var args = process.argv.slice(2);
@@ -70,7 +70,7 @@ runs:
         i=0
         for sarifFile in $(find ./ -name '*.sarif')
         do
-          sarif transform $sarifFile --output $sarifFile -f --sarif-output-version Current
-          node convert.js $sarifFile $sarifFile
-          mv $sarifFile $outputDir/$((i++)).sarif
+          sarif transform "$sarifFile" --output "$sarifFile" -f
+          node convert.js "$sarifFile" "$sarifFile"
+          mv "$sarifFile" "$outputDir/$((i++)).sarif"
         done
