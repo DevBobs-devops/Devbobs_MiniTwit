@@ -16,7 +16,26 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - "9090:9090"
-    
+  
+  alloy: 
+    image: ${DOCKER_USERNAME}/minitwit-alloy
+    container_name: alloy
+    command: 
+      - "run"
+      - "/etc/alloy/config.alloy"
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock 
+    depends_on:
+      - loki    
+
+  loki: 
+    image: ${DOCKER_USERNAME}/minitwit-loki
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki-data:/loki
+    command: "--config.file=/etc/loki/loki.yml"
 
   grafana:
     image: ${DOCKER_USERNAME}/minitwit-grafana
@@ -27,6 +46,7 @@ services:
       - grafana-storage:/var/lib/grafana
 
 volumes:
+  loki-storage: {}
   grafana-storage: {} 
   prometheus_data: {}
 
