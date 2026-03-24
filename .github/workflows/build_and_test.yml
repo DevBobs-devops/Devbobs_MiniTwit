@@ -37,7 +37,7 @@ jobs:
           dotnet build itu-minitwit
 
       - name: Convert sarif for uploading to GitHub
-        uses: DevBobs-devops/Devbobs_MiniTwit/blob/283ffc27a0591ddb91fa360882ab2bf52cb3a3b0/.github/security-code-scan-results-action@CI-Security-Analysis
+        uses: DevBobs-devops/Devbobs_MiniTwit/.github/security-code-scan-results-action@CI-Security-Analysis
 
       - name: Upload sarif
         uses: github/codeql-action/upload-sarif@v1
