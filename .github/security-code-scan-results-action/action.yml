@@ -32,6 +32,24 @@ runs:
             if (!run.tool) run.tool = {};
             if (!run.tool.driver) run.tool.driver = {};
 
+            // Move tool-level properties to tool.driver
+            if (run.tool.name) {
+              run.tool.driver.name = run.tool.name;
+              delete run.tool.name;
+            }
+            if (run.tool.version) {
+              run.tool.driver.version = run.tool.version;
+              delete run.tool.version;
+            }
+            if (run.tool.fileVersion) {
+              run.tool.driver.fileVersion = run.tool.fileVersion;
+              delete run.tool.fileVersion;
+            }
+            if (run.tool.semanticVersion) {
+              run.tool.driver.semanticVersion = run.tool.semanticVersion;
+              delete run.tool.semanticVersion;
+            }
+
             // Move rules from run level to tool.driver level if they exist
             if (run.rules && typeof run.rules === 'object' && !Array.isArray(run.rules)) {
               // Convert rules object to array format
@@ -48,6 +66,7 @@ runs:
             if (!run.results) run.results = [];
             if (!run.tool.driver.rules) run.tool.driver.rules = [];
 
+            // Set SecurityCodeScan as the driver
             run.tool.driver.name = "SecurityCodeScan";
             run.tool.driver.fullName = "Vulnerability Patterns Detector for C# and VB.NET";
             run.tool.driver.informationUri = "https://security-code-scan.github.io";
