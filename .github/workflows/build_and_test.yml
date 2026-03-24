@@ -33,6 +33,7 @@ jobs:
 
       - name: Build
         run: |
+          dotnet tool install --global Sarif.Multitool
           dotnet restore itu-minitwit
           dotnet build itu-minitwit
 
