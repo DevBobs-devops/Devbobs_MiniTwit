@@ -25,39 +25,53 @@ runs:
           var sarif = JSON.parse(fs.readFileSync(args[0], "utf8"));
 
           for (run of sarif.runs) {
+            // Ensure tool.driver exists
+            if (!run.tool) run.tool = {};
+            if (!run.tool.driver) run.tool.driver = {};
+
             run.tool.driver.name = "SecurityCodeScan";
             run.tool.driver.fullName  = "Vulnerability Patterns Detector for C# and VB.NET";
             run.tool.driver.informationUri  = "https://security-code-scan.github.io";
 
-            run.results = run.results.filter((e => e.ruleId.startsWith("SCS")));
-            run.tool.driver.rules = run.tool.driver.rules.filter((e => e.id.startsWith("SCS")));
+            // Initialize results and rules if they don't exist
+            if (!run.results) run.results = [];
+            if (!run.tool.driver.rules) run.tool.driver.rules = [];
+
+            run.results = run.results.filter((e => e.ruleId && e.ruleId.startsWith("SCS")));
+            run.tool.driver.rules = run.tool.driver.rules.filter((e => e.id && e.id.startsWith("SCS")));
 
             for (let i = 0; i < run.results.length; ++i) {
               run.results[i].ruleIndex = undefined;
               run.results[i].relatedLocations = undefined;
 
-              if (run.results[i].locations === undefined) {
-                const match = run.results[i].message.text.match(/(.*) in (.*)\((\d+)\)(:.*)/);
-                run.results[i].message.text = match[1];
-                run.results[i].locations = [{
-                  "physicalLocation" : {
-                    "artifactLocation" : {
-                      "uri" : "file:///" + match[2].replace(/\\\\/g, "/")
-                    },
-                    "region" : {
-                      "startLine": Number(match[3]),
-                      "startColumn": 1,
-                      "endLine": Number(match[3]),
-                      "endColumn": 1
+              if (run.results[i].locations === undefined || run.results[i].locations.length === 0) {
+                const messageText = run.results[i].message && run.results[i].message.text ? run.results[i].message.text : "";
+                const match = messageText.match(/(.*) in (.*)\((\d+)\)(:.*)/);
+                
+                if (match) {
+                  run.results[i].message.text = match[1];
+                  run.results[i].locations = [{
+                    "physicalLocation" : {
+                      "artifactLocation" : {
+                        "uri" : "file:///" + match[2].replace(/\\\\/g, "/")
+                      },
+                      "region" : {
+                        "startLine": Number(match[3]),
+                        "startColumn": 1,
+                        "endLine": Number(match[3]),
+                        "endColumn": 1
+                      }
                     }
-                  }
-                }];
+                  }];
+                }
               }
             }
 
             for (rule of run.tool.driver.rules) {
               rule.shortDescription = undefined;
-              rule.help = { "text" : rule.helpUri};
+              if (rule.helpUri) {
+                rule.help = { "text" : rule.helpUri};
+              }
             }
 
             run.language = undefined;
@@ -70,6 +84,7 @@ runs:
         i=0
         for sarifFile in $(find ./ -name '*.sarif')
         do
+          echo "Processing: $sarifFile"
           node convert.js "$sarifFile" "$sarifFile"
           mv "$sarifFile" "$outputDir/$((i++)).sarif"
         done
