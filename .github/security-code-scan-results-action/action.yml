@@ -24,19 +24,35 @@ runs:
           var args = process.argv.slice(2);
           var sarif = JSON.parse(fs.readFileSync(args[0], "utf8"));
 
+          // Update version to 2.1.0
+          sarif.version = "2.1.0";
+
           for (run of sarif.runs) {
             // Ensure tool.driver exists
             if (!run.tool) run.tool = {};
             if (!run.tool.driver) run.tool.driver = {};
 
-            run.tool.driver.name = "SecurityCodeScan";
-            run.tool.driver.fullName  = "Vulnerability Patterns Detector for C# and VB.NET";
-            run.tool.driver.informationUri  = "https://security-code-scan.github.io";
+            // Move rules from run level to tool.driver level if they exist
+            if (run.rules && typeof run.rules === 'object' && !Array.isArray(run.rules)) {
+              // Convert rules object to array format
+              let rulesArray = [];
+              for (const [ruleId, ruleObj] of Object.entries(run.rules)) {
+                if (!ruleObj.id) ruleObj.id = ruleId;
+                rulesArray.push(ruleObj);
+              }
+              run.tool.driver.rules = rulesArray;
+              delete run.rules;
+            }
 
             // Initialize results and rules if they don't exist
             if (!run.results) run.results = [];
             if (!run.tool.driver.rules) run.tool.driver.rules = [];
 
+            run.tool.driver.name = "SecurityCodeScan";
+            run.tool.driver.fullName = "Vulnerability Patterns Detector for C# and VB.NET";
+            run.tool.driver.informationUri = "https://security-code-scan.github.io";
+
+            // Filter results to only include SCS rules
             run.results = run.results.filter((e => e.ruleId && e.ruleId.startsWith("SCS")));
             run.tool.driver.rules = run.tool.driver.rules.filter((e => e.id && e.id.startsWith("SCS")));
 
