@@ -10,7 +10,8 @@ services:
     volumes:
       - /minitwit/data:/app/Data  # mount database folder on vm to : our workdir in Dockerfile is /app, and the rest need to match our connectionstring
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   prometheus:
     build: 
@@ -27,11 +28,16 @@ services:
   database:
     image: "postgres:latest"
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
-      POSTGRES_USER: username 
+      POSTGRES_USER: username   
       POSTGRES_PASSWORD: password 
       POSTGRES_DB: default_database 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U username"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     
 
   grafana:
