@@ -107,5 +107,4 @@ public interface ICheepRepository
     /// </summary>
     /// <param name="cheepId">The id of the cheep</param>
     public Task DeleteCheep(long cheepId);
-
 }

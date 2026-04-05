@@ -172,23 +172,19 @@ public class ChirpService : IChirpService
     }
 
     public async Task<List<CheepDto>> GetCheeps(int page)
-       {
-           
-           
-           
-           if ( page == 0 )
-           {
-               page = 1;
-           }
-           var queryresult = await _cheepRepository.GetCheeps(page);
+    {
+        if (page == 0)
+        {
+            page = 1;
+        }
+        var queryresult = await _cheepRepository.GetCheeps(page);
 
-            var follows = await _followRepository.GetFollowed("");
+        var follows = await _followRepository.GetFollowed("");
 
-           
-           var result = await ConvertCheepsToCheepDtos(queryresult, "", follows); // follower is empty since it doesnt matter for users that arent logged in
-           return result;
-       }
-    
+        var result = await ConvertCheepsToCheepDtos(queryresult, "", follows); // follower is empty since it doesnt matter for users that arent logged in
+        return result;
+    }
+
     public async Task<List<CheepDto>> GetCheeps(int page, string followerName) //for use when logged in, allows us to display the correct button, either follow or unfollow
     {
         if (page == 0)
@@ -298,8 +294,16 @@ public class ChirpService : IChirpService
         var cheepsByAuthor = await _cheepRepository.GetAllCheepsFromAuthor(authorName);
         var cheepsByFollowed = await _cheepRepository.GetAllCheepsFromFollowed(authorName);
 
-        var cheepsByAuthorDtos = await ConvertCheepsToCheepDtos(cheepsByAuthor, authorName, follows);
-        var cheepsByFollowedDtos = await ConvertCheepsToCheepDtos(cheepsByFollowed, authorName, follows);
+        var cheepsByAuthorDtos = await ConvertCheepsToCheepDtos(
+            cheepsByAuthor,
+            authorName,
+            follows
+        );
+        var cheepsByFollowedDtos = await ConvertCheepsToCheepDtos(
+            cheepsByFollowed,
+            authorName,
+            follows
+        );
 
         // Combine lists
         cheepsByAuthorDtos.AddRange(cheepsByFollowedDtos);
@@ -331,15 +335,19 @@ public class ChirpService : IChirpService
     /// <param name="cheeps"> The list of cheeps to be converted </param>
     /// <param name="authorName"> The name of the author who will view the cheeps</param>
     /// <returns> A list of cheepDTOs</returns>
-    private async Task<List<CheepDto>> ConvertCheepsToCheepDtos(List<Cheep> cheeps, string authorName, List<Follow> follows)
-    {        
+    private async Task<List<CheepDto>> ConvertCheepsToCheepDtos(
+        List<Cheep> cheeps,
+        string authorName,
+        List<Follow> follows
+    )
+    {
         var result = new List<CheepDto>();
         foreach (var cheep in cheeps)
         {
             bool isFollowing = false;
             bool isLiking = false;
             //int likesamount = cheep.Likes.Count;
-            foreach ( var follow in follows ) // this could be more efficient
+            foreach (var follow in follows) // this could be more efficient
             {
                 if (follow.Followed == cheep.Author.Name)
                 {
@@ -360,7 +368,7 @@ public class ChirpService : IChirpService
                 Follows = isFollowing,
                 Liked = isLiking,
                 Likes = cheep.NrLikes,
-                Id = cheep.CheepId
+                Id = cheep.CheepId,
             };
             result.Add(dto);
         }

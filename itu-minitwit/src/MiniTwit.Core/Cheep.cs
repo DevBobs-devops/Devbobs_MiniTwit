@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 public class Cheep
 {
     public long CheepId { get; set; }
+
     [StringLength(160)]
     [Required]
     public required string Text { get; set; }
@@ -17,5 +18,5 @@ public class Cheep
     public required Author Author { get; set; }
     public int AuthorId { get; set; }
     public List<string> Likes { get; set; } = new List<string>();
-    public int NrLikes {get; set;}
+    public int NrLikes { get; set; }
 }

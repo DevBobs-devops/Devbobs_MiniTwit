@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-
 /// <summary>
 /// Used to connect to the database.
 /// Inherents from IdentityDbContext where IdentityRole has been overriden to make the primary key an int.
@@ -20,24 +19,24 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
     public DbSet<Follow> Follows { get; set; }
 
     //Constructor
-    public CheepDbContext(DbContextOptions<CheepDbContext> options) : base(options)
-    {   
-        
-    }
+    public CheepDbContext(DbContextOptions<CheepDbContext> options)
+        : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {   
+    {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Cheep>()
-        .Property(c => c.Timestamp)
-        .HasColumnType("timestamp with time zone")
-        .ValueGeneratedOnAdd();
-
+        modelBuilder
+            .Entity<Cheep>()
+            .Property(c => c.Timestamp)
+            .HasColumnType("timestamp with time zone")
+            .ValueGeneratedOnAdd();
 
         var likesConverter = new ValueConverter<List<string>, string>(
             v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
-            v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>()
+            v =>
+                JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null)
+                ?? new List<string>()
         );
 
         var likesComparer = new ValueComparer<List<string>>(
@@ -45,10 +44,12 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
             c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
             c => c.ToList() // deep copy
         );
-        
-        modelBuilder.Entity<Cheep>().Property(c=> c.Likes).HasColumnName("likes").HasConversion(likesConverter).Metadata.SetValueComparer(likesComparer);
 
-
+        modelBuilder
+            .Entity<Cheep>()
+            .Property(c => c.Likes)
+            .HasColumnName("likes")
+            .HasConversion(likesConverter)
+            .Metadata.SetValueComparer(likesComparer);
     }
-
 }

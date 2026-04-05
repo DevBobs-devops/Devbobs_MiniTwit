@@ -12,9 +12,7 @@ string? connectionString = builder.Configuration.GetConnectionString("DefaultCon
 
 //If we are in production we use postgres, if we are testing, we use sqlite, as we did before
 Console.WriteLine("postgres");
-    builder.Services.AddDbContext<CheepDbContext>(options =>
-    options.UseNpgsql(connectionString));
-
+builder.Services.AddDbContext<CheepDbContext>(options => options.UseNpgsql(connectionString));
 
 builder
     .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -61,9 +59,8 @@ else
         //SQLite development db. Here we need to confirm it exists.
         context.Database.Migrate();
         DbInitializer.SeedDatabase(context);
-    } 
+    }
 }
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

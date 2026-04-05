@@ -15,15 +15,14 @@ namespace Chirp.Core.Migrations
                 table: "Cheeps",
                 type: "integer",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 0
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "NrLikes",
-                table: "Cheeps");
+            migrationBuilder.DropColumn(name: "NrLikes", table: "Cheeps");
         }
     }
 }
