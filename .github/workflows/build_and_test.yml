@@ -52,9 +52,7 @@ jobs:
     - name: Run MiniTwit
       run: |
         cd itu-minitwit
-        docker compose up --build
-        sleep 5
-        echo "Server is up and running"
+        docker compose up --build &
     - name: Test Pytest
       run: | 
         pytest itu-minitwit/test/minitwit_sim_api_test.py
