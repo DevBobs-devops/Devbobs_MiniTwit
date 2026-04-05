@@ -159,9 +159,8 @@ public class CheepRepository : ICheepRepository
     public async Task DeleteAllLikes(string authorName)
     {
         //https://stackoverflow.com/questions/1586013/how-to-do-select-all-in-linq-to-sql
-        var likedCheeps = await _context
-            .Cheeps.Where(cheep => cheep.Likes.Contains(authorName))
-            .ToListAsync();
+        var cheeps = await _context.Cheeps.ToListAsync();
+        var likedCheeps = cheeps.Where(c => c.Likes.Contains(authorName)).ToList();
 
         foreach (var likes in likedCheeps)
         {
