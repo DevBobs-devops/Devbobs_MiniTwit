@@ -51,7 +51,8 @@ jobs:
           pip install requests
     - name: Run MiniTwit
       run: |
-        dotnet run --project itu-minitwit/src/MiniTwit.Web/MiniTwit.Web.csproj &
+        cd itu-minitwit
+        docker compose up --build
         sleep 5
         echo "Server is up and running"
     - name: Test Pytest
