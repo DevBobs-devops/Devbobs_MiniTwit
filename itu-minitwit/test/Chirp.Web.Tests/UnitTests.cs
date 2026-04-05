@@ -400,7 +400,7 @@ public class UnitTests : IAsyncLifetime
         var currentLikes = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == 5);
         currentLikes.Likes.Add("Mellie Yost");
         currentLikes.NrLikes = currentLikes.Likes.Count;
-        
+
         await _context.SaveChangesAsync();
 
         //Act
