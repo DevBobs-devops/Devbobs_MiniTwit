@@ -22,11 +22,11 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
     public CheepDbContext(DbContextOptions<CheepDbContext> options)
         : base(options) { }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(builder);
 
-        modelBuilder
+        builder
             .Entity<Cheep>()
             .Property(c => c.Timestamp)
             .HasColumnType("timestamp with time zone")
@@ -45,7 +45,7 @@ public class CheepDbContext : IdentityDbContext<Author, IdentityRole<int>, int> 
             c => c.ToList() // deep copy
         );
 
-        modelBuilder
+        builder
             .Entity<Cheep>()
             .Property(c => c.Likes)
             .HasColumnName("likes")
