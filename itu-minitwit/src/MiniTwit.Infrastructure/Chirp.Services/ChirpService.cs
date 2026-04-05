@@ -151,7 +151,7 @@ public interface IChirpService
     /// Deletes a cheep from the database
     /// </summary>
     /// <param name="cheepId">The id of the cheep</param>
-    public Task DeleteCheep(int cheepId);
+    public Task DeleteCheep(long cheepId);
 }
 
 public class ChirpService : IChirpService
@@ -403,7 +403,7 @@ public class ChirpService : IChirpService
         return cheepDtos;
     }
 
-    public async Task DeleteCheep(int cheepId)
+    public async Task DeleteCheep(long cheepId)
     {
         await _cheepRepository.DeleteCheep(cheepId);
     }

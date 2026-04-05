@@ -61,9 +61,9 @@ else
         //SQLite development db. Here we need to confirm it exists.
         context.Database.Migrate();
         DbInitializer.SeedDatabase(context);
-    }
-    }
+    } 
 }
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

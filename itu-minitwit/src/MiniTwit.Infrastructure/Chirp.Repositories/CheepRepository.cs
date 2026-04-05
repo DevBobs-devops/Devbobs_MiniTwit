@@ -116,7 +116,7 @@ public class CheepRepository : ICheepRepository
         CheepMetrics.RecordCheep(author.Name);
     }
 
-    public async Task AddLike(string authorName, int cheepId)
+    public async Task AddLike(string authorName, long cheepId)
     {
         var currentLikes = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == cheepId);
         if (!currentLikes.Likes.Contains(authorName))
@@ -127,7 +127,7 @@ public class CheepRepository : ICheepRepository
         }
     }
 
-    public async Task RemoveLike(string authorName, int cheepId)
+    public async Task RemoveLike(string authorName, long cheepId)
     {
         var currentLikes = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == cheepId);
         if (currentLikes.Likes.Contains(authorName))
@@ -138,7 +138,7 @@ public class CheepRepository : ICheepRepository
         }
     }
 
-    public async Task<int> CountLikes(int cheepId)
+    public async Task<int> CountLikes(long cheepId)
     {
         var cheep = await _context.Cheeps.FirstAsync(cheep =>cheep.CheepId == cheepId);
         return cheep.NrLikes;

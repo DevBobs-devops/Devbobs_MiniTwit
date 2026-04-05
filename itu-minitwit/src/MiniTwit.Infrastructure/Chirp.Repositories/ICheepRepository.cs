@@ -64,7 +64,7 @@ public interface ICheepRepository
     /// <param name="authorName">The name of the author</param>
     /// <param name="cheepId">The ID of the cheep</param>
     /// <returns>Task</returns>
-    public Task AddLike(string authorName, int cheepId);
+    public Task AddLike(string authorName, long cheepId);
 
     /// <summary>
     /// Removes an author from the list of authors that have liked a cheep
@@ -72,14 +72,14 @@ public interface ICheepRepository
     /// <param name="authorName"> The name of the author</param>
     /// <param name="cheepId">The ID of the cheep</param>
     /// <returns></returns>
-    public Task RemoveLike(string authorName, int cheepId);
+    public Task RemoveLike(string authorName, long cheepId);
 
     /// <summary>
     /// Counts the amount of likes a cheep has
     /// </summary>
     /// <param name="cheepId">Id of cheep</param>
     /// <returns>Amount of likes</returns>
-    public Task<int> CountLikes(int cheepId);
+    public Task<int> CountLikes(long cheepId);
 
     /// <summary>
     /// Gets a list of all liked cheeps for a given author

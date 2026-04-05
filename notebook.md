@@ -175,4 +175,5 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - 15:41: We also had issues with some typeErrors with our ids which we had updated to longs instead of ints, missing some places. We also did a possible suboptimal fix to our GetAllLikes, where we fetch the all cheeps and filter them, based on wether or an author has liked them. This is suboptimal, and in a different scenario, not be a good solution.
 
 
-
+05/04 12:06:
+- Today we finally got out database working. This time we had a different approach; we first made it work locally. So we now create a local docker container with postgres and got it working with starting an empty database and filling it with our test data. After that, the next issue was fitting the old data to new the database / migrations and making that convertion. This is a 1-time only thing, so i did not need to be pretty. We got Claude AI to help us making some queries to convert and we got it working. The final step was to do this on the remote postgres database and then connection our production to it. 
