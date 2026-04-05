@@ -50,9 +50,7 @@ if (app.Environment.IsProduction())
     using (var serviceScope = app.Services.CreateScope())
     {
         var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
-        //Outcommented since we don't need to seed the database as it is located elsewhere
-        //context.Database.EnsureCreated();
-        //Prod_DbInitializer.SeedDatabase(context); //Should probably not be here anymore
+        context.Database.Migrate();
     }
 }
 else
@@ -63,7 +61,7 @@ else
         var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
 
         //SQLite development db. Here we need to confirm it exists.
-        context.Database.EnsureCreated();
+        context.Database.Migrate();
         DbInitializer.SeedDatabase(context);
     }
 }
