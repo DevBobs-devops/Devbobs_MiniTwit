@@ -12,9 +12,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<Author> _userManager;
 
-        public PersonalDataModel(
-            UserManager<Author> userManager,
-            ILogger<PersonalDataModel> logger)
+        public PersonalDataModel(UserManager<Author> userManager, ILogger<PersonalDataModel> logger)
         {
             _userManager = userManager;
         }

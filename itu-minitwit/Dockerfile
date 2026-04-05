@@ -8,9 +8,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 
 # copy the solution, tests and projects
+WORKDIR /.
 COPY MiniTwit.sln MiniTwit.sln
-RUN mkdir src
-RUN mkdir test
+RUN mkdir src test
 COPY ./test test/ 
 COPY ./src/ src/
 

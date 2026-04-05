@@ -67,14 +67,13 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 =======
 # Lecture 04
 12/02: 11:00: Put database into folder. So we later can use this folder as our Docker Volume
-12/02: 11:27:  Created docker compose file, such that we can persists out database. The docker container is linked to our /src/MiniTwit.Web/Data folder - so when we close and open the container the data persists. Can run it with `docker compose up`.
+12/02: 11:27: Created docker compose file, such that we can persists out database. The docker container is linked to our /src/MiniTwit.Web/Data folder - so when we close and open the container the data persists. Can run it with `docker compose up`.
 
-17/02 13:11
-To run the Server with minimal API, from the itu-minitwit/src/MiniTwit.Web run `dotnet run`
-The API can be observed on http://localhost:5221/swagger/index.html
-To run the simulator against the API, find the simulator at BSc_lecture_notes/sessions/session_03/API_Spec and run `python3 minitwit_simulator.py http://localhost:5221/` (while the server is running)
-To fit the 'minitwit_sim_api_test.py' tests to the application, set the BASE_URL at line 10 to 'http://127.0.0.1:5221', and out-comment lines 30 and 31.
-To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while the server is running)
+17/02 13:11: To run the Server with minimal API, from the itu-minitwit/src/MiniTwit.Web run `dotnet run`
+- The API can be observed on http://localhost:5221/swagger/index.html
+- To run the simulator against the API, find the simulator at BSc_lecture_notes/sessions/session_03/API_Spec and run `python3 minitwit_simulator.py http://localhost:5221/` (while the server is running)
+- To fit the 'minitwit_sim_api_test.py' tests to the application, set the BASE_URL at line 10 to 'http://127.0.0.1:5221', and out-comment lines 30 and 31.
+- To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while the server is running)
 
 20/02: 12:30: Setup our ci/cd pipeline (not tested yet, needs to be in main). 
 - The general idea is as follows: We have the github workflow `cicd.yaml`, which is the general file that first creates the minitwit image that gets uploaded to Dockerhub (CI - Continuous Integration). Remember to setup secrets (look at our README.md or exercises for session04). The workflow then runs tests. This still needs to be setup. The workflow ssh into the server, and runs the `deploy.sh` script.
@@ -131,6 +130,22 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - To Visualize it, go to grafana at localhost/3000 and find the dashboard, click edit, click add visualiztion. When you have added something copy the json file into /monitoring/grafana/dashboard/dashboard.json
 
 09/03: 18:00: Ran into uses with the github actions not being able to find the dockerfiles - because of the context being setup wrong. Also forgot to create two new repositories on Dockerhub for the new images.
+
+
+# Lecture 7
+
+15/03 13:45: Research on which linter(s) and codeformatter to use. They will fail if they report issues and we will then have to fix (i included how to run locally)
+- We use SonarQube Cloud (https://github.com/apps/sonarqubecloud). - We should look at if this is too much or not and if we can automate some of the fixes (it says there is ~600...)
+- For the code formatter we will use [CSharpier](https://csharpier.com/docs/About), which has the following github for github actions:  [guibranco/github-csharpier-linter-action](https://github.com/guibranco/github-csharpier-linter-action). To use locally: `dotnet csharpier format .`
+- For our Dockerfile(s) we will use  [hadolint/hadolint-action: GitHub action for Hadolint, A Dockerfile linting tool](https://github.com/hadolint/hadolint-action). To use locally first pull their docker image: `docker pull hadolint/hadolint` and then run `docker run --rm -i hadolint/hadolint < Dockerfile`, with 'Dockerfile' being our dockerfile.
+
+# Lecture 8
+20/03 10:45: Setup Alloy and Loki for logging 
+- Copied loki.yml file from this week's exercise repo and added a config.alloy file instead of the promtail. The alloy file was based on this guide/tutorial: [Setting Up Grafana Loki and Alloy for Docker: A Practical Guide From My Recent Battle](https://kycha-blog.org/posts/practical-guide-grafana-alloy-loki-docker)
+- modified the docker compose file to include containers for loki and alloy. Had some problems with the alloy container exitting immdiately, but this was due to the command flag `--config.file=/etc/loki/local-config.yaml` not being recognized by alloy. Instead the command should just be `run /etc/loki/loki.yml`
+
+20/03 13:15: Replace alloy config file
+- Was not satified with the structure of the logs, so I tried to use the converter tool on the promtail config file from the exercises. This generated a better base template for our alloy configuration, so I scraped the one from the online guide and replaced it with this instead. 
 
 
 11/03: Updates for project

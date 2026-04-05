@@ -8,7 +8,6 @@ using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); //Takes default connection from appsettings.json to use for db
 
 //If we are in production we use postgres, if we are testing, we use sqlite, as we did before
@@ -17,9 +16,9 @@ Console.WriteLine("postgres");
     options.UseNpgsql(connectionString));
 
 
-builder.Services.AddDefaultIdentity<Author>(options =>   
-        options.SignIn.RequireConfirmedAccount = true)            
-    .AddEntityFrameworkStores<CheepDbContext>(); 
+builder
+    .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<CheepDbContext>();
 
 builder.Services.AddSession();
 
@@ -35,7 +34,6 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseMetricServer();
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -64,13 +62,14 @@ else
         context.Database.Migrate();
         DbInitializer.SeedDatabase(context);
     }
+    }
 }
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. 
+    // The default HSTS value is 30 days.
     app.UseHsts();
 }
 
@@ -87,6 +86,6 @@ app.MapRazorPages();
 
 app.MapProductEndpoints();
 
-app.Run(); 
+app.Run();
 
-public partial class Program {} 
+public partial class Program { }
