@@ -399,6 +399,8 @@ public class UnitTests : IAsyncLifetime
         var before = await _cheepRepository.CountLikes(5);
         var currentLikes = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == 5);
         currentLikes.Likes.Add("Mellie Yost");
+        currentLikes.NrLikes = currentLikes.Likes.Count;
+        
         await _context.SaveChangesAsync();
 
         //Act
@@ -493,8 +495,10 @@ public class UnitTests : IAsyncLifetime
         var cheep1 = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == 5);
         cheep1.Likes.Add("Mellie Yost");
         cheep1.Likes.Add("Adrian");
+        cheep1.NrLikes = cheep1.Likes.Count;
         var cheep2 = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == 1);
         cheep2.Likes.Add("Mellie Yost");
+        cheep2.NrLikes = cheep2.Likes.Count;
         await _context.SaveChangesAsync();
 
         //Act
@@ -519,8 +523,12 @@ public class UnitTests : IAsyncLifetime
         var cheep1 = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == 5);
         cheep1.Likes.Add("Mellie Yost");
         cheep1.Likes.Add("Adrian");
+        cheep1.NrLikes = cheep1.Likes.Count;
+
         var cheep2 = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == 1);
         cheep2.Likes.Add("Mellie Yost");
+        cheep2.NrLikes = cheep2.Likes.Count;
+
         await _context.SaveChangesAsync();
 
         //Act
