@@ -53,9 +53,7 @@ public static class Api
 
                 var follows = await followRepository.GetFollowed(username);
                 var res = new GetFollowsResponse(
-                    Follows: follows
-                        .Select(follow => follow.Followed)
-                        .ToList()
+                    Follows: follows.Select(follow => follow.Followed).ToList()
                 );
                 return Results.Ok(res); // returns status code 200
             }
@@ -116,12 +114,11 @@ public static class Api
                 }
 
                 var cheeps = await cheepRepository.GetCheepsLimited(no ?? 32);
-                var res = cheeps
-                    .Select(cheep => new GetMessagesRequest(
-                        cheep.Text,
-                        cheep.Timestamp.ToString(),
-                        cheep.Author.Name
-                    ));
+                var res = cheeps.Select(cheep => new GetMessagesRequest(
+                    cheep.Text,
+                    cheep.Timestamp.ToString(),
+                    cheep.Author.Name
+                ));
                 return Results.Ok(res); //returns status code 200 and res
             }
         );
@@ -155,12 +152,11 @@ public static class Api
                 }
 
                 var cheeps = await cheepRepository.GetCheepsFromAuthorLimited(no ?? 32, username);
-                var res = cheeps
-                    .Select(cheep => new GetMessagesRequest(
-                        cheep.Text,
-                        cheep.Timestamp.ToString(),
-                        cheep.Author.Name
-                    ));
+                var res = cheeps.Select(cheep => new GetMessagesRequest(
+                    cheep.Text,
+                    cheep.Timestamp.ToString(),
+                    cheep.Author.Name
+                ));
                 return Results.Ok(res); //returns status code 200 and res
             }
         );
@@ -213,7 +209,8 @@ public static class Api
                 try
                 {
                     await authorRepository.CreateAuthor(request.Username, request.Email);
-                } catch (Exception)
+                }
+                catch (Exception)
                 { /*returns 400 HTTP code if createAuthor Fails*/
                     return Results.BadRequest(
                         "Possible reasons:\n - missing username \n- invalid email \n- password missing \n- username already taken"
