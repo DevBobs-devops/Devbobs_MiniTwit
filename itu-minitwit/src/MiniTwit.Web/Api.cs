@@ -28,7 +28,7 @@ public static class Api
         /* Returns list of authors followed by username*/
         app.MapGet(
             "/fllws/{username}",
-            (
+            async (
                 string username,
                 [FromHeader(Name = "Authorization")] string authorization,
                 [FromQuery(Name = "latest")] int? latests,
@@ -45,16 +45,16 @@ public static class Api
                     return Results.Forbid(); //returns status code 403
                 }
 
-                var author = authorRepository.GetAuthorByName(username).Result;
+                var author = await authorRepository.GetAuthorByName(username);
                 if (author == null)
                 {
                     return Results.NotFound("User not found (no response body)"); //returns status code 404
                 }
 
+                var follows = await followRepository.GetFollowed(username);
                 var res = new GetFollowsResponse(
-                    Follows: followRepository
-                        .GetFollowed(username)
-                        .Result.Select(follow => follow.Followed)
+                    Follows: follows
+                        .Select(follow => follow.Followed)
                         .ToList()
                 );
                 return Results.Ok(res); // returns status code 200
@@ -64,7 +64,7 @@ public static class Api
         /* User follows/unfollows author*/
         app.MapPost(
             "/fllws/{username}",
-            (
+            async (
                 string username,
                 [FromHeader(Name = "Authorization")] string authorization,
                 [FromQuery(Name = "latest")] int? latests,
@@ -82,14 +82,13 @@ public static class Api
 
                 if (!string.IsNullOrEmpty(request.Follow))
                 {
-                    var res = followRepository.AddFollowing(username, request.Follow);
+                    await followRepository.AddFollowing(username, request.Follow);
                     return Results.NoContent(); //returns status code 204
                 }
 
                 if (!string.IsNullOrEmpty(request.Unfollow))
                 {
-                    var res = followRepository.RemoveFollowing(username, request.Unfollow);
-
+                    await followRepository.RemoveFollowing(username, request.Unfollow);
                     return Results.NoContent(); //returns status code 204
                 }
 
@@ -101,7 +100,7 @@ public static class Api
 
         app.MapGet(
             "/msgs",
-            (
+            async (
                 [FromHeader(Name = "Authorization")] string authorization,
                 [FromQuery(Name = "latest")] int? latests,
                 [FromQuery(Name = "no")] int? no,
@@ -116,9 +115,9 @@ public static class Api
                     return Results.Forbid(); //returns status code 403
                 }
 
-                var res = cheepRepository
-                    .GetCheepsLimited(no ?? 32)
-                    .Result.Select(cheep => new GetMessagesRequest(
+                var cheeps = await cheepRepository.GetCheepsLimited(no ?? 32);
+                var res = cheeps
+                    .Select(cheep => new GetMessagesRequest(
                         cheep.Text,
                         cheep.Timestamp.ToString(),
                         cheep.Author.Name
@@ -129,7 +128,7 @@ public static class Api
 
         app.MapGet(
             "/msgs/{username}",
-            (
+            async (
                 string username,
                 [FromHeader(Name = "Authorization")] string authorization,
                 [FromQuery(Name = "latest")] int? latests,
@@ -147,14 +146,17 @@ public static class Api
                 {
                     return Results.Forbid(); //returns status code 403
                 }
-                if (authorRepository.GetAuthorByName(username).Result is null)
+
+                var author = await authorRepository.GetAuthorByName(username);
+
+                if (author is null)
                 {
                     return Results.NotFound("User not found (no response body)");
                 }
 
-                var res = cheepRepository
-                    .GetCheepsFromAuthorLimited(no ?? 32, username)
-                    .Result.Select(cheep => new GetMessagesRequest(
+                var cheeps = await cheepRepository.GetCheepsFromAuthorLimited(no ?? 32, username);
+                var res = cheeps
+                    .Select(cheep => new GetMessagesRequest(
                         cheep.Text,
                         cheep.Timestamp.ToString(),
                         cheep.Author.Name
@@ -165,7 +167,7 @@ public static class Api
 
         app.MapPost(
             "/msgs/{username}",
-            (
+            async (
                 string username,
                 [FromHeader(Name = "Authorization")] string authorization,
                 [FromQuery(Name = "latest")] int? latests,
@@ -184,14 +186,14 @@ public static class Api
                     return Results.Forbid(); //returns status code 403
                 }
 
-                var author = authorRepository.GetAuthorByName(username).Result;
+                var author = await authorRepository.GetAuthorByName(username);
 
                 if (author is null)
                 {
                     return Results.NotFound();
                 }
 
-                cheepRepository.AddCheep(msgRequest.Content, author);
+                await cheepRepository.AddCheep(msgRequest.Content, author);
 
                 return Results.NoContent(); //returns status code 204
             }
@@ -199,7 +201,7 @@ public static class Api
 
         app.MapPost(
             "/register",
-            (
+            async (
                 [FromQuery(Name = "latest")] int? latests,
                 [FromBody] SignUpRequest request,
                 IAuthorRepository authorRepository
@@ -208,11 +210,11 @@ public static class Api
                 if (latests.HasValue)
                     Latest = latests.Value;
 
-                var res = authorRepository.CreateAuthor(request.Username, request.Email);
-
-                /*returns 400 HTTP code if createAuthor Fails*/
-                if (res == null)
+                try
                 {
+                    await authorRepository.CreateAuthor(request.Username, request.Email);
+                } catch (Exception)
+                { /*returns 400 HTTP code if createAuthor Fails*/
                     return Results.BadRequest(
                         "Possible reasons:\n - missing username \n- invalid email \n- password missing \n- username already taken"
                     );
