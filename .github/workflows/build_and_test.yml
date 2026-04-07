@@ -37,7 +37,7 @@ jobs:
           dotnet build itu-minitwit
 
       - name: Convert sarif for uploading to GitHub
-        uses: ./.github/security-code-scan-results-action@CI-Security-Analysis
+        uses: ./.github/security-code-scan-results-action
 
       - name: Upload sarif
         uses: github/codeql-action/upload-sarif@v1
