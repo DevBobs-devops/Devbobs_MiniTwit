@@ -120,27 +120,60 @@ runs:
           fs.writeFileSync(args[1], converted);
         EOF
 
+        cat << 'EOF' > merge.js
+          const fs = require('fs')
+          const path = require('path')
+
+          var args = process.argv.slice(2);
+          var outputFile = args[0];
+          var sarifFiles = args.slice(1);
+
+          // Start with the first file as the base
+          var merged = JSON.parse(fs.readFileSync(sarifFiles[0], "utf8"));
+          var baseRun = merged.runs[0];
+
+          // Merge all subsequent files into the first run
+          for (let i = 1; i < sarifFiles.length; i++) {
+            var sarif = JSON.parse(fs.readFileSync(sarifFiles[i], "utf8"));
+            
+            for (let run of sarif.runs) {
+              if (run.results) {
+                baseRun.results = baseRun.results.concat(run.results);
+              }
+              
+              // Merge rules (avoid duplicates)
+              if (run.tool && run.tool.driver && run.tool.driver.rules) {
+                const existingRuleIds = new Set(baseRun.tool.driver.rules.map(r => r.id));
+                for (let rule of run.tool.driver.rules) {
+                  if (!existingRuleIds.has(rule.id)) {
+                    baseRun.tool.driver.rules.push(rule);
+                    existingRuleIds.add(rule.id);
+                  }
+                }
+              }
+            }
+          }
+
+          // Ensure only one run in the merged file
+          merged.runs = [baseRun];
+
+          var converted = JSON.stringify(merged, null, 2);
+          fs.writeFileSync(outputFile, converted);
+          console.log("Merged " + sarifFiles.length + " SARIF files into " + outputFile);
+        EOF
+
         i=0
         for sarifFile in $(find ./ -name '*.sarif')
         do
           echo "Processing: $sarifFile"
           node convert.js "$sarifFile" "$sarifFile"
-          
-          # Add category to each SARIF file to avoid conflicts
-          node << 'NODEEOF'
-          const fs = require('fs');
-          const sarifFile = "$sarifFile";
-          const fileIndex = $i;
-          
-          const sarif = JSON.parse(fs.readFileSync(sarifFile, "utf8"));
-          for (run of sarif.runs) {
-            run.automationDetails = {
-              "id": "SecurityCodeScan/" + fileIndex
-            };
-          }
-          
-          fs.writeFileSync(sarifFile, JSON.stringify(sarif, null, 2));
-          NODEEOF
-          
-          mv "$sarifFile" "$outputDir/$((i++)).sarif"
+          i=$((i+1))
         done
+
+        # Merge all converted SARIF files into one
+        echo "Merging SARIF files..."
+        sarifFiles=$(find ./ -name '*.sarif' -type f)
+        if [ ! -z "$sarifFiles" ]; then
+          node merge.js "$outputDir/merged.sarif" $sarifFiles
+          rm $sarifFiles
+        fi
