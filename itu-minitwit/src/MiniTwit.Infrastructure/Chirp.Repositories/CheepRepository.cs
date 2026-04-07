@@ -108,7 +108,7 @@ public class CheepRepository : ICheepRepository
             Author = author,
             AuthorId = author.Id,
             Text = text,
-            Timestamp = DateTime.Now,
+            Timestamp = DateTime.UtcNow,
         };
 
         await _context.Cheeps.AddAsync(cheep);
@@ -116,38 +116,42 @@ public class CheepRepository : ICheepRepository
         CheepMetrics.RecordCheep(author.Name);
     }
 
-    public async Task AddLike(string authorName, int cheepId)
+    public async Task AddLike(string authorName, long cheepId)
     {
         var currentLikes = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == cheepId);
         if (!currentLikes.Likes.Contains(authorName))
         {
             currentLikes.Likes.Add(authorName);
+            currentLikes.NrLikes += 1;
             _context.SaveChanges();
         }
     }
 
-    public async Task RemoveLike(string authorName, int cheepId)
+    public async Task RemoveLike(string authorName, long cheepId)
     {
         var currentLikes = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == cheepId);
         if (currentLikes.Likes.Contains(authorName))
         {
             currentLikes.Likes.Remove(authorName);
+            currentLikes.NrLikes -= 1;
             _context.SaveChanges();
         }
     }
 
-    public async Task<int> CountLikes(int cheepId)
+    public async Task<int> CountLikes(long cheepId)
     {
-        var likes = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == cheepId);
-        return likes.Likes.Count;
+        var cheep = await _context.Cheeps.FirstAsync(cheep => cheep.CheepId == cheepId);
+        return cheep.NrLikes;
     }
 
     public async Task<List<Cheep>> GetAllLiked(string authorName)
     {
-        var likedCheeps = await _context
-            .Cheeps.Where(cheep => cheep.Likes.Contains(authorName))
-            .Include(c => c.Author)
-            .ToListAsync();
+        //Fetch in memory, might be bad
+        var Cheeps = await _context.Cheeps.Include(c => c.Author).ToListAsync();
+
+        //var likedCheeps = await _context.Cheeps.Where(cheep => cheep.Likes.Contains(authorName)).Include(c => c.Author).ToListAsync();
+
+        var likedCheeps = Cheeps.Where(c => c.Likes.Contains(authorName)).ToList();
 
         return likedCheeps;
     }
@@ -155,24 +159,22 @@ public class CheepRepository : ICheepRepository
     public async Task DeleteAllLikes(string authorName)
     {
         //https://stackoverflow.com/questions/1586013/how-to-do-select-all-in-linq-to-sql
-        var likedCheeps = await _context
-            .Cheeps.Where(cheep => cheep.Likes.Contains(authorName))
-            .ToListAsync();
+        var cheeps = await _context.Cheeps.ToListAsync();
+        var likedCheeps = cheeps.Where(c => c.Likes.Contains(authorName)).ToList();
 
         foreach (var likes in likedCheeps)
         {
             likes.Likes.Remove(authorName);
+            likes.NrLikes -= 1;
         }
+
         _context.SaveChanges();
     }
 
     public async Task<List<Cheep>> GetTopLikedCheeps(int page) //This is not a great way to do it. But Keep It Simple Stupid
     {
         //https://stackoverflow.com/questions/5344805/linq-orderby-descending-query
-        var query = (
-            from cheep in _context.Cheeps.OrderByDescending(cheep => cheep.Likes.Count)
-            select cheep
-        )
+        var query = (from cheep in _context.Cheeps.OrderByDescending(c => c.NrLikes) select cheep)
             .Skip((page - 1) * 32)
             .Take(32)
             .Include(c => c.Author);
@@ -182,7 +184,7 @@ public class CheepRepository : ICheepRepository
         return cheeps;
     }
 
-    public async Task DeleteCheep(int cheepId)
+    public async Task DeleteCheep(long cheepId)
     {
         var cheep = await _context.Cheeps.FindAsync(cheepId);
         if (cheep != null)

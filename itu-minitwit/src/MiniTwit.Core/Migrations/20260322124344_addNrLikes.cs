@@ -5,24 +5,24 @@
 namespace Chirp.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangesLikesRemovedTable : Migration
+    public partial class addNrLikes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Likes",
+            migrationBuilder.AddColumn<int>(
+                name: "NrLikes",
                 table: "Cheeps",
-                type: "TEXT",
+                type: "integer",
                 nullable: false,
-                defaultValue: "[]"
+                defaultValue: 0
             );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(name: "Likes", table: "Cheeps");
+            migrationBuilder.DropColumn(name: "NrLikes", table: "Cheeps");
         }
     }
 }
