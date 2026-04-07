@@ -1,6 +1,6 @@
 # Devbobs's Notebook 
 **Team:** Devbobs  
-**Contributors:** Marius, Morten, Jonas & Laura
+**Contributors:** Marius, Morten, Jonas, Torkil & Laura
 
 ---
 
@@ -104,14 +104,32 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 01/03: 12:00: Made our Vagrantfile idempotent. The provisioner script can be run with `vagrant provision`. 
 - While doing it i looked at [https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script](vscode-file://vscode-app/usr/share/code/resources/app/out/vs/code/electron-browser/workbench/workbench.html) and https://arslan.io/2019/07/03/how-to-write-idempotent-bash-scripts/.
 
+# Lecture 06
+03/03: We decided to use the database manger provided by DigitalOcean, more specifically Postgres
 
-# Lecture 6
+05/03 - edited (14/03): To migrate we needed to provide the database server with a postgres dump. However, our current database is sqlite, so it would create a sqlite dump, which we did:
+- Copy sqlite db from server
+``` scp root@209.38.230.113:/minitwit/data/chirp.db <location you want it to be put in>```
+- make sqlite dump
+```sqlite3 chirp.db .dump > minitwitdb.sql ```
+
+- We create a postgres database locally to help with the dump
+```createdb -U postgres tempdb```
+
+- Then using PGloader, we load the sqlite dump into the postgres tempdb
+```pgloader sqlite://chirp.db postgresql://postgres:miniDBTwit@localhost/tempd```
+
+- Then we create the dump. The reason for --no-owner and --no-acl, is that we had a conflict between the user on digtal ocean, giving errors, because it was not marked as owner, the local postgres user was. Setting it to no owner, removed the conflicts.
+```sudo -u postgres pg_dump --no-owner --no-acl tempdb > minitwitdb.sql```
+
+- Then we upload the dump to the digital ocean database
+```psql "postgresql://doadmin:...@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
 
 08/03: 12:00: Setup Promethues and Grafana to do visualization of our application. The idea is that we in out .NET MiniTwit application expose /metrics, which is out "in memory" current view of the system (or whatever we expose). We then use Promethues to scrape this data and safe it. Grafana then uses what Promethues scrape and visualize it.
 - To expose more, see the MiniTwit.Infrastructure/Metrics.
 - To Visualize it, go to grafana at localhost/3000 and find the dashboard, click edit, click add visualiztion. When you have added something copy the json file into /monitoring/grafana/dashboard/dashboard.json
 
-09/02: 18:00: Ran into uses with the github actions not being able to find the dockerfiles - because of the context being setup wrong. Also forgot to create two new repositories on Dockerhub for the new images.
+09/03: 18:00: Ran into uses with the github actions not being able to find the dockerfiles - because of the context being setup wrong. Also forgot to create two new repositories on Dockerhub for the new images.
 
 
 # Lecture 7
@@ -128,3 +146,35 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 20/03 13:15: Replace alloy config file
 - Was not satified with the structure of the logs, so I tried to use the converter tool on the promtail config file from the exercises. This generated a better base template for our alloy configuration, so I scraped the one from the online guide and replaced it with this instead. 
+
+
+11/03: Updates for project
+- To switch from Sqlite to postgres we install a postgres package in the Minitwit.Web project. Version 8.0.4, since we are usinge .Net 8.
+```dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 8.0.4```
+- We also added the connectionstring to github secrets, which for obvious reason im not going to show. We use this conncetionstring to deploy from gihub actions, as we have already been doing. Now it should connect to the database server. The connection string will point to our new database.
+
+- We also updated the cicd workflow and docker compose, so they now hav an environment variable pointing to our connectionstring.
+
+- Note: You can connect to the database if you have postgres installed and use following command:
+```psql "postgresql://doadmin:<Our_password>@db-postgresql-minitwit-do-user-33189704-0.f.db.ondigitalocean.com:25060/minitwitdb?sslmode=require"```
+
+17/03 15:43: Added our connectionstring to the postgres database to the server as an environment variable.
+- Commands used: 
+    edit evironment variables
+    ```nano ~/.bashrc```  
+    Insterted following into the file.
+    ``` export ConnectionStrings__DefaultConnection="our_connectionstring"``` 
+    Confirm
+    ```source ~/.bashrc```
+
+21/03 14:22: 
+- fixed some issues with our backend relating to Likes. EFCore had trouble with converting ```Cheep.Likes.Count```into a correct query, giving us an error when we tried to access "top cheeps". We fixed this by editing our Cheep class to have the number of likes it has gotten (NrLikes), not just the list of those who have liked the cheep. This fixed the issue.
+
+- 15:09: We also had an issue with people accessing their own timeline. This was due to some misplaced "awaits" (awaits within awaits) that led to conflicting executions, mainly being an issues with follows. 
+
+- 15:41: We also had issues with some typeErrors with our ids which we had updated to longs instead of ints, missing some places. We also did a possible suboptimal fix to our GetAllLikes, where we fetch the all cheeps and filter them, based on wether or an author has liked them. This is suboptimal, and in a different scenario, not be a good solution.
+
+
+05/04 12:06:
+- Today we finally got out database working. This time we had a different approach; we first made it work locally. So we now create a local docker container with postgres and got it working with starting an empty database and filling it with our test data. After that, the next issue was fitting the old data to new the database / migrations and making that convertion. This is a 1-time only thing, so i did not need to be pretty. We got Claude AI to help us making some queries to convert and we got it working. The final step was to do this on the remote postgres database and then connection our production to it. 
+- After switching to using postgres, we ran into a problem with running our python test. The problem was caused by using .Result instead og await. .Result was ok when we were using the sqlite .db database as it blocked the whole thread. But when using .Result on our containerized Postgres database this caused a race condition. 

@@ -10,7 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); //Takes default connection from appsettings.json to use for db
 
-builder.Services.AddDbContext<CheepDbContext>(options => options.UseSqlite(connectionString));
+//If we are in production we use postgres, if we are testing, we use sqlite, as we did before
+Console.WriteLine("postgres");
+builder.Services.AddDbContext<CheepDbContext>(options => options.UseNpgsql(connectionString));
 
 builder
     .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -40,23 +42,22 @@ if (app.Environment.IsDevelopment())
 //If we are in production, seed with an empty dump, else seed with template data
 if (app.Environment.IsProduction())
 {
+    Console.Write("Prod");
     using (var serviceScope = app.Services.CreateScope())
     {
         var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
-
-        context.Database.EnsureCreated();
-
-        Prod_DbInitializer.SeedDatabase(context);
+        context.Database.Migrate();
     }
 }
 else
 {
+    Console.WriteLine("Dev");
     using (var serviceScope = app.Services.CreateScope())
     {
         var context = serviceScope.ServiceProvider.GetRequiredService<CheepDbContext>();
 
-        context.Database.EnsureCreated();
-
+        //SQLite development db. Here we need to confirm it exists.
+        context.Database.Migrate();
         DbInitializer.SeedDatabase(context);
     }
 }

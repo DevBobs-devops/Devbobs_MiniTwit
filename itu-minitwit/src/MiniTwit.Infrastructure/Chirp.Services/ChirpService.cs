@@ -151,7 +151,7 @@ public interface IChirpService
     /// Deletes a cheep from the database
     /// </summary>
     /// <param name="cheepId">The id of the cheep</param>
-    public Task DeleteCheep(int cheepId);
+    public Task DeleteCheep(long cheepId);
 }
 
 public class ChirpService : IChirpService
@@ -179,7 +179,9 @@ public class ChirpService : IChirpService
         }
         var queryresult = await _cheepRepository.GetCheeps(page);
 
-        var result = await ConvertCheepsToCheepDtos(queryresult, ""); // follower is empty since it doesnt matter for users that arent logged in
+        var follows = await _followRepository.GetFollowed("");
+
+        var result = await ConvertCheepsToCheepDtos(queryresult, "", follows); // follower is empty since it doesnt matter for users that arent logged in
         return result;
     }
 
@@ -190,8 +192,8 @@ public class ChirpService : IChirpService
             page = 1;
         }
         var queryresult = await _cheepRepository.GetCheeps(page);
-
-        var result = await ConvertCheepsToCheepDtos(queryresult, followerName);
+        var follows = await _followRepository.GetFollowed(followerName);
+        var result = await ConvertCheepsToCheepDtos(queryresult, followerName, follows);
         return result;
     }
 
@@ -206,7 +208,8 @@ public class ChirpService : IChirpService
             page = 1;
         }
         var queryresult = await _cheepRepository.GetCheepsFromAuthor(page, authorName);
-        var result = await ConvertCheepsToCheepDtos(queryresult, spectatingAuthorName);
+        var follows = await _followRepository.GetFollowed(spectatingAuthorName);
+        var result = await ConvertCheepsToCheepDtos(queryresult, spectatingAuthorName, follows);
         return result;
     }
 
@@ -278,26 +281,34 @@ public class ChirpService : IChirpService
     public async Task<List<CheepDto>> GetAllCheepsFromAuthor(string authorName)
     {
         var cheeps = await _cheepRepository.GetAllCheepsFromAuthor(authorName);
-        var dtos = await ConvertCheepsToCheepDtos(cheeps, authorName);
+        var follows = await _followRepository.GetFollowed(authorName);
+        var dtos = await ConvertCheepsToCheepDtos(cheeps, authorName, follows);
         return dtos;
     }
 
     //Gets a complete, sorted list of all cheeps that could go on a timeline
     private async Task<List<CheepDto>> GetAllCheepsForTimeline(string authorName)
     {
-        var cheepsByAuthor = _cheepRepository.GetAllCheepsFromAuthor(authorName);
-        var cheepsByFollowed = _cheepRepository.GetAllCheepsFromFollowed(authorName);
+        var follows = await _followRepository.GetFollowed(authorName);
 
-        var cheepsByAuthorDtos = ConvertCheepsToCheepDtos(await cheepsByAuthor, authorName);
-        var cheepsByFollowedDtos = ConvertCheepsToCheepDtos(await cheepsByFollowed, authorName);
-        await Task.WhenAll(cheepsByAuthorDtos, cheepsByFollowedDtos);
+        var cheepsByAuthor = await _cheepRepository.GetAllCheepsFromAuthor(authorName);
+        var cheepsByFollowed = await _cheepRepository.GetAllCheepsFromFollowed(authorName);
 
-        //combine the lists inelegantly
-        cheepsByAuthorDtos.Result.AddRange(cheepsByFollowedDtos.Result);
-        var allCheeps = cheepsByAuthorDtos.Result;
+        var cheepsByAuthorDtos = await ConvertCheepsToCheepDtos(
+            cheepsByAuthor,
+            authorName,
+            follows
+        );
+        var cheepsByFollowedDtos = await ConvertCheepsToCheepDtos(
+            cheepsByFollowed,
+            authorName,
+            follows
+        );
 
-        //sort it by time
-        var result = allCheeps.OrderByDescending(c => c.Timestamp).ToList();
+        // Combine lists
+        cheepsByAuthorDtos.AddRange(cheepsByFollowedDtos);
+
+        var result = cheepsByAuthorDtos.OrderByDescending(c => c.Timestamp).ToList();
         return result;
     }
 
@@ -326,18 +337,16 @@ public class ChirpService : IChirpService
     /// <returns> A list of cheepDTOs</returns>
     private async Task<List<CheepDto>> ConvertCheepsToCheepDtos(
         List<Cheep> cheeps,
-        string authorName
+        string authorName,
+        List<Follow> follows
     )
     {
-        //Gets a list over which Authors the current author follows
-        var follows = await _followRepository.GetFollowed(authorName);
-
         var result = new List<CheepDto>();
         foreach (var cheep in cheeps)
         {
             bool isFollowing = false;
             bool isLiking = false;
-            int likesamount = cheep.Likes.Count;
+            //int likesamount = cheep.Likes.Count;
             foreach (var follow in follows) // this could be more efficient
             {
                 if (follow.Followed == cheep.Author.Name)
@@ -358,7 +367,7 @@ public class ChirpService : IChirpService
                 Timestamp = cheep.Timestamp,
                 Follows = isFollowing,
                 Liked = isLiking,
-                Likes = likesamount,
+                Likes = cheep.NrLikes,
                 Id = cheep.CheepId,
             };
             result.Add(dto);
@@ -384,7 +393,8 @@ public class ChirpService : IChirpService
     public async Task<List<CheepDto>> GetAllLiked(string authorName)
     {
         var cheeps = await _cheepRepository.GetAllLiked(authorName);
-        var dtos = await ConvertCheepsToCheepDtos(cheeps, authorName);
+        var follows = await _followRepository.GetFollowed(authorName);
+        var dtos = await ConvertCheepsToCheepDtos(cheeps, authorName, follows);
         return dtos;
     }
 
@@ -396,11 +406,12 @@ public class ChirpService : IChirpService
     public async Task<List<CheepDto>> GetTopLikedCheeps(string authorName, int page)
     {
         var cheeps = await _cheepRepository.GetTopLikedCheeps(page);
-        var cheepDtos = await ConvertCheepsToCheepDtos(cheeps, authorName);
+        var follows = await _followRepository.GetFollowed(authorName);
+        var cheepDtos = await ConvertCheepsToCheepDtos(cheeps, authorName, follows);
         return cheepDtos;
     }
 
-    public async Task DeleteCheep(int cheepId)
+    public async Task DeleteCheep(long cheepId)
     {
         await _cheepRepository.DeleteCheep(cheepId);
     }

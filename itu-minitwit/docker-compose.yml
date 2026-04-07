@@ -2,10 +2,16 @@
 services:
   minitwit:
     build: . # build the image from the Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development #Ensure that locally run env is Development. Fix found here: https://oneuptime.com/blog/post/2026-01-25-docker-compose-development-environments/view & here https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-10.0
+      - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=default_database;Username=username;Password=password
     ports:
       - "8080:8080"
     volumes:
       - ./minitwit/data:/app/Data  # mount database folder on vm to : our workdir in Dockerfile is /app, and the rest need to match our connectionstring
+    depends_on:
+      database:
+        condition: service_healthy
 
   prometheus:
     build: 
@@ -19,6 +25,21 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - "9090:9090"
+
+ # taken from: https://github.com/gaelgthomas/docker-compose-with-postgresql/blob/main/docker-compose.yml
+  database:
+    image: "postgres:latest"
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: username   
+      POSTGRES_PASSWORD: password 
+      POSTGRES_DB: default_database 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U username -d default_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   alloy:
     build:
