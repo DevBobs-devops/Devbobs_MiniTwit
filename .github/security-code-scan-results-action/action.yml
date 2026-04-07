@@ -13,9 +13,11 @@ runs:
   steps:
     - name: Convert sarif
       shell: bash
+      env:
+        SARIF_DIR: ${{ inputs.sarif_directory }}
       run: |
         dotnet tool install --global Sarif.Multitool
-        outputDir="${{ inputs.sarif_directory }}"
+        outputDir="$SARIF_DIR"
         mkdir -p $outputDir
 
         cat << 'EOF' > convert.js
