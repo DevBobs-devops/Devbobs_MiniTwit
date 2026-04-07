@@ -178,3 +178,14 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 05/04 12:06:
 - Today we finally got out database working. This time we had a different approach; we first made it work locally. So we now create a local docker container with postgres and got it working with starting an empty database and filling it with our test data. After that, the next issue was fitting the old data to new the database / migrations and making that convertion. This is a 1-time only thing, so i did not need to be pretty. We got Claude AI to help us making some queries to convert and we got it working. The final step was to do this on the remote postgres database and then connection our production to it. 
 - After switching to using postgres, we ran into a problem with running our python test. The problem was caused by using .Result instead og await. .Result was ok when we were using the sqlite .db database as it blocked the whole thread. But when using .Result on our containerized Postgres database this caused a race condition. 
+
+
+# Lecture 9
+24/03: 11:00: For now, we just install nginx & certbot directly on the server.
+- Bought free domain from https://controlpanel.tech/servlet/ListAllOrdersServlet?formaction=listOrders. "Devbobs.tech"
+- Pointed the nameservers to Digitalocean.
+- Followed the given tutorial: https://github.com/itu-devops/BSc_lecture_notes/blob/master/sessions/session_09/TLSTutorial.md
+- Ran into problem that dns providers could not see our name: https://dnschecker.org/#A/devbovs.tech. 
+- Ran into a problem where Certbot could not give an certifacate because Let's Encrypt tries to reach us on port 80 (which we block).
+- Could not figure out why devbobs.tech was not working. Asked ClaudeAI and found it our ip http://209.38.230.113/, do work, so Nginx does work with our IP. But the DNS does not work (yet, lets wait and see)
+
