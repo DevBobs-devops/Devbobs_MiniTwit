@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up projects
-        uses: security-code-scan/security-code-scan-add-action@v1.2
+        uses: security-code-scan/security-code-scan-add-action@5f75674efc0abc4d41aa8cf3f1706ed5fe9365dd
 
       - name: Build
         run: |
@@ -37,7 +37,7 @@ jobs:
           dotnet build itu-minitwit
 
       - name: Convert sarif for uploading to GitHub
-        uses: DevBobs-devops/Devbobs_MiniTwit/.github/security-code-scan-results-action@CI-Security-Analysis
+        uses: ./.github/security-code-scan-results-action@CI-Security-Analysis
 
       - name: Upload sarif
         uses: github/codeql-action/upload-sarif@v1
