@@ -1,6 +1,8 @@
-﻿using Chirp.Core;
+﻿using System.Diagnostics;
+using Chirp.Core;
 using Chirp.Infrastructure.Metrics;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 
 namespace Chirp.Infrastructure.Chirp.Repositories;
 
@@ -18,12 +20,16 @@ public class CheepRepository : ICheepRepository
     }
 
     public async Task<List<Cheep>> GetCheeps(int page)
-    {
+    {   
+        var stopwatch = Stopwatch.StartNew();
         var query = (from cheep in _context.Cheeps orderby cheep.Timestamp descending select cheep)
             .Include(c => c.Author)
             .Skip((page - 1) * 32)
             .Take(32);
         var result = await query.ToListAsync();
+        stopwatch.Stop();
+        CheepMetrics.RecordQueryGetCheeps(stopwatch);
+        Console.WriteLine("Get cheeeeps");
         return result;
     }
 
