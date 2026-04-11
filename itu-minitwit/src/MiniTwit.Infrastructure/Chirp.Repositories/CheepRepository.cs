@@ -26,6 +26,8 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Skip((page - 1) * 32)
             .Take(32);
+
+            
         var result = await query.ToListAsync();
         stopwatch.Stop();
         CheepMetrics.RecordQueryGetCheeps(stopwatch);
@@ -39,7 +41,7 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Take(amount);
         var result = await query.ToListAsync();
-        CheepMetrics.RecordQueryGetCheepsLimited(stopwatch);
+        CheepMetrics.RecordQueryGetCheeps(stopwatch);
         return result;
     }
 
@@ -72,7 +74,7 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Take(amount);
         var result = await query.ToListAsync();
-        CheepMetrics.RecordQueryGetAuthorLimited(stopwatch);
+        CheepMetrics.RecordQueryGetAuthor(stopwatch);
         return result;
     }
 
