@@ -20,7 +20,7 @@ public class CheepRepository : ICheepRepository
     }
 
     public async Task<List<Cheep>> GetCheeps(int page)
-    {   
+    {
         var stopwatch = Stopwatch.StartNew();
         var query = (from cheep in _context.Cheeps orderby cheep.Timestamp descending select cheep)
             .Include(c => c.Author)
