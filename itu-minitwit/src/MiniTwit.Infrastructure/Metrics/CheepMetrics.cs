@@ -42,5 +42,18 @@ public class CheepMetrics
         DatabaseQueryDuration.WithLabels("get", "cheeps").Observe(stopwatch.Elapsed.TotalSeconds);
     }
 
+    public static void RecordQueryGetCheepsLimited(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration.WithLabels("get_limited", "cheeps").Observe(stopwatch.Elapsed.TotalSeconds);
+    }
+
+    public static void RecordQueryGetAuthor(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration.WithLabels("get", "author").Observe(stopwatch.Elapsed.TotalSeconds);
+    }
     
+    public static void RecordQueryGetAuthorLimited(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration.WithLabels("get_limited", "author").Observe(stopwatch.Elapsed.TotalSeconds);
+    }
 }

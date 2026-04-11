@@ -35,15 +35,19 @@ public class CheepRepository : ICheepRepository
 
     public async Task<List<Cheep>> GetCheepsLimited(int amount)
     {
+        var stopwatch = Stopwatch.StartNew();
         var query = (from cheep in _context.Cheeps orderby cheep.Timestamp descending select cheep)
             .Include(c => c.Author)
             .Take(amount);
         var result = await query.ToListAsync();
+        CheepMetrics.RecordQueryGetCheepsLimited(stopwatch);
+        Console.WriteLine("Get cheeps limited");
         return result;
     }
 
     public async Task<List<Cheep>> GetCheepsFromAuthor(int page, string authorName)
     {
+        var stopwatch = Stopwatch.StartNew();
         var query = (
             from cheep in _context.Cheeps
             where cheep.Author.Name == authorName
@@ -54,12 +58,15 @@ public class CheepRepository : ICheepRepository
             .Skip((page - 1) * 32)
             .Take(32);
         var result = await query.ToListAsync();
+        CheepMetrics.RecordQueryGetAuthor(stopwatch);
+        Console.WriteLine("Get cheeps limited");
 
         return result;
     }
 
     public async Task<List<Cheep>> GetCheepsFromAuthorLimited(int amount, string authorName)
     {
+        var stopwatch = Stopwatch.StartNew();
         var query = (
             from cheep in _context.Cheeps
             where cheep.Author.Name == authorName
@@ -69,7 +76,8 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Take(amount);
         var result = await query.ToListAsync();
-
+        CheepMetrics.RecordQueryGetAuthorLimited(stopwatch);
+        Console.WriteLine("Get cheeps limited");
         return result;
     }
 
