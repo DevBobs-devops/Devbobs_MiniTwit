@@ -193,3 +193,5 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 # Lecture 10
 11/02: 12:12: Ran our application locally. Tried with both a local database (with little data) and our remote live database. Here it was obvious that our slow application comes from the amount of data in the database
 - This probably means that the bottleneck is our queries.
+11/04: 18:45: Added metrics for queries
+- Added metrics for some of our queries. Used Claude to help understand how to setup/understand some of the queries Grafana proposed.
