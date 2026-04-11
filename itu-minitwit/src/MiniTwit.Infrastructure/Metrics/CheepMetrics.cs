@@ -56,4 +56,9 @@ public class CheepMetrics
     {
         DatabaseQueryDuration.WithLabels("get_limited", "author").Observe(stopwatch.Elapsed.TotalSeconds);
     }
+
+    public static void RecordAddCheep(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration.WithLabels("post", "cheeps").Observe(stopwatch.Elapsed.TotalSeconds);
+    }
 }

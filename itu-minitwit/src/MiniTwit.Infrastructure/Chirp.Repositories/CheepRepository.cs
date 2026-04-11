@@ -112,6 +112,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task AddCheep(string text, Author author)
     {
+        var stopwatch = Stopwatch.StartNew();
         if (text.Length <= 0 || text.Length > 160)
         {
             throw new ArgumentException("Text must be between 0 and 160 characters");
@@ -128,6 +129,7 @@ public class CheepRepository : ICheepRepository
         await _context.Cheeps.AddAsync(cheep);
         await _context.SaveChangesAsync();
         CheepMetrics.RecordCheep(author.Name);
+        CheepMetrics.RecordAddCheep(stopwatch);
     }
 
     public async Task AddLike(string authorName, long cheepId)
