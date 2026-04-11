@@ -29,7 +29,6 @@ public class CheepRepository : ICheepRepository
         var result = await query.ToListAsync();
         stopwatch.Stop();
         CheepMetrics.RecordQueryGetCheeps(stopwatch);
-        Console.WriteLine("Get cheeeeps");
         return result;
     }
 
@@ -41,7 +40,6 @@ public class CheepRepository : ICheepRepository
             .Take(amount);
         var result = await query.ToListAsync();
         CheepMetrics.RecordQueryGetCheepsLimited(stopwatch);
-        Console.WriteLine("Get cheeps limited");
         return result;
     }
 
@@ -59,8 +57,6 @@ public class CheepRepository : ICheepRepository
             .Take(32);
         var result = await query.ToListAsync();
         CheepMetrics.RecordQueryGetAuthor(stopwatch);
-        Console.WriteLine("Get cheeps limited");
-
         return result;
     }
 
@@ -77,7 +73,6 @@ public class CheepRepository : ICheepRepository
             .Take(amount);
         var result = await query.ToListAsync();
         CheepMetrics.RecordQueryGetAuthorLimited(stopwatch);
-        Console.WriteLine("Get cheeps limited");
         return result;
     }
 
