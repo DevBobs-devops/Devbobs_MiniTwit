@@ -22,12 +22,88 @@
   "links": [],
   "panels": [
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P1809F7CD0C75ACF3"
+      },
+      "description": "Shows time to query cheeps. 95% are faster than this and 5% is slowers",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 13,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.1.10",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(0.95, sum by(le) (rate(database_query_duration_seconds_bucket{operation=\"get\", table=\"cheeps\"}[$__rate_interval])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "GetCheeps Query",
+      "type": "bargauge"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 5,
       "panels": [],
@@ -81,7 +157,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 9
       },
       "id": 1,
       "options": {
@@ -101,7 +177,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.1.9",
+      "pluginVersion": "12.1.10",
       "targets": [
         {
           "datasource": {
@@ -185,7 +261,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 9
       },
       "id": 8,
       "options": {
@@ -201,7 +277,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.1.9",
+      "pluginVersion": "12.1.10",
       "targets": [
         {
           "disableTextWrap": false,
@@ -283,7 +359,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 17
       },
       "id": 9,
       "options": {
@@ -299,7 +375,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.1.9",
+      "pluginVersion": "12.1.10",
       "targets": [
         {
           "disableTextWrap": false,
@@ -380,7 +456,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 17
       },
       "id": 11,
       "options": {
@@ -396,7 +472,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.1.9",
+      "pluginVersion": "12.1.10",
       "targets": [
         {
           "disableTextWrap": false,
@@ -419,7 +495,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 25
       },
       "id": 6,
       "panels": [],
@@ -490,7 +566,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 26
       },
       "id": 10,
       "options": {
@@ -506,7 +582,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.1.9",
+      "pluginVersion": "12.1.10",
       "targets": [
         {
           "disableTextWrap": false,
@@ -587,7 +663,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 26
       },
       "id": 7,
       "options": {
@@ -603,7 +679,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.1.9",
+      "pluginVersion": "12.1.10",
       "targets": [
         {
           "disableTextWrap": false,
@@ -626,7 +702,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 34
       },
       "id": 3,
       "panels": [],
@@ -697,7 +773,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 35
       },
       "id": 2,
       "options": {
@@ -713,7 +789,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.1.9",
+      "pluginVersion": "12.1.10",
       "targets": [
         {
           "disableTextWrap": false,
@@ -760,7 +836,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 27
+        "y": 35
       },
       "id": 12,
       "options": {
@@ -780,7 +856,7 @@
         "textMode": "name",
         "wideLayout": true
       },
-      "pluginVersion": "12.1.9",
+      "pluginVersion": "12.1.10",
       "targets": [
         {
           "disableTextWrap": false,
@@ -816,5 +892,5 @@
   "timezone": "browser",
   "title": "Minitwit Dashboard",
   "uid": "fegau3n6gywaoa",
-  "version": 10
+  "version": 2
 }
