@@ -39,7 +39,7 @@ public class CheepMetrics
 
     public static void RecordQueryGetCheeps(Stopwatch stopwatch)
     {
-        DatabaseQueryDuration.Observe(stopwatch.Elapsed.TotalSeconds);
+        DatabaseQueryDuration.WithLabels("get", "cheeps").Observe(stopwatch.Elapsed.TotalSeconds);
     }
 
     
