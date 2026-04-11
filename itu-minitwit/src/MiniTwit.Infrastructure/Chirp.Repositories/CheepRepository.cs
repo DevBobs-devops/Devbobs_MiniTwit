@@ -1,6 +1,8 @@
-﻿using Chirp.Core;
+﻿using System.Diagnostics;
+using Chirp.Core;
 using Chirp.Infrastructure.Metrics;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 
 namespace Chirp.Infrastructure.Chirp.Repositories;
 
@@ -19,25 +21,31 @@ public class CheepRepository : ICheepRepository
 
     public async Task<List<Cheep>> GetCheeps(int page)
     {
+        var stopwatch = Stopwatch.StartNew();
         var query = (from cheep in _context.Cheeps orderby cheep.Timestamp descending select cheep)
             .Include(c => c.Author)
             .Skip((page - 1) * 32)
             .Take(32);
         var result = await query.ToListAsync();
+        stopwatch.Stop();
+        CheepMetrics.RecordQueryGetCheeps(stopwatch);
         return result;
     }
 
     public async Task<List<Cheep>> GetCheepsLimited(int amount)
     {
+        var stopwatch = Stopwatch.StartNew();
         var query = (from cheep in _context.Cheeps orderby cheep.Timestamp descending select cheep)
             .Include(c => c.Author)
             .Take(amount);
         var result = await query.ToListAsync();
+        CheepMetrics.RecordQueryGetCheepsLimited(stopwatch);
         return result;
     }
 
     public async Task<List<Cheep>> GetCheepsFromAuthor(int page, string authorName)
     {
+        var stopwatch = Stopwatch.StartNew();
         var query = (
             from cheep in _context.Cheeps
             where cheep.Author.Name == authorName
@@ -48,12 +56,13 @@ public class CheepRepository : ICheepRepository
             .Skip((page - 1) * 32)
             .Take(32);
         var result = await query.ToListAsync();
-
+        CheepMetrics.RecordQueryGetAuthor(stopwatch);
         return result;
     }
 
     public async Task<List<Cheep>> GetCheepsFromAuthorLimited(int amount, string authorName)
     {
+        var stopwatch = Stopwatch.StartNew();
         var query = (
             from cheep in _context.Cheeps
             where cheep.Author.Name == authorName
@@ -63,7 +72,7 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Take(amount);
         var result = await query.ToListAsync();
-
+        CheepMetrics.RecordQueryGetAuthorLimited(stopwatch);
         return result;
     }
 
@@ -98,6 +107,7 @@ public class CheepRepository : ICheepRepository
 
     public async Task AddCheep(string text, Author author)
     {
+        var stopwatch = Stopwatch.StartNew();
         if (text.Length <= 0 || text.Length > 160)
         {
             throw new ArgumentException("Text must be between 0 and 160 characters");
@@ -114,6 +124,7 @@ public class CheepRepository : ICheepRepository
         await _context.Cheeps.AddAsync(cheep);
         await _context.SaveChangesAsync();
         CheepMetrics.RecordCheep(author.Name);
+        CheepMetrics.RecordAddCheep(stopwatch);
     }
 
     public async Task AddLike(string authorName, long cheepId)

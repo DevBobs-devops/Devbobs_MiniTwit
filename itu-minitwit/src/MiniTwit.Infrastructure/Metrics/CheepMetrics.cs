@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using Prometheus;
 
@@ -16,6 +17,17 @@ public class CheepMetrics
         new CounterConfiguration { LabelNames = new[] { "user" } }
     );
 
+    // https://oneuptime.com/blog/post/2026-01-25-prometheus-metrics-dotnet/view#histograms
+    private static readonly Histogram DatabaseQueryDuration = Prometheus.Metrics.CreateHistogram(
+        "database_query_duration_seconds",
+        "Duration of database queries in seconds",
+        new HistogramConfiguration
+        {
+            LabelNames = new[] { "operation", "table" },
+            Buckets = new[] { 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1.0, 5.0, 10.0 },
+        }
+    );
+
     public static void RecordCheep(string? user)
     {
         CheepsCreated.Inc();
@@ -24,5 +36,34 @@ public class CheepMetrics
         {
             TotalCheepsPerUser.WithLabels(user).Inc();
         }
+    }
+
+    public static void RecordQueryGetCheeps(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration.WithLabels("get", "cheeps").Observe(stopwatch.Elapsed.TotalSeconds);
+    }
+
+    public static void RecordQueryGetCheepsLimited(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration
+            .WithLabels("get_limited", "cheeps")
+            .Observe(stopwatch.Elapsed.TotalSeconds);
+    }
+
+    public static void RecordQueryGetAuthor(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration.WithLabels("get", "author").Observe(stopwatch.Elapsed.TotalSeconds);
+    }
+
+    public static void RecordQueryGetAuthorLimited(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration
+            .WithLabels("get_limited", "author")
+            .Observe(stopwatch.Elapsed.TotalSeconds);
+    }
+
+    public static void RecordAddCheep(Stopwatch stopwatch)
+    {
+        DatabaseQueryDuration.WithLabels("post", "cheeps").Observe(stopwatch.Elapsed.TotalSeconds);
     }
 }
