@@ -186,10 +186,13 @@ public class UnitTests : IAsyncLifetime
 
         //Act
         var cheeps = await _cheepRepository.GetCheepsFromAuthor(2, "Jacqualine Gilcoine");
-        var cheep = cheeps[0];
+        var cheep = cheeps[1];
 
         //Assert
-        Assert.Equal("What a relief it was the place examined.", cheep.Text);
+        Assert.Equal(
+            "As far as this conductor must descend to considerable accuracy by experts.",
+            cheep.Text
+        );
     }
 
     [Fact]
