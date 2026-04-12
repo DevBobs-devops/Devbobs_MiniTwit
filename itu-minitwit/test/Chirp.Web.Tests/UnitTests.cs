@@ -189,7 +189,7 @@ public class UnitTests : IAsyncLifetime
         var cheep = cheeps[0];
 
         //Assert
-        Assert.Equal("What a relief it was the place examined.", cheep.Text);
+        Assert.Equal("As far as this conductor must descend to considerable accuracy by experts.", cheep.Text);
     }
 
     [Fact]
