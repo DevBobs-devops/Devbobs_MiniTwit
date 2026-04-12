@@ -13,15 +13,14 @@ namespace Chirp.Core.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Cheeps_Timestamp",
                 table: "Cheeps",
-                column: "Timestamp");
+                column: "Timestamp"
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_Cheeps_Timestamp",
-                table: "Cheeps");
+            migrationBuilder.DropIndex(name: "IX_Cheeps_Timestamp", table: "Cheeps");
         }
     }
 }
