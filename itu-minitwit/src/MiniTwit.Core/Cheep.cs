@@ -1,10 +1,12 @@
 ﻿namespace Chirp.Core;
 
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 ///Cheep represents the "tweets" in the Chirp application
 /// </summary>
+[Index(nameof(Timestamp))]
 public class Cheep
 {
     public long CheepId { get; set; }

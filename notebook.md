@@ -195,3 +195,5 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - This probably means that the bottleneck is our queries.
 11/04: 18:45: Added metrics for queries
 - Added metrics for some of our queries. Used Claude to help understand how to setup/understand some of the queries Grafana proposed.
+12/04: 11:45: Added an index on timestamp on cheeps. 
+- Up until now, we sorted cheeps on the homepage by timestamp. We did this without an index, so it would sort though it all. Added an index on the timestamp so our database can use that instead. ClaudeAI helped with debugging and understanding.

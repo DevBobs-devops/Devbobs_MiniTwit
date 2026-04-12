@@ -2,6 +2,7 @@
 using Chirp.Core;
 using Chirp.Infrastructure.Metrics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Prometheus;
 
 namespace Chirp.Infrastructure.Chirp.Repositories;
@@ -26,8 +27,6 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Skip((page - 1) * 32)
             .Take(32);
-
-            
         var result = await query.ToListAsync();
         stopwatch.Stop();
         CheepMetrics.RecordQueryGetCheeps(stopwatch);
@@ -41,6 +40,7 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Take(amount);
         var result = await query.ToListAsync();
+        stopwatch.Stop();
         CheepMetrics.RecordQueryGetCheeps(stopwatch);
         return result;
     }
@@ -58,6 +58,7 @@ public class CheepRepository : ICheepRepository
             .Skip((page - 1) * 32)
             .Take(32);
         var result = await query.ToListAsync();
+        stopwatch.Stop();
         CheepMetrics.RecordQueryGetAuthor(stopwatch);
         return result;
     }
@@ -74,6 +75,7 @@ public class CheepRepository : ICheepRepository
             .Include(c => c.Author)
             .Take(amount);
         var result = await query.ToListAsync();
+        stopwatch.Stop();
         CheepMetrics.RecordQueryGetAuthor(stopwatch);
         return result;
     }
@@ -126,6 +128,7 @@ public class CheepRepository : ICheepRepository
         await _context.Cheeps.AddAsync(cheep);
         await _context.SaveChangesAsync();
         CheepMetrics.RecordCheep(author.Name);
+        stopwatch.Stop();
         CheepMetrics.RecordAddCheep(stopwatch);
     }
 
