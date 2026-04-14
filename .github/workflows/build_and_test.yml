@@ -23,7 +23,8 @@ jobs:
       - uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5
         with:
           dockerfile: itu-minitwit/Dockerfile
-  SCS:
+
+  security-code-scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -38,9 +39,13 @@ jobs:
 
       - name: Convert sarif for uploading to GitHub
         uses: ./.github/security-code-scan-results-action
+        # uses: security-code-scan/security-code-scan-results-action@v1
 
       - name: Upload sarif
         uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: results.sarif
+          
 
   build:
     runs-on: ubuntu-24.04 # matches version in droplets
