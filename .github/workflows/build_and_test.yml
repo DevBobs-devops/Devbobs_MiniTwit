@@ -3,9 +3,9 @@ name: Build and Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch: #Allow manual trigger of workflow
 
 jobs:
@@ -19,45 +19,64 @@ jobs:
   hadolint-dockerfile:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v3
-    - uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5
-      with:
-        dockerfile: itu-minitwit/Dockerfile
-  
+      - uses: actions/checkout@v3
+      - uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5
+        with:
+          dockerfile: itu-minitwit/Dockerfile
+
+  security-code-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up projects
+        uses: security-code-scan/security-code-scan-add-action@5f75674efc0abc4d41aa8cf3f1706ed5fe9365dd
+
+      - name: Build
+        run: |
+          dotnet restore itu-minitwit
+          dotnet build itu-minitwit
+
+      - name: Convert sarif for uploading to GitHub
+        uses: ./.github/security-code-scan-results-action
+        # uses: security-code-scan/security-code-scan-results-action@v1
+
+      - name: Upload sarif
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ../results/merged.sarif
+          
+
   build:
     runs-on: ubuntu-24.04 # matches version in droplets
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore itu-minitwit
-    - name: Build
-      run: dotnet build itu-minitwit --no-restore
-    - name: Test Dotnet
-      run: |
-        dotnet test itu-minitwit --filter FullyQualifiedName!~PlaywrightTests --configuration Release
-# Inspired by this link https://docs.github.com/en/actions/tutorials/build-and-test-code/python
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-          python-version: '3.11'
-    - name: Install pip & Pytest
-      run: |
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore itu-minitwit
+      - name: Build
+        run: dotnet build itu-minitwit --no-restore
+      - name: Test Dotnet
+        run: |
+          dotnet test itu-minitwit --filter FullyQualifiedName!~PlaywrightTests --configuration Release
+      # Inspired by this link https://docs.github.com/en/actions/tutorials/build-and-test-code/python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pip & Pytest
+        run: |
           python -m pip install --upgrade pip
           pip install pytest
           pip install requests
-    - name: Run MiniTwit
-      run: |
-        cd itu-minitwit
-        docker compose up --build -d
-        sleep 5
-    - name: Test Pytest
-      run: | 
-        pytest itu-minitwit/test/minitwit_sim_api_test.py
-  
-
-    
-    
+      - name: Run MiniTwit
+        run: |
+          cd itu-minitwit
+          docker compose up --build -d
+          sleep 5
+      - name: Test Pytest
+        run: |
+          pytest itu-minitwit/test/minitwit_sim_api_test.py
