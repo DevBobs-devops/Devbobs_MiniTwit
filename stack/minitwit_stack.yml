@@ -1,0 +1,77 @@
+version: '3.3'
+
+services:
+
+  minitwit:
+    image: ${DOCKER_USERNAME}/minitwitimage
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production #specified for clarity
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+    ports:
+      - '8080:8080'
+    deploy:
+      replicas: 4
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8888:8888"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  prometheus:
+    image: ${DOCKER_USERNAME}/minitwit-prometheus
+    volumes:
+      - prometheus-storage:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    deploy:
+     replicas: 1
+
+  alloy: 
+    image: ${DOCKER_USERNAME}/minitwit-alloy
+    command: 
+      - "run"
+      - "/etc/alloy/config.alloy"
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock 
+
+  loki: 
+    image: ${DOCKER_USERNAME}/minitwit-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki-storage:/loki
+    command: "--config.file=/etc/loki/loki.yml"
+    deploy:
+     replicas: 1
+
+
+  grafana:
+    image: ${DOCKER_USERNAME}/minitwit-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    deploy:
+     replicas: 1
+
+
+  loadbalancer:
+    image: nginx
+    ports:
+      - '80:80'
+    volumes:
+      - /loadbalancer:/etc/nginx/conf.d
+    deploy:
+      replicas: 2
+
+volumes:
+  loki-storage: {}
+  grafana-storage: {} 
+  prometheus-storage: {}
