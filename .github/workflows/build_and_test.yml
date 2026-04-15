@@ -25,38 +25,83 @@ jobs:
         dockerfile: itu-minitwit/Dockerfile
   
   build:
-    runs-on: ubuntu-24.04 # matches version in droplets
+    runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore itu-minitwit
-    - name: Build
-      run: dotnet build itu-minitwit --no-restore
-    - name: Test Dotnet
-      run: |
-        dotnet test itu-minitwit --filter FullyQualifiedName!~PlaywrightTests --configuration Release
-# Inspired by this link https://docs.github.com/en/actions/tutorials/build-and-test-code/python
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore itu-minitwit
+
+      - name: Build
+        run: dotnet build itu-minitwit --no-restore
+
+      - name: Run unit and integration tests
+        run: dotnet test itu-minitwit --filter FullyQualifiedName!~PlaywrightTests --configuration Release
+
+      # ── API test (existing) ──────────────────────────────────────────────────
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
           python-version: '3.11'
-    - name: Install pip & Pytest
-      run: |
+
+      - name: Install pip & Pytest
+        run: |
           python -m pip install --upgrade pip
-          pip install pytest
-          pip install requests
-    - name: Run MiniTwit
-      run: |
-        cd itu-minitwit
-        docker compose up --build -d
-        sleep 5
-    - name: Test Pytest
-      run: | 
-        pytest itu-minitwit/test/minitwit_sim_api_test.py
+          pip install pytest requests
+
+      - name: Start app via Docker Compose
+        run: |
+          cd itu-minitwit
+          docker compose up --build -d
+
+      - name: Wait for app to be ready
+        run: |
+          echo "Waiting for app..."
+          for i in $(seq 1 24); do
+            if curl -sf http://localhost:8080 > /dev/null 2>&1; then
+              echo "App is up after $((i * 5)) seconds"
+              exit 0
+            fi
+            echo "  attempt $i/24 - not ready yet"
+            sleep 5
+          done
+          echo "App never became ready"
+          docker compose -f itu-minitwit/docker-compose.yml logs
+          exit 1
+
+      - name: Run API tests (pytest)
+        run: pytest itu-minitwit/test/minitwit_sim_api_test.py
+
+      # ── E2E / UI tests (Playwright) ──────────────────────────────────────────
+      - name: Install Playwright browsers
+        run: |
+          dotnet tool install --global Microsoft.Playwright.CLI 2>/dev/null || true
+          dotnet build itu-minitwit/tests/PlaywrightTests/PlaywrightTests.csproj --configuration Release
+          pwsh itu-minitwit/tests/PlaywrightTests/bin/Release/net8.0/playwright.ps1 install --with-deps chromium
+
+      - name: Run E2E tests (Playwright)
+        env:
+          BASE_URL: http://localhost:8080
+        run: |
+          dotnet test itu-minitwit/tests/PlaywrightTests/PlaywrightTests.csproj \
+            --configuration Release \
+            --logger "trx;LogFileName=e2e-results.trx"
+
+      - name: Upload E2E test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: "**/*.trx"
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: docker compose -f itu-minitwit/docker-compose.yml down -v
   
 
     

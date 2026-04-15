@@ -10,10 +10,20 @@ using NUnit.Framework;
 [TestFixture]
 public partial class EndToEnd : PageTest
 {
+    private string _baseUrl = null!;
+
+    [SetUp]
+    public void SetBaseUrl()
+    {
+        _baseUrl = Environment.GetEnvironmentVariable("BASE_URL") 
+                ?? "http://localhost:8080";
+    }
+
+
     [Test]
     public async Task HasTitle()
     {
-        await Page.GotoAsync("http://localhost:5221");
+        await Page.GotoAsync(_baseUrl);
 
         // Expect a title "to contain" a substring.
         await Expect(Page).ToHaveTitleAsync(MyRegex());
@@ -22,7 +32,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanSeePublicTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221");
+        await Page.GotoAsync(_baseUrl);
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }))
             .ToBeVisibleAsync();
     }
@@ -30,21 +40,21 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task HomePageHasRegisterButton()
     {
-        await Page.GotoAsync("http://localhost:5221");
+        await Page.GotoAsync(_baseUrl);
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Register" })).ToBeVisibleAsync();
     }
 
     [Test]
     public async Task HomePageHasLoginButton()
     {
-        await Page.GotoAsync("http://localhost:5221");
+        await Page.GotoAsync(_baseUrl);
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Login" })).ToBeVisibleAsync();
     }
 
     [Test]
     public async Task GoFromPublicTimelineToUserTimeLine()
     {
-        await Page.GotoAsync("http://localhost:5221");
+        await Page.GotoAsync(_baseUrl);
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }))
             .ToBeVisibleAsync();
         await Page.Locator("li")
@@ -66,7 +76,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task GoFromUserTimeLineToPublicTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/Jacqualine%20Gilcoine");
+        await Page.GotoAsync($"{_baseUrl}/Jacqualine%20Gilcoine");
         await Expect(
                 Page.GetByRole(AriaRole.Heading, new() { Name = "Jacqualine Gilcoine's Timeline" })
             )
@@ -79,7 +89,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task JacqualineTimelineExists()
     {
-        await Page.GotoAsync("http://localhost:5221/Jacqualine%20Gilcoine");
+        await Page.GotoAsync($"{_baseUrl}/Jacqualine%20Gilcoine");
         await Expect(
                 Page.GetByRole(AriaRole.Heading, new() { Name = "Jacqualine Gilcoine's Timeline" })
             )
@@ -89,7 +99,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task JacqualineCheepAboutStarbucksExists()
     {
-        await Page.GotoAsync("http://localhost:5221/Jacqualine%20Gilcoine");
+        await Page.GotoAsync($"{_baseUrl}/Jacqualine%20Gilcoine");
         await Page.GetByText("Starbuck now is what we hear").ClickAsync();
         await Expect(Page.Locator("#messagelist"))
             .ToContainTextAsync("Starbuck now is what we hear the worst.");
@@ -98,7 +108,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanClickRegisterPublicTimeLine()
     {
-        await Page.GotoAsync("http://localhost:5221");
+        await Page.GotoAsync(_baseUrl);
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }))
             .ToBeVisibleAsync();
@@ -110,7 +120,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanClickRegisterUserTimeLine()
     {
-        await Page.GotoAsync("http://localhost:5221/Jacqualine%20Gilcoine");
+        await Page.GotoAsync($"{_baseUrl}/Jacqualine%20Gilcoine");
 
         await Expect(
                 Page.GetByRole(AriaRole.Heading, new() { Name = "Jacqualine Gilcoine's Timeline" })
@@ -124,7 +134,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanClickLoginPublicTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221");
+        await Page.GotoAsync(_baseUrl);
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }))
             .ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
@@ -137,7 +147,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanClickLoginUserTimeLine()
     {
-        await Page.GotoAsync("http://localhost:5221/Jacqualine%20Gilcoine");
+        await Page.GotoAsync($"{_baseUrl}/Jacqualine%20Gilcoine");
         await Expect(
                 Page.GetByRole(AriaRole.Heading, new() { Name = "Jacqualine Gilcoine's Timeline" })
             )
@@ -152,7 +162,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task HasPage2()
     {
-        await Page.GotoAsync("http://localhost:5221?Page=2");
+        await Page.GotoAsync($"{_baseUrl}?Page=2");
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" }))
             .ToBeVisibleAsync();
     }
@@ -160,7 +170,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanSeeOtherUsersTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Mellie Yost" }).ClickAsync();
         await Page.GetByText("But what was behind the").ClickAsync();
         await Page.GetByRole(AriaRole.Heading, new() { Name = "Mellie Yost's Timeline" })
@@ -170,7 +180,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanSeeRegisterPage()
     {
-        await Page.GotoAsync("http://localhost:5221");
+        await Page.GotoAsync(_baseUrl);
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
         await Page.GetByRole(AriaRole.Heading, new() { Name = "Register", Exact = true })
@@ -190,7 +200,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task MakeTestAccount() // username = testUser    Password = Test123!    email: test@testmail.com
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -223,7 +233,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanCheep()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -266,7 +276,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task ViewOtherUsersTimelineLoggedin()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         // logs in
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -307,7 +317,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task LoginAndSeeOwnTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -345,7 +355,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task DeleteUserDeletesFollowedUsers()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -410,7 +420,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanFollowJacqualine()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -459,7 +469,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanFollowJacqualineAndUnfollow()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -518,7 +528,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CantLoginAfterDeleteData()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
         await Page.GetByPlaceholder("Username").FillAsync("tester");
@@ -560,7 +570,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanLoginAndSeeLikeButton()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         // registers + logs in
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -598,7 +608,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanLikeJacqualinesCheep()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         // registers + logs in
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -648,7 +658,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanLikeJacqualinesCheepThenUnlike()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         // registers + logs in
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -702,7 +712,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanLikeFromUserTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         // registers + logs in
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -771,7 +781,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanLikeAndUnlikeFromUserTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         // registers + logs in
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -843,7 +853,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanFollowThenLikeFromPersonalTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         // registers + logs in
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -909,7 +919,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanFollowThenLikeFromPersonalTimelineAndUnlike()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         // registers + logs in
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -978,7 +988,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanGoFromPage1ToPage2()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Expect(Page.Locator("h3")).ToContainTextAsync("1");
         await Page.GetByRole(AriaRole.Link, new() { Name = ">" }).ClickAsync();
@@ -988,7 +998,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanGoFromPage2ToPage1()
     {
-        await Page.GotoAsync("http://localhost:5221?Page=2");
+        await Page.GotoAsync($"{_baseUrl}?Page=2");
 
         await Expect(Page.Locator("h3")).ToContainTextAsync("2");
         await Page.GetByRole(AriaRole.Link, new() { Name = "<" }).ClickAsync();
@@ -998,7 +1008,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanGoFromPage1ToPage2AndBackLoggedIn()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -1037,7 +1047,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanGoFromPage1ToPage2AndBackLoggedInUserTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -1085,7 +1095,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanGoFromPage1ToPage2AndBackUserTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.Locator("li")
             .Filter(
@@ -1107,7 +1117,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanGoFromPage1ToPage2AndBackPersonalTimeline()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register", Exact = true }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -1181,7 +1191,7 @@ public partial class EndToEnd : PageTest
     [Test]
     public async Task CanDeleteOwnCheep()
     {
-        await Page.GotoAsync("http://localhost:5221/");
+        await Page.GotoAsync($"{_baseUrl}/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
         await Page.GetByPlaceholder("Username").FillAsync("Pows");
@@ -1214,6 +1224,6 @@ public partial class EndToEnd : PageTest
             .ClickAsync();
     }
 
-    [GeneratedRegex("Chirp!")]
+    [GeneratedRegex("MiniTwit!")]
     private static partial Regex MyRegex();
 }
