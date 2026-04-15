@@ -18,12 +18,6 @@ public partial class EndToEnd : PageTest
         _baseUrl = Environment.GetEnvironmentVariable("BASE_URL") ?? "http://localhost:8080";
     }
 
-    
-
-
-
-
-
     [Test]
     public async Task HasTitle()
     {
