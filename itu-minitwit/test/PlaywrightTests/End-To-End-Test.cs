@@ -15,8 +15,7 @@ public partial class EndToEnd : PageTest
     [SetUp]
     public void SetBaseUrl()
     {
-        _baseUrl = Environment.GetEnvironmentVariable("BASE_URL") 
-                ?? "http://localhost:8080";
+        _baseUrl = Environment.GetEnvironmentVariable("BASE_URL") ?? "http://localhost:8080";
     }
 
     
