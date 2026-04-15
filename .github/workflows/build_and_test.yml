@@ -81,14 +81,14 @@ jobs:
       - name: Install Playwright browsers
         run: |
           dotnet tool install --global Microsoft.Playwright.CLI 2>/dev/null || true
-          dotnet build itu-minitwit/tests/PlaywrightTests/PlaywrightTests.csproj --configuration Release
-          pwsh itu-minitwit/tests/PlaywrightTests/bin/Release/net8.0/playwright.ps1 install --with-deps chromium
+          dotnet build itu-minitwit/test/PlaywrightTests/PlaywrightTests.csproj --configuration Release
+          pwsh itu-minitwit/test/PlaywrightTests/bin/Release/net8.0/playwright.ps1 install --with-deps chromium
 
       - name: Run E2E tests (Playwright)
         env:
           BASE_URL: http://localhost:8080
         run: |
-          dotnet test itu-minitwit/tests/PlaywrightTests/PlaywrightTests.csproj \
+          dotnet test itu-minitwit/test/PlaywrightTests/PlaywrightTests.csproj \
             --configuration Release \
             --logger "trx;LogFileName=e2e-results.trx"
 
