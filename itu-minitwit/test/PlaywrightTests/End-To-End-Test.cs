@@ -19,6 +19,11 @@ public partial class EndToEnd : PageTest
                 ?? "http://localhost:8080";
     }
 
+    
+
+
+
+
 
     [Test]
     public async Task HasTitle()
@@ -62,7 +67,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Link)
@@ -212,6 +217,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -245,6 +251,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -288,6 +295,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -329,6 +337,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -367,6 +376,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -395,6 +405,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -432,6 +443,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -450,7 +462,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:36 The train pulled up at his",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:36 The train pulled up at his",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -481,6 +493,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
@@ -498,7 +511,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -510,7 +523,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -539,6 +552,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("123Test!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Public Timeline" }).ClickAsync();
@@ -582,6 +596,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -620,6 +635,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -638,7 +654,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -670,6 +686,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -688,7 +705,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -724,6 +741,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -741,7 +759,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Link)
@@ -760,7 +778,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -793,6 +811,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -810,7 +829,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Link)
@@ -829,7 +848,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -865,6 +884,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -882,7 +902,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -897,7 +917,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -931,6 +951,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
 
@@ -948,7 +969,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -963,7 +984,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -1020,6 +1041,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
@@ -1059,6 +1081,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
@@ -1073,7 +1096,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Link)
@@ -1102,7 +1125,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Jacqualine Gilcoine — 01-08-2023 13:17:39 Starbuck now is what we hear the",
+                        "Jacqualine Gilcoine — 08/01/2023 13:17:39 Starbuck now is what we hear the",
                 }
             )
             .GetByRole(AriaRole.Link)
@@ -1129,6 +1152,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
@@ -1140,7 +1164,7 @@ public partial class EndToEnd : PageTest
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Public Timeline" }).ClickAsync();
         await Page.Locator("li")
-            .Filter(new() { HasText = "Mellie Yost — 01-08-2023 13:" })
+            .Filter(new() { HasText = "Mellie Yost — 08/01/2023 13:" })
             .GetByRole(AriaRole.Button)
             .First.ClickAsync();
         await Page.Locator("li")
@@ -1148,7 +1172,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Quintin Sitts — 01-08-2023 13:17:32 It''s bad enough to appal the stoutest man",
+                        "Quintin Sitts — 08/01/2023 13:17:32 It''s bad enough to appal the stoutest man",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -1158,7 +1182,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Malcolm Janski — 01-08-2023 13:17:29 At present I cannot spare energy and",
+                        "Malcolm Janski — 08/01/2023 13:17:29 At present I cannot spare energy and",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -1168,7 +1192,7 @@ public partial class EndToEnd : PageTest
                 new()
                 {
                     HasText =
-                        "Roger Histand — 01-08-2023 13:17:20 You can understand his regarding it as",
+                        "Roger Histand — 08/01/2023 13:17:20 You can understand his regarding it as",
                 }
             )
             .GetByRole(AriaRole.Button)
@@ -1202,6 +1226,7 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Testkode0!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        await Page.WaitForSelectorAsync("a#confirm-link");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
             .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
