@@ -77,20 +77,15 @@ jobs:
       - name: Run API tests (pytest)
         run: pytest itu-minitwit/test/minitwit_sim_api_test.py
 
+    
+    
       # ── E2E / UI tests (Playwright) ──────────────────────────────────────────
-      - name: Install Playwright browsers
+      - name: Run E2E tests in Docker
         run: |
-          dotnet tool install --global Microsoft.Playwright.CLI 2>/dev/null || true
-          dotnet build itu-minitwit/test/PlaywrightTests/PlaywrightTests.csproj --configuration Release
-          pwsh itu-minitwit/test/PlaywrightTests/bin/Release/net8.0/playwright.ps1 install --with-deps chromium
-
-      - name: Run E2E tests (Playwright)
-        env:
-          BASE_URL: http://localhost:8080
-        run: |
-          dotnet test itu-minitwit/test/PlaywrightTests/PlaywrightTests.csproj \
-            --configuration Release \
-            --logger "trx;LogFileName=e2e-results.trx"
+          docker compose -f itu-minitwit/docker-compose.test.yml up \
+            --build \
+            --abort-on-container-exit \
+            --exit-code-from e2e-tests
 
       - name: Upload E2E test results
         if: always()
@@ -99,10 +94,9 @@ jobs:
           name: e2e-test-results
           path: "**/*.trx"
 
-      - name: Tear down Docker Compose
+      - name: Tear down test compose
         if: always()
-        run: docker compose -f itu-minitwit/docker-compose.yml down -v
-  
+        run: docker compose -f itu-minitwit/docker-compose.test.yml down -v
 
     
     
