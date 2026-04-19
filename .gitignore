@@ -481,3 +481,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+cookies.txt
+itu-minitwit/SELECT
+itu-minitwit/minitwit/data/

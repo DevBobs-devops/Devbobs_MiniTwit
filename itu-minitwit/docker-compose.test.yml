@@ -1,0 +1,32 @@
+services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: default_database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U username -d default_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minitwit:
+    build: .
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=default_database;Username=username;Password=password
+    ports:
+      - "8080:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+
+  e2e-tests:
+    build:
+      context: .
+      dockerfile: test/PlaywrightTests/Dockerfile.playwright
+    environment:
+      - BASE_URL=http://minitwit:8080
+    depends_on:
+      - minitwit
