@@ -43,8 +43,8 @@ services:
       - "/etc/alloy/config.alloy"
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock 
-    #deploy:
-      # - mode = global?
+    deploy:
+      mode: global
 
 
   loki: 
