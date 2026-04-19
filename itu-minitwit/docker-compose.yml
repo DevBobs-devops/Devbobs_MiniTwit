@@ -17,7 +17,7 @@ services:
     build: 
       dockerfile: ./Dockerfile
       context: ./monitoring/prometheus
-    image: prometheus_image
+    image: dhi.io/prometheus:3.11
     volumes:
       - prometheus_data:/prometheus
     container_name: prometheus
