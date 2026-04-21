@@ -199,7 +199,7 @@ output "minitwit-swarm-worker-ip-address" {
 
 // https://www.digitalocean.com/community/questions/how-to-retrieve-database-credentials-and-certificate-in-terraform
 // we probably wanna use this somehow?
-output "database-url" {
+output "ConnectionStrings__DefaultConnection" {
   value = "postgresql://${digitalocean_database_user.db-user.name}:${digitalocean_database_user.db-user.password}@${data.digitalocean_database_cluster.db-cluster.host}/${resource.digitalocean_database_db.db.name}?sslmode=require"
   sensitive = true
 }
