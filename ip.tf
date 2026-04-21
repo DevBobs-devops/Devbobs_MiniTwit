@@ -9,6 +9,7 @@ resource "digitalocean_floating_ip_assignment" "public-ip" {
   droplet_id = digitalocean_droplet.minitwit-swarm-leader.id
 }
 
+# expose a public_ip value - here our hardcoded value
 output "public_ip" {
   value = 134.199.190.79
 }
