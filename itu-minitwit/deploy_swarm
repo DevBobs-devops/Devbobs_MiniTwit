@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+#turn docker engine into swarm mode
+docker swarm init
+
+if [[ $1 == "build" ]]; then
+    docker compose build
+fi
+
+docker stack deploy minitwit -c ./local_stack/minitwit_stack.yml --detach=false 
