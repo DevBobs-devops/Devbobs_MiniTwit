@@ -58,7 +58,7 @@ services:
     build: 
       dockerfile: ./Dockerfile
       context: ./monitoring/loki
-    image: loki_image
+    image: dhi.io/loki:3-debian13
     container_name: loki
     ports:
       - "3100:3100"
@@ -70,7 +70,7 @@ services:
     build: 
       dockerfile: ./Dockerfile
       context: ./monitoring/grafana
-    image: grafana_image
+    image: dhi.io/grafana:12-debian13
     container_name: grafana
     ports:
       - "3000:3000"
