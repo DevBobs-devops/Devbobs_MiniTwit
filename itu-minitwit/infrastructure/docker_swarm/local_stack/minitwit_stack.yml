@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
 
@@ -7,8 +7,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development #specified for clarity
       - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=default_database;Username=username;Password=password
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
     ports:
       - '8080:8080'
+    networks:
+      - redis_net
     deploy:
       replicas: 4
 
@@ -94,7 +97,44 @@ services:
       timeout: 5s
       retries: 5
 
+# https://oneuptime.com/blog/post/2026-03-31-redis-deploy-docker-swarm/view
+  redis:
+    image: redis:7-alpine
+    command: >
+      redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - target: 6379
+        published: 6379
+    volumes:
+      - redis_data:/data
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager   
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - redis_net  
+
 volumes:
   loki-storage: {}
   grafana-storage: {} 
   prometheus-storage: {}
+  redis_data:
+    driver: local
+
+networks:
+  redis_net:
+    driver: overlay
+    attachable: true
