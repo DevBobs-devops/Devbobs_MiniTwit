@@ -489,3 +489,6 @@ itu-minitwit/infrastructure/terraform/temp/
 **/.terraform.lock.hcl
 **/*.tfstate
 **/*.tfstate.backup
+cookies.txt
+itu-minitwit/SELECT
+itu-minitwit/minitwit/data/

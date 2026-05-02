@@ -139,6 +139,18 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - For the code formatter we will use [CSharpier](https://csharpier.com/docs/About), which has the following github for github actions:  [guibranco/github-csharpier-linter-action](https://github.com/guibranco/github-csharpier-linter-action). To use locally: `dotnet csharpier format .`
 - For our Dockerfile(s) we will use  [hadolint/hadolint-action: GitHub action for Hadolint, A Dockerfile linting tool](https://github.com/hadolint/hadolint-action). To use locally first pull their docker image: `docker pull hadolint/hadolint` and then run `docker run --rm -i hadolint/hadolint < Dockerfile`, with 'Dockerfile' being our dockerfile.
 
+15/04: Added integration tests, UI tests, and end-to-end tests to CI pipeline as a quality gate.
+- Added `docker-compose.test.yml` to spin up the app and run Playwright E2E tests in a Docker container.
+- Added `Dockerfile.playwright` for the Playwright test runner container.
+- Updated `build_and_test.yml` to run all test types in sequence:
+  1. Unit and integration tests via `dotnet test`
+  2. API tests via pytest against a running Docker Compose stack
+  3. E2E/UI tests via Playwright running inside a Docker container
+- If any tests fail, the workflow fails and `cicd.yml` does not deploy.
+- Fixed E2E tests to work with MiniTwit app: updated date format (`08/01/2023`), base URL from environment variable, registration wait, and page title regex.
+- Tested locally with `sudo docker compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from e2e-tests` — 37/37 tests passing inside container.
+
+
 # Lecture 8
 20/03 10:45: Setup Alloy and Loki for logging 
 - Copied loki.yml file from this week's exercise repo and added a config.alloy file instead of the promtail. The alloy file was based on this guide/tutorial: [Setting Up Grafana Loki and Alloy for Docker: A Practical Guide From My Recent Battle](https://kycha-blog.org/posts/practical-guide-grafana-alloy-loki-docker)
