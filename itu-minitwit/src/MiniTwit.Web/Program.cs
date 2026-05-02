@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.DataProtection;
+using StackExchange.Redis;
 using Chirp.Core;
 using Chirp.Infrastructure.Chirp.Repositories;
 using Chirp.Infrastructure.Chirp.Services;
@@ -7,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var redis = ConnectionMultiplexer.Connect("redis:6379");
+builder.Services.AddDataProtection()
+    .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
 
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); //Takes default connection from appsettings.json to use for db
 
