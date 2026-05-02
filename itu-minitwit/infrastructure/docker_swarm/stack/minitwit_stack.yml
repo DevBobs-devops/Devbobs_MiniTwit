@@ -12,6 +12,19 @@ services:
     deploy:
       replicas: 4
 
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == minitwit-swarm-leader
+
+
+
+
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
