@@ -200,6 +200,6 @@ output "minitwit-swarm-worker-ip-address" {
 }
 
 output "ConnectionStrings__DefaultConnection" {
-  value     = "Host=${digitalocean_database_cluster.postgres.host};Port=${digitalocean_database_cluster.postgres.port};Database=${digitalocean_database_cluster.postgres.database};Username=${digitalocean_database_cluster.postgres.user};Password=${digitalocean_database_cluster.postgres.password};SSL Mode=Require;Trust Server Certificate=true"
+  value = "Host=${digitalocean_database_cluster.postgres.host};Port=${digitalocean_database_cluster.postgres.port};Database=${digitalocean_database_cluster.postgres.database};Username=${digitalocean_database_cluster.postgres.user};Password=${digitalocean_database_cluster.postgres.password};SSL Mode=Require;Trust Server Certificate=true;Maximum Pool Size=10"  
   sensitive = true
 }
