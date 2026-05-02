@@ -209,3 +209,7 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - Added metrics for some of our queries. Used Claude to help understand how to setup/understand some of the queries Grafana proposed.
 12/04: 11:45: Added an index on timestamp on cheeps. 
 - Up until now, we sorted cheeps on the homepage by timestamp. We did this without an index, so it would sort though it all. Added an index on the timestamp so our database can use that instead. ClaudeAI helped with debugging and understanding.
+
+# Lecutre 11
+14/04: 12:00: We decided to go with docker swarm and terraform as out guarantees of higher availanility, as we had a choice between this and the dual load balancers. We are a bit behind, from the previous weeks and we deem it easier to implement it in a pile, than doing a lot of small steps, some which would potentially be redundant with new features and tools.
+

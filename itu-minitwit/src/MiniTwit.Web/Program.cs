@@ -3,6 +3,8 @@ using Chirp.Infrastructure.Chirp.Repositories;
 using Chirp.Infrastructure.Chirp.Services;
 using Chirp.Infrastructure.data;
 using Chirp.Web;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
 
@@ -17,6 +19,8 @@ builder.Services.AddDbContext<CheepDbContext>(options => options.UseNpgsql(conne
 builder
     .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<CheepDbContext>();
+
+builder.Services.AddDataProtection().PersistKeysToDbContext<CheepDbContext>();
 
 builder.Services.AddSession();
 
