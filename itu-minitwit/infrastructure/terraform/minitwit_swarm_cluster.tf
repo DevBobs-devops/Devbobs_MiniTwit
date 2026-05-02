@@ -7,6 +7,8 @@
 
 # create cloud vm
 resource "digitalocean_droplet" "minitwit-swarm-leader" {
+  depends_on = [digitalocean_database_cluster.postgres]
+
   image = "docker-20-04" // ubuntu-22-04-x64
   name = "minitwit-swarm-leader"
   region = var.region
@@ -24,7 +26,7 @@ resource "digitalocean_droplet" "minitwit-swarm-leader" {
   }
 
   provisioner "file" {
-    source = "stack/minitwit_stack.yml"
+    source = "../docker_swarm/stack/minitwit_stack.yml"
     destination = "/root/minitwit_stack.yml"
   }
 
@@ -77,7 +79,7 @@ resource "digitalocean_droplet" "minitwit-swarm-manager" {
   depends_on = [null_resource.swarm-manager-token]
 
   # number of vms to create
-  count = 2
+  count = 1
 
   image = "docker-20-04"
   name = "minitwit-swarm-manager-${count.index}"
@@ -132,7 +134,7 @@ resource "digitalocean_droplet" "minitwit-swarm-worker" {
   depends_on = [null_resource.swarm-worker-token]
 
   # number of vms to create
-  count = 2
+  count = 1
 
   image = "docker-20-04"
   name = "minitwit-swarm-worker-${count.index}"
@@ -197,9 +199,7 @@ output "minitwit-swarm-worker-ip-address" {
   value = digitalocean_droplet.minitwit-swarm-worker.*.ipv4_address
 }
 
-// https://www.digitalocean.com/community/questions/how-to-retrieve-database-credentials-and-certificate-in-terraform
-// we probably wanna use this somehow?
 output "ConnectionStrings__DefaultConnection" {
-  value = "postgresql://${digitalocean_database_user.db-user.name}:${digitalocean_database_user.db-user.password}@${data.digitalocean_database_cluster.db-cluster.host}/${resource.digitalocean_database_db.db.name}?sslmode=require"
+  value     = "Host=${digitalocean_database_cluster.postgres.host};Port=${digitalocean_database_cluster.postgres.port};Database=${digitalocean_database_cluster.postgres.database};Username=${digitalocean_database_cluster.postgres.user};Password=${digitalocean_database_cluster.postgres.password};SSL Mode=Require;Trust Server Certificate=true"
   sensitive = true
 }

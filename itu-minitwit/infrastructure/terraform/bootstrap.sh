@@ -39,13 +39,17 @@ bash scripts/gen_load_balancer_config.sh
 echo -e "\n--> Copying loadbalancer configuration to nodes\n"
 bash scripts/scp_load_balancer_config.sh
 
+# create env file for leader to use. Got help from ClaudeAI
+LEADER=$(terraform output -raw minitwit-swarm-leader-ip-address)
+CONNECTION_STRING=$(terraform output -raw ConnectionStrings__DefaultConnection)
+echo -e "\n--> SSH'ing into leader and creating env file\n"
+printf 'DOCKER_USERNAME=%s\nConnectionStrings__DefaultConnection="%s"\n' "$DOCKER_USERNAME" "$CONNECTION_STRING" \
+    | ssh -o 'StrictHostKeyChecking no' root@$LEADER -i ssh_key/terraform 'cat > /root/.env'
+
 # deploy the stack to the cluster
 echo -e "\n--> Deploying the Minitwit stack to the cluster\n"
-ssh \
-    -o 'StrictHostKeyChecking no' \
-    root@$(terraform output -raw minitwit-swarm-leader-ip-address) \
-    -i ssh_key/terraform \
-    'docker stack deploy minitwit -c minitwit_stack.yml'
+  ssh -o 'StrictHostKeyChecking no' root@$LEADER -i ssh_key/terraform \
+      'set -a && source /root/.env && set +a && docker stack deploy minitwit -c minitwit_stack.yml --with-registry-auth'
 
 echo -e "\n--> Done bootstrapping Minitwit"
 echo -e "--> The dbs will need a moment to initialize, this can take up to a couple of minutes..."
