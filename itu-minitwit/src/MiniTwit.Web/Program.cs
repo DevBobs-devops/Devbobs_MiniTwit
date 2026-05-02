@@ -3,11 +3,10 @@ using Chirp.Infrastructure.Chirp.Repositories;
 using Chirp.Infrastructure.Chirp.Services;
 using Chirp.Infrastructure.data;
 using Chirp.Web;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
-using Microsoft.AspNetCore.DataProtection;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +20,7 @@ builder
     .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<CheepDbContext>();
 
- builder.Services.AddDataProtection()
-     .PersistKeysToDbContext<CheepDbContext>();
+builder.Services.AddDataProtection().PersistKeysToDbContext<CheepDbContext>();
 
 builder.Services.AddSession();
 
