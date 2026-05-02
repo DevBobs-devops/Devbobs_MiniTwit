@@ -82,6 +82,22 @@ services:
     deploy:
       replicas: 2
 
+  # from https://medium.com/@tashuanlawrence7/docker-swarm-with-prometheus-and-grafana-real-world-monitor-bc343e839373
+  node-exporter:
+    image: prom/node-exporter
+    deploy:
+      mode: global  # Runs on every Swarm node
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+    ports:
+      - 9100:9100
+
 volumes:
   loki-storage: {}
   grafana-storage: {} 
