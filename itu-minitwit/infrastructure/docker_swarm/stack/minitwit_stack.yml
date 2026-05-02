@@ -19,8 +19,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:
-      placement:
-        constraints: [node.role == manager]
+      replicas: 1
 
   prometheus:
     image: ${DOCKER_USERNAME}/minitwit-prometheus
@@ -34,7 +33,7 @@ services:
      replicas: 1
      placement:
         constraints: 
-          - node.hostname == leader
+          - node.hostname == minitwit-swarm-leader
 
   alloy: 
     image: ${DOCKER_USERNAME}/minitwit-alloy
@@ -58,7 +57,7 @@ services:
      replicas: 1
      placement:
       constraints:
-        - node.hostname == leader
+        - node.hostname == minitwit-swarm-leader
 
 
   grafana:
@@ -71,7 +70,7 @@ services:
      replicas: 1
      placement:
       constraints:
-        - node.hostname == leader
+        - node.hostname == minitwit-swarm-leader
 
 
   loadbalancer:
