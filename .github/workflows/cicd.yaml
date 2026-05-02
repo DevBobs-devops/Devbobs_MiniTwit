@@ -98,7 +98,7 @@ jobs:
         run: >
           ssh $SSH_USER@$SSH_HOST
           -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
-          'docker stack deploy minitwit -c minitwit/minitwit_stack.yml'
+          'docker stack deploy minitwit -c minitwit_stack.yml'
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
