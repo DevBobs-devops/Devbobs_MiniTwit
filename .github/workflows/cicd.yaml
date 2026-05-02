@@ -88,7 +88,7 @@ jobs:
 
       - name: Copy stack file
         run: >
-          scp ./itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml $SSH_USER@$SSH_HOST:/minitwit -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
+          scp /itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml $SSH_USER@$SSH_HOST:/minitwit -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
 
       - name: Deploy to server
         # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
