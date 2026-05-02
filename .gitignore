@@ -481,3 +481,11 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#Terraform
+itu-minitwit/infrastructure/terraform/secrets
+itu-minitwit/infrastructure/terraform/ssh_key/
+itu-minitwit/infrastructure/terraform/temp/
+**/.terraform/
+**/.terraform.lock.hcl
+**/*.tfstate
+**/*.tfstate.backup
