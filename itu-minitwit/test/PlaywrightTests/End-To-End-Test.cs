@@ -210,9 +210,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -244,9 +241,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -288,9 +282,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -330,9 +321,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -369,9 +357,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -398,9 +383,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -436,9 +418,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -486,9 +465,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("Test123!");
@@ -545,9 +521,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("123Test!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Public Timeline" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
@@ -589,9 +562,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -628,9 +598,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -679,9 +646,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -734,9 +698,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -804,9 +765,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -877,9 +835,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -944,9 +899,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
@@ -1034,9 +986,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("Test123!");
@@ -1074,9 +1023,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("Test123!");
@@ -1145,9 +1091,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Test123!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("password").ClickAsync();
         await Page.GetByPlaceholder("password").FillAsync("Test123!");
@@ -1219,9 +1162,6 @@ public partial class EndToEnd : PageTest
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Testkode0!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        await Page.WaitForSelectorAsync("a#confirm-link");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })
-            .ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await Page.GetByPlaceholder("Username").ClickAsync();
         await Page.GetByPlaceholder("Username").FillAsync("Pows");
