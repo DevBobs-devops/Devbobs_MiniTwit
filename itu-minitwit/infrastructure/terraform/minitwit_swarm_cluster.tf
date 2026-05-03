@@ -40,6 +40,10 @@ resource "digitalocean_droplet" "minitwit-swarm-leader" {
       "ufw allow 80",
       "ufw allow 8080",
       "ufw allow 8888",
+      "ufw allow 9090",
+      "ufw allow 3100",
+      "ufw allow 3000",
+      "ufw allow 9100",
       # SSH
       "ufw allow 22",
 
