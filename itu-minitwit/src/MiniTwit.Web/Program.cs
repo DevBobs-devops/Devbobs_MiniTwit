@@ -18,6 +18,10 @@ builder.Services.AddDbContext<CheepDbContext>(options => options.UseNpgsql(conne
 
 builder.Services.AddDataProtection().PersistKeysToDbContext<CheepDbContext>();
 
+builder
+    .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<CheepDbContext>();
+
 builder.Services.AddSession();
 
 // Add services to the container.
