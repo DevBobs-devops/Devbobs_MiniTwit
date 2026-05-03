@@ -16,11 +16,11 @@ string? connectionString = builder.Configuration.GetConnectionString("DefaultCon
 Console.WriteLine("postgres");
 builder.Services.AddDbContext<CheepDbContext>(options => options.UseNpgsql(connectionString));
 
-builder
-    .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<CheepDbContext>();
-
 builder.Services.AddDataProtection().PersistKeysToDbContext<CheepDbContext>();
+
+builder
+    .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<CheepDbContext>();
 
 builder.Services.AddSession();
 
