@@ -3,11 +3,14 @@
   "editor.formatOnSave": true,
   "debug.terminal.clearBeforeReusing": true,
   "python.analysis.typeCheckingMode": "basic",
+  "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+  "latex-workshop.latex.autoBuild.run": "never",
   "latex-workshop.latex.tools": [
     {
-      "name": "pdflatex",
-      "command": "pdflatex",
+      "name": "lualatex",
+      "command": "lualatex",
       "args": [
+        "-shell-escape",
         "-synctex=1",
         "-interaction=nonstopmode",
         "-file-line-error",
@@ -26,8 +29,8 @@
   ],
   "latex-workshop.latex.recipes": [
     {
-      "name": "pdflatex ",
-      "tools": ["pdflatex"],
+      "name": "lualatex ",
+      "tools": ["lualatex"],
     },
   ],
   "workbench.colorTheme": "Dark Modern",
