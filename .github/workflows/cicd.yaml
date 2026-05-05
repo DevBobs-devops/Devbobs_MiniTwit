@@ -88,17 +88,20 @@ jobs:
 
       - name: Copy stack file
         run: >
-          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ./itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml $SSH_USER@$SSH_HOST:/minitwit
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ./itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml $SSH_USER@$SSH_HOST:/root/
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           
+
       - name: Deploy to server
         # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
         run: >
           ssh $SSH_USER@$SSH_HOST
           -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
-          'docker stack deploy minitwit -c /minitwit/minitwit_stack.yml'
+          "DOCKER_USERNAME='$DOCKER_USERNAME' ConnectionStrings__DefaultConnection='$CONNECTION_STRING' docker stack deploy minitwit -c /root/minitwit_stack.yml"
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          CONNECTION_STRING: ${{secrets.CONNECTION_STRING}}
