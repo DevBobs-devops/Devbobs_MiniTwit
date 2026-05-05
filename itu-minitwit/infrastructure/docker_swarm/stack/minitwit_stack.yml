@@ -79,6 +79,8 @@ services:
       - '80:80'
     volumes:
       - /loadbalancer:/etc/nginx/conf.d
+    constraints:
+        - node.hostname == minitwit-swarm-leader  
     deploy:
       replicas: 2
 
