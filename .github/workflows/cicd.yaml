@@ -99,7 +99,7 @@ jobs:
         run: >
           ssh $SSH_USER@$SSH_HOST
           -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
-          "DOCKER_USERNAME='$DOCKER_USERNAME' ConnectionStrings__DefaultConnection='$CONNECTION_STRING' docker stack deploy minitwit -c root/minitwit_stack.yml"
+          "DOCKER_USERNAME='$DOCKER_USERNAME' ConnectionStrings__DefaultConnection='$CONNECTION_STRING' docker stack deploy minitwit -c /root/minitwit_stack.yml"
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
