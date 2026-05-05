@@ -79,10 +79,11 @@ services:
       - '80:80'
     volumes:
       - /loadbalancer:/etc/nginx/conf.d
-    constraints:
-        - node.hostname == minitwit-swarm-leader  
     deploy:
       replicas: 2
+      placement:
+        constraints:
+          - node.hostname == minitwit-swarm-leader
 
   # from https://medium.com/@tashuanlawrence7/docker-swarm-with-prometheus-and-grafana-real-world-monitor-bc343e839373
   node-exporter:
