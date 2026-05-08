@@ -1,5 +1,5 @@
 global:
-  scrape_interval: 15s # By default, scrape targets every 15 seconds.
+  scrape_interval: 60s # By default, scrape targets every 15 seconds.
   evaluation_interval: 15s # Evaluate rules every 15 seconds.
 
   # Attach these extra labels to all timeseries collected by this Prometheus instance.
@@ -13,7 +13,7 @@ scrape_configs:
   - job_name: "prometheus"
 
     # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 5s
+    scrape_interval: 20s
 
     static_configs:
       - targets: ["prometheus:9090"]
@@ -21,7 +21,7 @@ scrape_configs:
   - job_name: "itu-minittwit-app"
 
     # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 5s
+    scrape_interval: 20s
 
     static_configs:
       - targets: ["minitwit:8080"]
@@ -29,7 +29,7 @@ scrape_configs:
           group: "production"
 
   - job_name: "itu-minittwit-swarm"
-    scrape_interval: 10s #Scrape every 10 seconds
+    scrape_interval: 20s #Scrape every 10 seconds
 
     #following this guide: https://www.innoq.com/en/blog/2020/04/scraping-docker-swarm-service-instances-with-prometheus/
     dns_sd_configs:
