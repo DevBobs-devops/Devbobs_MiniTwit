@@ -12,7 +12,7 @@ resource "digitalocean_droplet" "minitwit-swarm-leader" {
   image = "docker-20-04" // ubuntu-22-04-x64
   name = "minitwit-swarm-leader"
   region = var.region
-  size = "s-1vcpu-1gb"
+  size = "s-1vcpu-2gb"
   # add public ssh key so we can access the machine
   ssh_keys = [digitalocean_ssh_key.minitwit.fingerprint]
 

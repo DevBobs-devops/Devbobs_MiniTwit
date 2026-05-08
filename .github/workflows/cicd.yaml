@@ -95,7 +95,7 @@ jobs:
           
 
       - name: Deploy to server
-        # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
+        # SSH in and deploy the stack
         run: >
           ssh $SSH_USER@$SSH_HOST
           -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no

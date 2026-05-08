@@ -1,4 +1,6 @@
 # version: '3'
+
+#THIS FILE IS USED IN CI/CD only
 services:
   minitwit:
     build: . # build the image from the Dockerfile
