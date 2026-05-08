@@ -490,5 +490,4 @@ itu-minitwit/infrastructure/terraform/temp/
 **/*.tfstate
 **/*.tfstate.backup
 cookies.txt
-itu-minitwit/SELECT
 itu-minitwit/minitwit/data/
