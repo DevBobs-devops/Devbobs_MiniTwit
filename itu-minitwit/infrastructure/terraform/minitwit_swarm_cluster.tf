@@ -117,6 +117,7 @@ resource "digitalocean_droplet" "minitwit-swarm-manager" {
       "ufw allow 80",
       "ufw allow 8080",
       "ufw allow 8888",
+      "ufw allow 443",
       # SSH
       "ufw allow 22",
 
@@ -172,6 +173,7 @@ resource "digitalocean_droplet" "minitwit-swarm-worker" {
       "ufw allow 80",
       "ufw allow 8080",
       "ufw allow 8888",
+      "ufw allow 443",
       # SSH
       "ufw allow 22",
 
