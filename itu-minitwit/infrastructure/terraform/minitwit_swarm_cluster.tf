@@ -44,7 +44,7 @@ resource "digitalocean_droplet" "minitwit-swarm-leader" {
       "ufw allow 3100",
       "ufw allow 3000",
       "ufw allow 9100",
-      "ufw allow 443"
+      "ufw allow 443",
       # SSH
       "ufw allow 22",
 
