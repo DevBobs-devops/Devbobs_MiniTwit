@@ -34,22 +34,23 @@ services:
     ports:
       - "9090:9090"
     deploy:
-     replicas: 1
-     placement:
+      replicas: 1
+      placement:
         constraints: [node.role == manager]
 
-  alloy: 
+
+  alloy:
     image: alloy_image
-    command: 
+    command:
       - "run"
       - "/etc/alloy/config.alloy"
-    volumes: 
-      - /var/run/docker.sock:/var/run/docker.sock 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     deploy:
       mode: global
 
 
-  loki: 
+  loki:
     image: loki_image
     ports:
       - "3100:3100"
@@ -57,9 +58,9 @@ services:
       - loki-storage:/loki
     command: "--config.file=/etc/loki/loki.yml"
     deploy:
-     replicas: 1
-     placement:
-      constraints: [node.role == manager]
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
 
 
   grafana:
@@ -69,11 +70,12 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
     deploy:
-     replicas: 1
-     placement:
-      constraints: [node.role == manager]
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
 
 
+  #For the traefik part we followed this guide: https://doc.traefik.io/traefik/setup/swarm/
   traefik:
     image: traefik:v3.7
     networks:
@@ -88,9 +90,10 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro   
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./tls.yaml:/local_stack/tls.yaml:ro
     command:
-       # HTTP EntryPoint
+      # HTTP EntryPoint
       - "--entrypoints.web.address=:80"
 
       # Configure HTTP to HTTPS Redirection
@@ -100,14 +103,15 @@ services:
 
       # HTTPS EntryPoint
       - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.websecure.http.tls=true"
 
       # Attach dynamic TLS file
-      - "--providers.file.filename=/local_stack/tls.yaml"
+      - "--entrypoints.websecure.http.tls=true"
 
-      # Providers
+
+     # Providers
 
       # Enable the Docker Swarm provider (instead of Docker provider)
+      - "--providers.file.filename=/local_stack/tls.yaml"
       - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
 
       # Watch for Swarm service changes (requires socket access)
@@ -133,8 +137,7 @@ services:
       replicas: 1
       placement:
         constraints: [node.role == manager]
-
-    labels:
+      labels:
         - "traefik.enable=true"
 
         # Dashboard router
@@ -150,14 +153,15 @@ services:
         # Service hint
         - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
+
   database:
     image: "postgres:latest"
     ports:
       - 5433:5432
     environment:
-      POSTGRES_USER: username   
-      POSTGRES_PASSWORD: password 
-      POSTGRES_DB: default_database 
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: default_database
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U username -d default_database"]
       interval: 5s
@@ -167,7 +171,7 @@ services:
 
 volumes:
   loki-storage: {}
-  grafana-storage: {} 
+  grafana-storage: {}
   prometheus-storage: {}
   cert-storage: {}
 
