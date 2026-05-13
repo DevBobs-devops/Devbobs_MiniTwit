@@ -223,4 +223,5 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - This did indeed fix the http:devbobs.tech, but there is still problems with the https:devbobs.tech. We suspect that this is due to tls certificates. 
 
 13/05 9:30: Trying to fix https. Tried traefik but could not get it to work. Then switched to Caddy, which for now works locally. We will still have a single point of failure as the floating ip will be pointing to the leader only, but now the leader should be able to ude caddy to take in request on port 80 and 433 and decrypt. It would be: internet -> floating ip -> leader 80 or 433 -> caddy -> minitwit containers (load balanced). We have to check up on this exactly!
+- link to Docker-Caddy github repository: https://github.com/lucaslorentz/caddy-docker-proxy
 
