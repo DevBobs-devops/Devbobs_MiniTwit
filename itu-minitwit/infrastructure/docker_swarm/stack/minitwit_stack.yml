@@ -92,7 +92,7 @@ services:
         constraints:
           - node.hostname == minitwit-swarm-leader
       labels:
-        caddy.email: marho@itu.dk
+        caddy.email: ${CADDY_EMAIL}
 
 volumes:
   loki-storage: {}
