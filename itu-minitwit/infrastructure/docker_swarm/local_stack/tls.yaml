@@ -1,5 +1,0 @@
-# dynamic/tls.yaml
-tls:
-  certificates:
-    - certFile: /certs/local.crt
-      keyFile:  /certs/local.key
