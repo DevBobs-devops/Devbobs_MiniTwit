@@ -10,16 +10,13 @@ services:
     ports:
       - '8080:8080'
     networks:
-      - traefik_proxy
+      - caddy
       - default
     deploy:
       replicas: 4
-      labels: #adding traefik
-        - "traefik.enable=true"
-        - "traefik.http.routers.minitwit.rule=Host(`${DOMAIN}`)"
-        - "traefik.http.routers.minitwit.entrypoints=websecure"
-        - "traefik.http.routers.minitwit.tls.certresolver=letsencrypt"
-        - "traefik.http.services.minitwit.loadbalancer.server.port=8080"
+      labels:
+        caddy: devbobs.tech # host name 
+        caddy.reverse_proxy: "{{upstreams 8080}}" #where to send traffic
 
   prometheus:
     image: ${DOCKER_USERNAME}/minitwit-prometheus
@@ -70,78 +67,38 @@ services:
         constraints:
           - node.hostname == minitwit-swarm-leader
 
-#Followed this guide https://doc.traefik.io/traefik/setup/swarm/
-  traefik:
-    image: traefik:v3.7
-    networks:
-      - traefik_proxy
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
     ports:
-      - target: 80
-        published: 80
-        protocol: tcp
-        mode: host
-      - target: 443
-        published: 443
-        protocol: tcp
-        mode: host
+    - target: 80
+      published: 80
+      protocol: tcp
+      mode: host
+    - target: 443
+      published: 443
+      protocol: tcp
+      mode: host
+    environment:
+      - CADDY_INGRESS_NETWORKS=minitwit_caddy
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik-certificates:/certificates
-    command:
-      # HTTP EntryPoint
-      - "--entrypoints.web.address=:80"
-
-      # Redirection from HTTP to HTTPs
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-
-      # HTTPS EntryPoint
-      - "--entrypoints.websecure.address=:443"
-
-      # Setting of swarm network
-      - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
-      - "--providers.swarm.watch=true"
-      - "--providers.swarm.exposedbydefault=false"
-      - "--providers.swarm.network=traefik_traefik_proxy"
-
-      # Certificates
-      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.email=${CERT_EMAIL}" #Was ACME_EMAIL if needed to change back
-      - "--certificatesresolvers.letsencrypt.acme.storage=/certificates/acme.json"
-
-      # API & Dashboard
-      - "--api.dashboard=true"
-      - "--api.insecure=false"
-
-      # Enable prometheus and logs
-      - "--log.level=INFO" # Set the Log Level e.g INFO, DEBUG
-      - "--accesslog=true" # Enable Access Logs
-      - "--metrics.prometheus=true"  # Enable Prometheus
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+    networks:
+      - caddy
     deploy:
-      mode: replicated
       replicas: 1
       placement:
         constraints:
           - node.hostname == minitwit-swarm-leader
-      labels:
-        # setting up the dashboard for the leader
-        - "traefik.enable=true"
-        - "traefik.http.routers.dashboard.rule=Host(`dashboard.${DOMAIN}`)"
-        - "traefik.http.routers.dashboard.entrypoints=websecure"
-        - "traefik.http.routers.dashboard.service=api@internal"
-        - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
-        - "traefik.http.middlewares.dashboard-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
-        - "traefik.http.routers.dashboard.middlewares=dashboard-auth@swarm"
-        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
 volumes:
   loki-storage: {}
   grafana-storage: {} 
   prometheus-storage: {}
-  traefik-certificates: {}
+  caddy_data: {}
 
 networks:
-  traefik_proxy:
+  caddy:
     driver: overlay
     attachable: true
