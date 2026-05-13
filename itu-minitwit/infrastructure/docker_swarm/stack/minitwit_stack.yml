@@ -69,7 +69,7 @@ services:
 
   caddy:
     image: lucaslorentz/caddy-docker-proxy:ci-alpine
-    ports:
+    ports: #Debugged with Claude AI
     - target: 80
       published: 80
       protocol: tcp
