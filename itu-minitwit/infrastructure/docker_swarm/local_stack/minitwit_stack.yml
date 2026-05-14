@@ -35,7 +35,7 @@ services:
     image: alloy_image
     command:
       - "run"
-      - "/etc/alloy/config.alloy"
+      - "/etc/alloy/swarm.alloy"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
