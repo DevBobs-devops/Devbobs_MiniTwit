@@ -1,0 +1,7 @@
+@startuml deployment_diagram
+
+node "Droplet - Swarm Leader" {
+    component 
+}
+
+@enduml
