@@ -213,3 +213,15 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 # Lecutre 11
 14/04: 12:00: We decided to go with docker swarm and terraform as out guarantees of higher availanility, as we had a choice between this and the dual load balancers. We are a bit behind, from the previous weeks and we deem it easier to implement it in a pile, than doing a lot of small steps, some which would potentially be redundant with new features and tools.
 
+
+
+# Lecture 13
+7/5 - 15:25: finally figured out what caused our broken domain url
+- discovered that none of our dockerswarm nodes were listening at ports 80 (default http) and 443 (default https). It was only listening at port 8080. This is why the url devbobs.tech/ (which is directed to port 80 automatically) always terminated due to slow response time. If the same request was sent to port 8080 (devbobs.tech:8080/) the minitwit webpage loaded as expected. 
+- used the command `sudo ss -tlnp | grep :80` and `sudo ss -tlnp | grep :443`from one of our droplets terminals to verify that no process was listening at the expected ports. 
+- This was fixed by removing and then adding the ports manually in one of the manager nodes terminal. To remove ports `docker service update minitwit_loadbalancer --publish-rm 80` and `docker service update minitwit_loadbalancer --publish-rm 443`. Then followed by `docker service update minitwit_loadbalancer --publish-add 80:80` and `docker service update minitwit_loadbalancer --publish-add 443:443`
+- This did indeed fix the http:devbobs.tech, but there is still problems with the https:devbobs.tech. We suspect that this is due to tls certificates. 
+
+13/05 9:30: Trying to fix https. Tried traefik but could not get it to work. Then switched to Caddy, which for now works locally. We will still have a single point of failure as the floating ip will be pointing to the leader only, but now the leader should be able to ude caddy to take in request on port 80 and 433 and decrypt. It would be: internet -> floating ip -> leader 80 or 433 -> caddy -> minitwit containers (load balanced). We have to check up on this exactly!
+- link to Docker-Caddy github repository: https://github.com/lucaslorentz/caddy-docker-proxy
+

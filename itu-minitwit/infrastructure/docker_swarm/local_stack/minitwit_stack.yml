@@ -7,20 +7,15 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development #specified for clarity
       - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=default_database;Username=username;Password=password
-    ports:
-      - '8080:8080'
+    networks:
+      - caddy
+      - default
     deploy:
       replicas: 4
+      labels:
+        caddy: minitwit.localhost # host name 
+        caddy.reverse_proxy: "{{upstreams 8080}}" #where to send traffic
 
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - "8888:8888"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
 
   prometheus:
     image: prometheus_image
@@ -31,22 +26,23 @@ services:
     ports:
       - "9090:9090"
     deploy:
-     replicas: 1
-     placement:
+      replicas: 1
+      placement:
         constraints: [node.role == manager]
 
-  alloy: 
+
+  alloy:
     image: alloy_image
-    command: 
+    command:
       - "run"
       - "/etc/alloy/config.alloy"
-    volumes: 
-      - /var/run/docker.sock:/var/run/docker.sock 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     deploy:
       mode: global
 
 
-  loki: 
+  loki:
     image: loki_image
     ports:
       - "3100:3100"
@@ -54,9 +50,9 @@ services:
       - loki-storage:/loki
     command: "--config.file=/etc/loki/loki.yml"
     deploy:
-     replicas: 1
-     placement:
-      constraints: [node.role == manager]
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
 
 
   grafana:
@@ -66,52 +62,58 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
     deploy:
-     replicas: 1
-     placement:
-      constraints: [node.role == manager]
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
 
 
-#  loadbalancer:
-#    image: nginx
-#    ports:
-#      - '80:80'
-#    volumes:
-#      - /loadbalancer:/etc/nginx/conf.d
-#    deploy:
-#      replicas: 2
+
 
   database:
     image: "postgres:latest"
     ports:
       - 5433:5432
     environment:
-      POSTGRES_USER: username   
-      POSTGRES_PASSWORD: password 
-      POSTGRES_DB: default_database 
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: default_database
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U username -d default_database"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-# from https://medium.com/@tashuanlawrence7/docker-swarm-with-prometheus-and-grafana-real-world-monitor-bc343e839373
-  node-exporter:
-    image: prom/node-exporter
-    deploy:
-      mode: global  # Runs on every Swarm node
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--path.rootfs=/rootfs'
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
     ports:
-      - 9100:9100
-
+    - target: 80
+      published: 80
+      protocol: tcp
+      mode: host
+    - target: 443
+      published: 443
+      protocol: tcp
+      mode: host
+    environment:
+      - CADDY_INGRESS_NETWORKS=minitwit_caddy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+    networks:
+      - caddy
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
 
 volumes:
   loki-storage: {}
-  grafana-storage: {} 
+  grafana-storage: {}
   prometheus-storage: {}
+  caddy_data: {}
+
+networks:
+  caddy:
+    driver: overlay
+    attachable: true
