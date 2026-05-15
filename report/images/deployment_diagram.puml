@@ -5,39 +5,59 @@ actor User
 
 
 frame "Deployment MiniTwit" {
-    port 443
-    port 80
-    port 8080
-    port 9090
-    port 3000
 
     node "<<node>> Swarm 'Leader'" {
-    component MiniTwit as minitwit_leader
-    component Caddy
-    component Grafana
-    component Loki
-    component Alloy as alloy_leader
-    component Promethues
+        port 443
+        port 80
+        port 8080 as 8in
+        port 9090
+        port 3000
+
+        component MiniTwit as minitwit_leader{
+            portin ":8080" as min_1
+        }
+        component Caddy {
+            portout "8080" as cad_out
+        }
+        together{
+            component Grafana
+            component Loki
+            component Alloy as alloy_leader
+            component Promethues
+        }
+        
     }
 
     node "<<node>> Swarm Manager" as manager1 {
-    component MiniTwit as minitwit_manager1
-    component Alloy as alloy_manager1
-    }
+        component MiniTwit as minitwit_manager1{
+            portin ":8080" as min_2
+        }
 
-    node "<<node>> Swarm Manager" as manager2 {
-    component MiniTwit as minitwit_manager2
-    component Alloy as alloy_manager2
+        component Alloy as alloy_manager1
+        }
+
+        node "<<node>> Swarm Manager" as manager2 {
+        component MiniTwit as minitwit_manager2{
+            portin ":8080" as min_3
+        }
+
+        component Alloy as alloy_manager2
     }
 
     node "<<node>> Swarm Worker" as worker1 {
-    component MiniTwit as minitwit_worker1
-    component Alloy as alloy_worker1
-    }
+        component MiniTwit as minitwit_worker1{
+            portin ":8080" as min_4
+        }
 
-    node "<<node>> Swarm Worker" as worker2 {
-    component MiniTwit as minitwit_worker2
-    component Alloy as alloy_worker2
+        component Alloy as alloy_worker1
+        }
+
+        node "<<node>> Swarm Worker" as worker2 {
+        component MiniTwit as minitwit_worker2{
+            portin ":8080" as min_5
+        }
+
+        component Alloy as alloy_worker2
     }
 
     database Postgres {
@@ -47,6 +67,13 @@ frame "Deployment MiniTwit" {
 
 'We need to dobble checj how Caddy intercepts the request'
 User --> Caddy : Devbobs.tech <<HTTPS>> 
+
+
+cad_out --> min_1
+cad_out --> min_2
+cad_out --> min_3
+cad_out --> min_4
+cad_out --> min_5
 
 @enduml
 
