@@ -5,18 +5,42 @@ actor User
 
 
 frame "Deployment MiniTwit" {
-    node "Droplet - Swarm Leader" {
-    component MiniTwit
+    node "<<node>> Swarm 'Leader'" {
+    component MiniTwit as minitwit_leader
     component Caddy
     component Grafana
     component Loki
-    component Alloy
+    component Alloy as alloy_leader
     component Promethues
+    }
+
+    node "<<node>> Swarm Manager" as manager1 {
+    component MiniTwit as minitwit_manager1
+    component Alloy as alloy_manager1
+    }
+
+    node "<<node>> Swarm Manager" as manager2 {
+    component MiniTwit as minitwit_manager2
+    component Alloy as alloy_manager2
+    }
+
+    node "<<node>> Swarm Worker" as worker1 {
+    component MiniTwit as minitwit_worker1
+    component Alloy as alloy_worker1
+    }
+
+    node "<<node>> Swarm Worker" as worker2 {
+    component MiniTwit as minitwit_worker2
+    component Alloy as alloy_worker2
+    }
+
+    database Postgres {
+
     }
 }
 
-
-User --> Caddy : Floating IP / Devbobs.tech 
+'We need to dobble checj how Caddy intercepts the request'
+User --> Caddy : Devbobs.tech <<HTTPS>> 
 
 @enduml
 
