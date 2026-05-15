@@ -1,7 +1,22 @@
-@startuml deployment_diagram
+@startuml 
 
-node "Droplet - Swarm Leader" {
-    component 
+actor User
+
+
+
+frame "Deployment MiniTwit" {
+    node "Droplet - Swarm Leader" {
+    component MiniTwit
+    component Caddy
+    component Grafana
+    component Loki
+    component Alloy
+    component Promethues
+    }
 }
 
+
+User --> Caddy : Floating IP / Devbobs.tech 
+
 @enduml
+
