@@ -6,10 +6,11 @@ actor User
 
 frame "Deployment MiniTwit" {
 
+
     node "<<node>> Swarm 'Leader'" {
         port 443
         port 80
-        port 8080 as 8in
+        port 8080 as 8080m1
         port 9090
         port 3000
 
@@ -19,46 +20,40 @@ frame "Deployment MiniTwit" {
         component Caddy {
             portout "8080" as cad_out
         }
-        together{
-            component Grafana
-            component Loki
-            component Alloy as alloy_leader
-            component Promethues
-        }
-        
+        component Grafana
+        component Loki
+        component Alloy as alloy_leader
+        component Promethues
     }
 
-    node "<<node>> Swarm Manager" as manager1 {
-        component MiniTwit as minitwit_manager1{
-            portin ":8080" as min_2
-        }
-
-        component Alloy as alloy_manager1
+    together {
+        node "<<node>> Swarm Manager" as manager1 {
+            portin ":8080" as 8080m2
+            component MiniTwit as minitwit_manager1
+            component Alloy as alloy_manager1
+    
         }
 
         node "<<node>> Swarm Manager" as manager2 {
-        component MiniTwit as minitwit_manager2{
-            portin ":8080" as min_3
+            portin ":8080" as 8080m3
+            component MiniTwit as minitwit_manager2
+            component Alloy as alloy_manager2
         }
 
-        component Alloy as alloy_manager2
-    }
+        node "<<node>> Swarm Worker" as worker1 {
+            portin ":8080" as 8080m4
+            component MiniTwit as minitwit_worker1
 
-    node "<<node>> Swarm Worker" as worker1 {
-        component MiniTwit as minitwit_worker1{
-            portin ":8080" as min_4
-        }
-
-        component Alloy as alloy_worker1
+            component Alloy as alloy_worker1
         }
 
         node "<<node>> Swarm Worker" as worker2 {
-        component MiniTwit as minitwit_worker2{
-            portin ":8080" as min_5
+            portin ":8080" as 8080m5
+            component MiniTwit as minitwit_worker2
+            component Alloy as alloy_worker2
         }
-
-        component Alloy as alloy_worker2
     }
+    
 
     database Postgres {
 
@@ -66,14 +61,7 @@ frame "Deployment MiniTwit" {
 }
 
 'We need to dobble checj how Caddy intercepts the request'
-User --> Caddy : Devbobs.tech <<HTTPS>> 
-
-
-cad_out --> min_1
-cad_out --> min_2
-cad_out --> min_3
-cad_out --> min_4
-cad_out --> min_5
+User --> 443 : Devbobs.tech <<HTTPS>> 
 
 @enduml
 
