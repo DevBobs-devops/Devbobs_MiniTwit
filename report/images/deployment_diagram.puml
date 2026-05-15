@@ -5,6 +5,12 @@ actor User
 
 
 frame "Deployment MiniTwit" {
+    port 443
+    port 80
+    port 8080
+    port 9090
+    port 3000
+
     node "<<node>> Swarm 'Leader'" {
     component MiniTwit as minitwit_leader
     component Caddy
