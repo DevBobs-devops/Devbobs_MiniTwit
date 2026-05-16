@@ -34,11 +34,16 @@ services:
 
   alloy:
     image: ${DOCKER_USERNAME}/minitwit-alloy
-    command:
-      - "run"
-      - "/etc/alloy/config.alloy"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/swarm.alloy
+    ports: 
+      - 12345:12345
     deploy:
       mode: global
 

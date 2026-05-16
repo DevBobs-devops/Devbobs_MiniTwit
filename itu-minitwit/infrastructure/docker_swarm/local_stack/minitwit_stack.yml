@@ -33,13 +33,18 @@ services:
 
   alloy:
     image: alloy_image
-    command:
-      - "run"
-      - "/etc/alloy/config.alloy"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/swarm.alloy
+    ports: 
+      - 12345:12345
     deploy:
-      mode: global
+      mode: global          # <-- one per node, not replicated
 
 
   loki:
