@@ -41,7 +41,7 @@ services:
       - run
       - --server.http.listen-addr=0.0.0.0:12345
       - --storage.path=/var/lib/alloy/data
-      - /etc/alloy/swarm.alloy
+      - /etc/alloy/newconfig.alloy
     ports: 
       - 12345:12345
     deploy:
