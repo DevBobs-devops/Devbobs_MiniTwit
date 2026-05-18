@@ -95,4 +95,5 @@ Terraform
 Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production.
 
 # Use of Generative AI
-Generative AI has been used to help solve issues with debugging errors and helped with coding sections of unfamiliar formats. The AIs used are ChatGPT and Claude AI. They have been co-aurthered when they have been used, often with a small message, explaining what they helped with.   
+Generative AI has been used to help solve issues with debugging errors and helped with parts of the coding. Used Ais are ChatGPT and Claude AI. They have been co-aurthored when they have been used, often with a small message, explaining what they did.
+They have helped us get a better understanding of how our code works and potential errors that can occur. Obviously, there is a possibility of loss of learning opportunities, as AI speeds up the problemsolving process, sometimes highlighting issues we had not observed yet.     
