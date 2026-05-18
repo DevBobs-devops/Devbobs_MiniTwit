@@ -79,6 +79,7 @@ The application can be scaled in two different ways: <br>
 
 
 # Reflection Perspective
+This section will focus on our reflections about the process, some of our major issues and what we could have done better. 
 ## Biggest issues
 ### Migrating Database
 The migration from the sqlite database to postgres database on DigitalOcean gave us troube, when moving the old data to the new database, as the format of sqlite and postgres did not match. We solved this by converting the sqlite dump to csv-files, which could then be converted into posgres dumps in the correct format. 
