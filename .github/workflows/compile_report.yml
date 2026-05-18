@@ -22,7 +22,7 @@ jobs:
         with:
           root_file: report/src/main.tex
           latexmk_use_lualatex: true
-          args: -shell-escape
+          args: -shell-escape -interaction=nonstopmode
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
 
