@@ -43,14 +43,14 @@ On a business level we monitor:
 - Number of created accounts
 - Average follower count per user
 - Total cheeps over time
-(IMAGE)
+![monitoring_business](./images/monitoring_business.png)
 
 ### Application monitoring
 On a application level we monitor different database queries that MiniTwit makes:
 - GetCheeps query durations
 - GetCheepsFromAuthor
 - AddCheep
-(IMAGE)
+![monitoring_queries](./images/monitoring_queries.png)
 
 ### Infrastructure level
 On a infrastructure level we monitor:
@@ -58,7 +58,7 @@ On a infrastructure level we monitor:
 - Memory usage of nodes
 - CPU usage of nodes
 - HTTP per minutte for each node'
-(IMAGE)
+![system_status](./images/system_status.png)
 
 ## Logging
 (HUSK AT ÆNDRE URL TIL LOGGING)
