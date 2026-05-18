@@ -8,15 +8,15 @@ This section will give description and illustrations of the design and architect
 ## CI/CD Pipelines
 
 The CI/CD pipeline consists of three stages. The pipeline can be seen in `/.github/workflows/`. All workflows are run on `ubuntu-24.04`.
-A complete illustration can be seen HERE:
+A complete illustration can be seen HERE (IMAGE).
 
 ### Build and test
 The build and test workflow is run on `push` to main and on `pull-requests` and consists of the following steps that run in parrallel:
 1. **Code linter with Csharpier**: Checks the format of the code and reports. Does not automaticly apply the format.
 2. **Dockerfile linter with Hadolint**: Checks the format of the Minitwit dockerfile.  <-- WE SHOULD LINT MORE THAN ONLY THIS?
 3. **Build the application**: Builds the applications and runs test:
-- Runs unit and intergreation test
-- Runs test on the API / simulator endpoint.
+- Run unit and intergreation tests
+- Run tests on the API / simulator endpoint.
 - Runs E2E / Playwright tests
 
 ### CI/CD 
@@ -61,21 +61,31 @@ On a infrastructure level we monitor:
 ![system_status](./images/system_status.png)
 
 ## Logging
-(HUSK AT ÆNDRE URL TIL LOGGING)
+_(HUSK AT ÆNDRE URL TIL LOGGING) pushed, loki, alloy, logs for services, logs for nodes? - vi kan overveje node exporter_ <br>
+The application uses a Grafana-loki-alloy stack to log all services. 
+
+### What we log
+Logs from each docker service in `/infrastructure/docker_swarm/stack/minitwit_stack.yml` are logged. _In reflection more should be logged?_ - (BURDE VI HAVE MERE???)
+
+### Aggregation of logs
+We use Alloy to push logs from each node to Loki, which collects them (UML IMAGE? - ift. flowet). The logs are displayed on grafana, which can be seen: 
+
+![logging_dashboard](./images/logging_dashboard.png)
 
 ## Security hardening
 
 ## Availability and scaling
+To scale and ensure availability of the application Terraform and Docker Swarm are used. 
 
 ### Availability
-The application consists of five nodes that are a part of a swarm cluster, that together run 4 replicated minitwit services, see `terraform/minitwit_swarm_cluster.tf` and `docker_swarm/stack/minitwit_stack.yml` under `/infrastructure`. This ensures that even if a service or node fails, the application is still available<br>
+The application consists of five nodes that are a part of a swarm cluster, that together run four replicated minitwit services, see `terraform/minitwit_swarm_cluster.tf` and `docker_swarm/stack/minitwit_stack.yml` under `/infrastructure`. This ensures that even if a service or node fails, the application is still available<br>
 
 **SPOF**: We currently only have one Caddy loadbalancer service, living on the leader node, that takes https requests on our `devbobs.tech` domain. This is a single point of failure for accessing the application from `devbobs.tech` and with https. If the leader goes down, it is still possible to access the other nodes ip's on port :8080 without https, where the docker ingress routing mesh will take care of loadbalancing.
 
 ### Scaling
 The application can be scaled in two different ways: <br>
 **Vertical scaling**: A single node can be scaled vertically either by rezising the node in DigitalOcean or changing the `size` field in `minitwit_swarm_cluster.tf` and applying it with terraform. <br>
-**Horizontal scaling**: The deployment of the application can be scaled horizontal by increasing the amount of nodes in the cluster. This can be done by increasing the `count` number of e.g. a Worker node and then make it join the swarm (det skal vi lige tjekke op på). 
+**Horizontal scaling**: The deployment of the application can be scaled horizontal by increasing the amount of nodes in the cluster. This can be done by increasing the `count` number of e.g. a Worker node and then make it join the swarm (det    skal vi lige tjekke op på). 
 
 
 # Reflection Perspective
