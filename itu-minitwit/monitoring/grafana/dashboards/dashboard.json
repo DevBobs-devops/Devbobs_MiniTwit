@@ -108,7 +108,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "up{instance=\"10.0.1.89:8080\"}",
+          "expr": "up{job=\"itu-minittwit-swarm\"}",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -1167,5 +1167,5 @@
   "timezone": "browser",
   "title": "Minitwit Dashboard",
   "uid": "fegau3n6gywaoa",
-  "version": 1
+  "version": 2
 }
