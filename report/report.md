@@ -5,7 +5,7 @@ This section will give description and illustrations of the design and architect
 
 # Process Perspective
 
-## CI/CD Pipelines (_Marius_)
+## CI/CD Pipelines
 
 The CI/CD pipeline consists of three stages. The pipeline can be seen in `/.github/workflows/`. All workflows are run on `ubuntu-24.04`.
 A complete illustration can be seen HERE:
@@ -32,7 +32,48 @@ The CI/CD workflow runs on a succesfull Build and Test workflow and push to main
 The release workflow runs on a successfull CI/CD run. 
 It builds and zips the application for Windows, Mac and Linux.
 
-### Sonarqube
+### SonarQube
 
 
 ## Monitoring
+Monitoring is done on a business level, application level, and infrastructure level. 
+
+### Business Monitoring
+On a business level we monitor:
+- Number of created accounts
+- Average follower count per user
+- Total cheeps over time
+(IMAGE)
+
+### Application monitoring
+On a application level we monitor different database queries that MiniTwit makes:
+- GetCheeps query durations
+- GetCheepsFromAuthor
+- AddCheep
+(IMAGE)
+
+### Infrastructure level
+On a infrastructure level we monitor:
+- The status of nodes
+- Memory usage of nodes
+- CPU usage of nodes
+- HTTP per minutte for each node'
+(IMAGE)
+
+## Logging
+(HUSK AT ÆNDRE URL TIL LOGGING)
+
+## Security hardening
+
+## Availability and scaling
+
+### Availability
+
+
+**SPOF**
+Docker swarm cluster, 5 nodes
+
+### Scaling
+The application can be scaled in two different ways: <br>
+**Vertical scaling**: A single node can be scaled vertically either by rezising the node in DigitalOcean or changing the `size` field in `minitwit_swarm_cluster.tf` and applying it with terraform. <br>
+**Horizontal scaling**: The deployment of the application can be scaled horizontal by increasing the amount of nodes in the cluster. This can be done by increasing the `count` number of e.g. a Worker node and then make it join the swarm (det skal vi lige tjekke op på). 
