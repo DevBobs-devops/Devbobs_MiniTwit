@@ -9,9 +9,9 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v4
         with:
-          root_file: report/main.tex
+          root_file: ./report/main.tex
       - name: Upload PDF file
         uses: actions/upload-artifact@v6
         with:
           name: PDF
-          path: report/build/main.pdf
+          path: ./report/build/main.pdf
