@@ -21,6 +21,12 @@ jobs:
       - name: Create build directory
         run: mkdir -p report/out/diagrams-ltx
 
+      - name: Create build directory
+        run: mkdir -p out/diagrams-ltx
+
+      - name: Create build directory
+        run: mkdir -p report/src/out/diagrams-ltx
+
       - name: Compile LaTeX document
         run: |
           cd report
