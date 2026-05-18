@@ -23,7 +23,7 @@ jobs:
       - name: Compile LaTeX document
         run: |
           cd report/src
-          latexmk -lualatex -interaction=nonstopmode -shell-escape -jobname=../out/BSc_group_k main.tex
+          latexmk -lualatex -interaction=nonstopmode -shell-escape -output-directory=../out main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
           TEXINPUTS: ".:**:"
