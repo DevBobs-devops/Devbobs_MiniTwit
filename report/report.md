@@ -5,8 +5,10 @@ This section will give description and illustrations of the design and architect
 
 # Process Perspective
 
-## CI/CD Pipelines
-The CI/CD pipeline consists of three stages. The pipeline can be seen in `/.github/workflows/`. All pipelines are run on `ubuntu-24.04`
+## CI/CD Pipelines (_Marius_)
+
+The CI/CD pipeline consists of three stages. The pipeline can be seen in `/.github/workflows/`. All pipelines are run on `ubuntu-24.04`.
+A complete illustration can be seen HERE:
 
 ### Build and test
 The build and test workflow is run on `push` to main and on `pull-requests` and consists of the following steps that run in parrallel:
@@ -29,3 +31,8 @@ The CI/CD workflow runs on a succesfull Build and Test workflow and push to main
 ### Release
 The release workflow runs on a successfull CI/CD run. 
 It builds and zips the application for Windows, Mac and Linux.
+
+### Sonarqube
+
+
+## Monitoring
