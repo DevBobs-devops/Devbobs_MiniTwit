@@ -101,12 +101,15 @@ Logging has been a consitant issue. Logs would "dissapear" after a while using G
 ### Terraform
 Terraform
 
-## Learned lessons
+## Learned lessons and improvements
 ### Test-server
-Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production. This also holds true for the database, as we often had to be very cautious out of fear that we would overwrite or delete data. 
+Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production. This also holds true for the database, as we often had to be very cautious out of fear that we would overwrite or delete data. We did make another DigitalOcean project near the end of the project, to test docker swarm, however this never got added to our pipeline.
 
 ### Importance of good logging
-Having more indept logging, would have made it easier to spot errors in our program. We often had to check the logs on the server, by ssh into it, instead of using the grafana dashboard. Having more logs show up in grafana, for example statistics about queries to the database, could have given us more information about the more niche parts of our program and errors.   
+Having more indept logging, would have made it easier to spot errors in our program. We often had to check the logs on the server, by ssh into it, instead of using the grafana dashboard. Having more logs show up in grafana, for example statistics about queries to the database, could have given us more information about the more niche parts of our program and errors.
+
+### updating test-file
+Our current test run on an old docker compose file, from before we introduced terraform and docker swarm. It would probably be better practice to use the stack file for the tests, rather than the compose file.
 
 # Use of Generative AI
 Generative AI has been used to help solve issues with debugging errors and helped with parts of the coding. Used Ais are ChatGPT and Claude AI. They have been co-aurthored when they have been used, often with a small message, explaining what they did.
