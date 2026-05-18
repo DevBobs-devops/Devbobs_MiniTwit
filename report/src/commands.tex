@@ -1,7 +1,7 @@
 \def\pumlfile#1{%
   \directlua{%
     local filename = "\luaescapestring{#1}"
-    local f = assert(io.open("src/diagrams/" .. filename, "rb"))
+    local f = assert(io.open("diagrams/" .. filename, "rb"))
     local content = f:read("*all")
     f:close()
     local f2 = assert(io.open(filename .. ".ltx", "w"))

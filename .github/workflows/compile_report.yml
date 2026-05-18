@@ -29,12 +29,12 @@ jobs:
 
       - name: Compile LaTeX document
         run: |
-          cd report
+          cd report/src
           latexmk -lualatex -interaction=nonstopmode -shell-escape\
-            src/main.tex
+            main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
-          TEXINPUTS: "./src:**:"
+          TEXINPUTS: ".:**:"
 
       - name: Print Folder Tree
         uses: jaywcjlove/github-action-folder-tree@main
@@ -46,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: BSc_group_k.pdf
-          path: report/main.pdf
+          path: report/src/main.pdf
