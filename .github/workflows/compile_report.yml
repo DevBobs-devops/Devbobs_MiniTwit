@@ -40,4 +40,4 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: BSc_group_k
-          path: report/src/main.pdf
+          path: report/src/BSc_group_k.pdf
