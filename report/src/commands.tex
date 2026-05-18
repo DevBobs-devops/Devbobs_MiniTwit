@@ -1,10 +1,11 @@
 \def\pumlfile#1{%
-\directlua{%
-   local f = assert(io.open("diagrams/#1", "rb"))
+  \directlua{%
+    local filename = "\luaescapestring{#1}"
+    local f = assert(io.open("diagrams/" .. filename, "rb"))
     local content = f:read("*all")
     f:close()
-    local f2 = io.open("./#1" .. ".ltx","w")
-    f2:write("\string\\begin{plantuml}\string\n" ..  content .. "\string\\end{plantuml}")
+    local f2 = assert(io.open("./" .. filename .. ".ltx", "w"))
+    f2:write("\string\\begin{plantuml}\string\n" .. content .. "\string\\end{plantuml}")
     f2:close()
-}%
-\input{"./#1.ltx"}}
+  }%
+  \input{"./#1.ltx"}}
