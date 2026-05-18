@@ -10,19 +10,20 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y graphviz default-jre texlive-luatex texlive-latex-extra inkscape
+          sudo apt-get install -y graphviz default-jre texlive-luatex texlive-latex-extra inkscape latexmk perl
 
       - name: Download PlantUML JAR
         run: |
           mkdir -p /opt/plantuml
           wget -O /opt/plantuml/plantuml.jar https://sourceforge.net/projects/plantuml/files/plantuml.jar/download
 
+      - name: Create build directory
+        run: mkdir -p report/build
+
       - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@v4
-        with:
-          root_file: report/src/main.tex
-          latexmk_use_lualatex: true
-          args: -shell-escape -interaction=nonstopmode
+        run: |
+          cd report
+          latexmk -lualatex -interaction=nonstopmode -shell-escape src/main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
 
@@ -30,6 +31,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add main.pdf
+          git add report/build/main.pdf
           git commit -m "Build LaTeX document with PlantUML" || true
           git push
