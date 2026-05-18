@@ -28,6 +28,7 @@ jobs:
             src/main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
+          TEXINPUTS: ".:**:"
 
       - name: Print Folder Tree
         uses: jaywcjlove/github-action-folder-tree@main
