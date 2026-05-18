@@ -24,7 +24,10 @@ jobs:
       - name: Compile LaTeX document
         run: |
           cd report
-          latexmk -lualatex -interaction=nonstopmode -shell-escape -output-directory=./out -aux-directory=./out/aux src/main.tex
+          latexmk -lualatex -interaction=nonstopmode -shell-escape\
+            -output-directory=$(pwd)/out \
+            -aux-directory=$(pwd)/out/aux \
+            src/main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
 
