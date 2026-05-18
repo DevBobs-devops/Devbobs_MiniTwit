@@ -10,3 +10,4 @@ fi
 docker stack deploy minitwit -c ./infrastructure/docker_swarm/local_stack/minitwit_stack.yml --detach=false 
 echo "go to MiniTwit: https://minitwit.localhost"
 echo "go to Grafana: http://127.0.0.1:3000"
+echo "go to Alloy UI: http://127.0.0.1:12345"
