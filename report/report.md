@@ -93,13 +93,10 @@ This section will focus on our reflections about the process, some of our major 
 
 ## Biggest issues during development
 ### Migrating Database
-The migration from the sqlite database to postgres database on DigitalOcean gave us troube, when moving the old data to the new database, as the format of sqlite and postgres did not match. We solved this by converting the sqlite dump to csv-files, which could then be converted into posgres dumps in the correct format. 
+The migration from the sqlite database to postgres database on DigitalOcean gave us troube, when moving the old data to the new database, as the format of sqlite and postgres are incompatible. At the same time postgres had issues with names used for tables such as Cheeps, modifying them to be cheeps, breaking our queries. We solved this by converting the sqlite dump to csv-files, which could then be converted into postgres dumps in the correct format. 
 
 ### Logging
 Logging has been a consitant issue. Logs would "dissapear" after a while using Grafana log drilldown, only showing logs for one or two of out entities. We instead made a log dashboard, like the minitwit dashboard, fixing the problem. 
-
-### Terraform
-Terraform
 
 ## Learned lessons and improvements
 ### Test-server
@@ -108,7 +105,7 @@ Having a test-server would have been benefitial for this project, as we currentl
 ### Importance of good logging
 Having more indept logging, would have made it easier to spot errors in our program. We often had to check the logs on the server, by ssh into it, instead of using the grafana dashboard. Having more logs show up in grafana, for example statistics about queries to the database, could have given us more information about the more niche parts of our program and errors.
 
-### updating test-file
+### Updating test-file
 Our current test run on an old docker compose file, from before we introduced terraform and docker swarm. It would probably be better practice to use the stack file for the tests, rather than the compose file.
 
 # Use of Generative AI
