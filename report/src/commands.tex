@@ -3,8 +3,8 @@
    local f = assert(io.open("diagrams/#1", "rb"))
     local content = f:read("*all")
     f:close()
-    local f2 = io.open("../out/diagrams-ltx/#1" .. ".ltx","w")
+    local f2 = io.open("./#1" .. ".ltx","w")
     f2:write("\string\\begin{plantuml}\string\n" ..  content .. "\string\\end{plantuml}")
     f2:close()
 }%
-\input{"../out/diagrams-ltx/#1.ltx"}}
+\input{"./#1.ltx"}}
