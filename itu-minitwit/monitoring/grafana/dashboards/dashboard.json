@@ -276,7 +276,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "process_working_set_bytes",
+          "expr": "process_working_set_bytes{job=\"itu-minittwit-swarm\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -374,7 +374,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "rate(process_cpu_seconds_total[$__rate_interval])",
+          "expr": "rate(process_cpu_seconds_total{job=\"itu-minittwit-swarm\"}[$__rate_interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
@@ -471,7 +471,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "rate(microsoft_aspnetcore_hosting_http_server_request_duration_count[$__rate_interval])",
+          "expr": "rate(microsoft_aspnetcore_hosting_http_server_request_duration_count{job=\"itu-minittwit-swarm\"}[$__rate_interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "legendFormat": "__auto",
