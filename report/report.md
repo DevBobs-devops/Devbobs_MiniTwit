@@ -77,3 +77,23 @@ Docker swarm cluster, 5 nodes
 The application can be scaled in two different ways: <br>
 **Vertical scaling**: A single node can be scaled vertically either by rezising the node in DigitalOcean or changing the `size` field in `minitwit_swarm_cluster.tf` and applying it with terraform. <br>
 **Horizontal scaling**: The deployment of the application can be scaled horizontal by increasing the amount of nodes in the cluster. This can be done by increasing the `count` number of e.g. a Worker node and then make it join the swarm (det skal vi lige tjekke op på). 
+
+
+# Reflection Perspective
+## Biggest issues
+### Migrating Database
+The migration from the sqlite database to postgres database on DigitalOcean gave us troube, when moving the old data to the new database, as the format of sqlite and postgres did not match. We solved this by converting the sqlite dump to csv-files, which could then be converted into posgres dumps in the correct format. 
+
+### Logging
+Logging has been a consitant issue. Logs would "dissapear" after a while using Grafana log drilldown, only showing logs for one or two of out entities. We instead made a log dashboard, like the minitwit dashboard, fixing the problem. 
+
+### Terraform
+Terraform
+
+## Learned lessons
+### Test-server
+Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production.
+
+# Use of Generative AI
+Generative AI has been used to help solve issues with debugging errors and helped with parts of the coding. Used Ais are ChatGPT and Claude AI. They have been co-aurthored when they have been used, often with a small message, explaining what they did.
+They have helped us get a better understanding of how our code works and potential errors that can occur. Obviously, there is a possibility of loss of learning opportunities, as AI speeds up the problemsolving process, sometimes highlighting issues we had not observed yet.     
