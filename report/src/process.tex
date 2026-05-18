@@ -1,0 +1,151 @@
+\section{Process Perspective}\label{process-perspective}
+
+\subsection{CI/CD Pipelines}\label{cicd-pipelines}
+
+The CI/CD pipeline consists of three stages. The pipeline can be seen in
+\code{/.github/workflows/}. All workflows are run on
+\code{ubuntu-24.04}. A complete illustration can be seen HERE (IMAGE).
+
+\subsubsection{Build and test}\label{build-and-test}
+
+The build and test workflow is run on \code{push} to main and on
+\code{pull-requests} and consists of the following steps that run in
+parrallel: 
+\begin{enumerate}
+    \item \textbf{Code linter with Csharpier}: Checks the format of the code and reports. Does not automaticly apply the format. 
+    \item \textbf{Dockerfile linter with Hadolint}: Checks the format of the Minitwit dockerfile. % WE SHOULD LINT MORE THAN ONLY THIS?
+    \item \textbf{Build the application}: Builds the applications and runs test:
+    \begin{itemize}
+        \item Run unit and intergreation tests
+        \item Run tests on the API / simulator endpoint.
+        \item Runs E2E / Playwright tests
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{CI/CD}
+The CI/CD workflow runs on a succesfull Build and Test workflow and push to main. It consists of the following steps that run sequentially:
+\begin{enumerate}
+    \item \textbf{Dockerhub}:
+    \begin{itemize}
+        \item Builds and pushes the \code{Minitwit}, \code{Grafana}, \code{Alloy}, \code{Loki} and \code{Prometheus} docker images to Dockerhub.
+    \end{itemize}
+    \item \textbf{SSH and Deploy}
+    \begin{itemize}
+        \item SSH into the node named leader in the swarm.
+        \item Copy the stack file \code{/itu-minitwit/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} to the node.
+        \item Deploy to the swarm.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Release}\label{release}
+
+The release workflow runs on a successfull CI/CD run. It builds and zips
+the application for Windows, Mac and Linux.
+
+\subsubsection{SonarQube}\label{sonarqube}
+
+\subsection{Monitoring}\label{monitoring}
+
+Monitoring is done on a business level, application level, and
+infrastructure level.
+
+\subsubsection{Business monitoring}\label{business-monitoring}
+
+On a business level we monitor:
+\begin{itemize}
+    \item Number of created accounts
+    \item Average
+    \item follower count per user
+    \item Total cheeps over time
+\end{itemize}
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/monitoring_business.png}
+\end{figure}
+
+
+\subsubsection{Application monitoring}\label{application-monitoring}
+
+On a application level we monitor different database queries that
+MiniTwit makes:
+\begin{itemize}
+    \item GetCheeps query durations
+    \item GetCheepsFromAuthor
+    \item AddCheep
+\end{itemize}
+
+\includegraphics[width=\textwidth]{./images/monitoring_queries.png}
+
+\subsubsection{Infrastructure
+monitoring}\label{infrastructure-monitoring}
+
+On a infrastructure level we monitor:
+\begin{itemize}
+    \item The status of nodes
+    \item Memory usage of nodes
+    \item CPU usage of nodes
+    \item HTTP per minutte for each node
+\end{itemize}
+
+\includegraphics[width=\textwidth]{./images/system_status.png}
+
+\subsection{Logging}\label{processlogging}
+
+\emph{(HUSK AT ÆNDRE URL TIL LOGGING) pushed, loki, alloy, logs for
+services, logs for nodes?
+vi kan overveje node exporter}
+The application uses a Grafana-loki-alloy stack to log all services.
+
+\subsubsection{What we log}\label{what-we-log}
+
+Logs from each docker service in
+\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} are
+logged. \emph{In reflection more should be logged?}
+(BURDE VI HAVE MERE???)
+
+\subsubsection{Aggregation of logs}\label{aggregation-of-logs}
+
+We use Alloy to push logs from each node to Loki, which collects them
+(UML IMAGE? ift. flowet). The logs are displayed on grafana, which can
+be seen:
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{./images/logging_dashboard.png}
+\caption{logging\_dashboard}
+\end{figure}
+
+\subsection{Security hardening}\label{security-hardening}
+
+\subsection{Availability and scaling}\label{availability-and-scaling}
+
+To scale and ensure availability of the application Terraform and Docker
+Swarm is used.
+
+\subsubsection{Availability}\label{availability}
+
+The application consists of five nodes that are a part of a swarm
+cluster, that together run four replicated minitwit services, see
+\code{terraform/minitwit\_swarm\_cluster.tf} and
+\code{docker\_swarm/stack/minitwit\_stack.yml} under
+\code{/infrastructure}. This ensures that even if a service or node
+fails, the application is still available
+
+\textbf{SPOF}: We currently only have one Caddy loadbalancer service,
+living on the leader node, that takes https requests on our
+\code{devbobs.tech} domain. This is a single point of failure for
+accessing the application from \code{devbobs.tech} and with https. If
+the leader goes down, it is still possible to access the other nodes
+ip's on port :8080 without https, where the docker ingress routing mesh
+will take care of loadbalancing.
+
+\subsubsection{Scaling}\label{scaling}
+
+The application can be scaled in two different ways: \textbf{Vertical
+scaling}: A single node can be scaled vertically either by rezising the
+node in DigitalOcean or changing the \code{size} field in
+\code{minitwit\_swarm\_cluster.tf} and applying it with terraform.
+\textbf{Horizontal scaling}: The deployment of the application can be
+scaled horizontal by increasing the amount of nodes in the cluster. This
+can be done by increasing the \code{count} number of e.g.~a Worker
+node and then make it join the swarm (det skal vi lige tjekke op på).

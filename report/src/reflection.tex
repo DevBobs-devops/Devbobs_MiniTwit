@@ -1,0 +1,55 @@
+\section{Reflection Perspective}\label{reflection-perspective}
+
+This section will focus on our reflections about the process, some of
+our major issues and what we have learned for improving the process in
+the future.
+
+\subsection{Biggest issues during
+development}\label{biggest-issues-during-development}
+
+\subsubsection{Migrating Database}\label{migrating-database}
+
+The migration from the sqlite database to postgres database on
+DigitalOcean gave us troube, when moving the old data to the new
+database, as the format of sqlite and postgres are incompatible. At the
+same time postgres had issues with names used for tables such as Cheeps,
+modifying them to be cheeps, breaking our queries. We solved this by
+converting the sqlite dump to csv-files, which could then be converted
+into postgres dumps in the correct format.
+
+\subsubsection{Logging}\label{reflection-logging}
+
+Logging has been a consitant issue. Logs would ``dissapear'' after a
+while using Grafana log drilldown, only showing logs for one or two of
+out entities. We instead made a log dashboard, like the minitwit
+dashboard, fixing the problem.
+
+\subsection{Learned lessons and
+improvements}\label{learned-lessons-and-improvements}
+
+\subsubsection{Test-server}\label{test-server}
+
+Having a test-server would have been benefitial for this project, as we
+currently only have our ``main'' server. This would have allowed us to
+further test new features or fixes, before they ended up in production.
+This also holds true for the database, as we often had to be very
+cautious out of fear that we would overwrite or delete data. We did make
+another DigitalOcean project near the end of the project, to test docker
+swarm, however this never got added to our pipeline.
+
+\subsubsection{Importance of good
+logging}\label{importance-of-good-logging}
+
+Having more indept logging, would have made it easier to spot errors in
+our program. We often had to check the logs on the server, by ssh into
+it, instead of using the grafana dashboard. Having more logs show up in
+grafana, for example statistics about queries to the database, could
+have given us more information about the more niche parts of our program
+and errors.
+
+\subsubsection{Updating test-file}\label{updating-test-file}
+
+Our current test run on an old docker compose file, from before we
+introduced terraform and docker swarm. It would probably be better
+practice to use the stack file for the tests, rather than the compose
+file.
