@@ -38,7 +38,7 @@ It builds and zips the application for Windows, Mac and Linux.
 ## Monitoring
 Monitoring is done on a business level, application level, and infrastructure level. 
 
-### Business Monitoring
+### Business monitoring
 On a business level we monitor:
 - Number of created accounts
 - Average follower count per user
@@ -52,7 +52,7 @@ On a application level we monitor different database queries that MiniTwit makes
 - AddCheep
 ![monitoring_queries](./images/monitoring_queries.png)
 
-### Infrastructure level
+### Infrastructure monitoring
 On a infrastructure level we monitor:
 - The status of nodes
 - Memory usage of nodes
@@ -68,10 +68,9 @@ On a infrastructure level we monitor:
 ## Availability and scaling
 
 ### Availability
+The application consists of five nodes that are a part of a swarm cluster, that together run 4 replicated minitwit services, see `terraform/minitwit_swarm_cluster.tf` and `docker_swarm/stack/minitwit_stack.yml` under `/infrastructure`. This ensures that even if a service or node fails, the application is still available<br>
 
-
-**SPOF**
-Docker swarm cluster, 5 nodes
+**SPOF**: We currently only have one Caddy loadbalancer service, living on the leader node, that takes https requests on our `devbobs.tech` domain. This is a single point of failure for accessing the application from `devbobs.tech` and with https. If the leader goes down, it is still possible to access the other nodes ip's on port :8080 without https, where the docker ingress routing mesh will take care of loadbalancing.
 
 ### Scaling
 The application can be scaled in two different ways: <br>
