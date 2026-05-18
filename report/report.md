@@ -7,7 +7,7 @@ This section will give description and illustrations of the design and architect
 
 ## CI/CD Pipelines (_Marius_)
 
-The CI/CD pipeline consists of three stages. The pipeline can be seen in `/.github/workflows/`. All pipelines are run on `ubuntu-24.04`.
+The CI/CD pipeline consists of three stages. The pipeline can be seen in `/.github/workflows/`. All workflows are run on `ubuntu-24.04`.
 A complete illustration can be seen HERE:
 
 ### Build and test
