@@ -32,7 +32,31 @@ The CI/CD workflow runs on a succesfull Build and Test workflow and push to main
 The release workflow runs on a successfull CI/CD run. 
 It builds and zips the application for Windows, Mac and Linux.
 
-### Sonarqube
+### SonarQube
 
 
-## Monitoring
+## Monitoring (_Marius_)
+Monitoring is done on a business level, application level, and infrastructure level. 
+
+### Business Monitoring
+On a business level we monitor:
+- Number of created accounts
+- Average follower count per user
+- Total cheeps over time
+(IMAGE)
+
+### Application monitoring
+On a application level we monitor different database queries that MiniTwit makes:
+- GetCheeps query durations
+- GetCheepsFromAuthor
+- AddCheep
+(IMAGE)
+
+### Infrastructure level
+On a infrastructure level we monitor:
+- The status of nodes
+- Memory usage of nodes
+- CPU usage of nodes
+- HTTP per minutte for each node'
+(IMAGE)
+
