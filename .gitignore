@@ -491,3 +491,6 @@ itu-minitwit/infrastructure/terraform/temp/
 **/*.tfstate.backup
 cookies.txt
 itu-minitwit/minitwit/data/
+/report/out
+*plantuml.txt
+*plantuml.tex

@@ -1,0 +1,40 @@
+{
+  "files.autoSave": "afterDelay",
+  "editor.formatOnSave": true,
+  "debug.terminal.clearBeforeReusing": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+  "latex-workshop.latex.autoBuild.run": "never",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "lualatex",
+      "command": "lualatex",
+      "args": [
+        "-shell-escape",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-output-directory=%OUTDIR%",
+        "-aux-directory=%AUXDIR%",
+        "%DOC%",
+      ],
+      "env": {},
+    },
+    {
+      "name": "bibtex",
+      "command": "bibtex",
+      "args": ["%DOCFILE%"],
+      "env": {},
+    },
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "lualatex ",
+      "tools": ["lualatex"],
+    },
+  ],
+  "workbench.colorTheme": "Dark Modern",
+  "latex-workshop.latex.outDir": "%DIR%/../out/",
+  "latex-workshop.latex.auxDir": "%OUTDIR%/aux/",
+  "latex-workshop.formatting.latex": "none",
+}
