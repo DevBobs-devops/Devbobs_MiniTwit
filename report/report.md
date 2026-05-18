@@ -2,6 +2,13 @@
 This section will give description and illustrations of the design and architecture of our Mini-twit system, dependencies and the current state of out system.
 
 ## Design and architecture of our ITU-MiniTwit systems.
+The architecture of the system can 
+
+## Dependencies
+package and deliver services = docker containers (has all dependencies). Nuget dependencies. Github action dependencies (Hadolint, Csharpier, ). Docker. 
+
+## Current state of system
+
 
 # Process Perspective
 
@@ -75,7 +82,7 @@ We use Alloy to push logs from each node to Loki, which collects them (UML IMAGE
 ## Security hardening
 
 ## Availability and scaling
-To scale and ensure availability of the application Terraform and Docker Swarm are used. 
+To scale and ensure availability of the application Terraform and Docker Swarm is used. 
 
 ### Availability
 The application consists of five nodes that are a part of a swarm cluster, that together run four replicated minitwit services, see `terraform/minitwit_swarm_cluster.tf` and `docker_swarm/stack/minitwit_stack.yml` under `/infrastructure`. This ensures that even if a service or node fails, the application is still available<br>
