@@ -37,4 +37,4 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: BSc_group_k.pdf
-          path: report/build/main.pdf
+          path: report/main.pdf
