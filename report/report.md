@@ -94,6 +94,9 @@ Terraform
 ### Test-server
 Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production.
 
+### Importance of good logging
+Having more indept logging, would have made it easier to spot errors in our program. We often had to check the logs on the server, by ssh into it, instead of using the grafana dashboard. Having more logs show up in grafana, for example queries to the database, could have given us more information about the more niche parts of our program.   
+
 # Use of Generative AI
 Generative AI has been used to help solve issues with debugging errors and helped with parts of the coding. Used Ais are ChatGPT and Claude AI. They have been co-aurthored when they have been used, often with a small message, explaining what they did.
 They have helped us get a better understanding of how our code works and potential errors that can occur. Obviously, there is a possibility of loss of learning opportunities, as AI speeds up the problemsolving process, sometimes highlighting issues we had not observed yet.     
