@@ -2,6 +2,13 @@
 This section will give description and illustrations of the design and architecture of our Mini-twit system, dependencies and the current state of out system.
 
 ## Design and architecture of our ITU-MiniTwit systems.
+The architecture of the system can 
+
+## Dependencies
+package and deliver services = docker containers (has all dependencies). Nuget dependencies. Github action dependencies (Hadolint, Csharpier, ). Docker. 
+
+## Current state of system
+
 
 # Process Perspective
 
@@ -75,7 +82,7 @@ We use Alloy to push logs from each node to Loki, which collects them (UML IMAGE
 ## Security hardening
 
 ## Availability and scaling
-To scale and ensure availability of the application Terraform and Docker Swarm are used. 
+To scale and ensure availability of the application Terraform and Docker Swarm is used. 
 
 ### Availability
 The application consists of five nodes that are a part of a swarm cluster, that together run four replicated minitwit services, see `terraform/minitwit_swarm_cluster.tf` and `docker_swarm/stack/minitwit_stack.yml` under `/infrastructure`. This ensures that even if a service or node fails, the application is still available<br>
@@ -93,20 +100,20 @@ This section will focus on our reflections about the process, some of our major 
 
 ## Biggest issues during development
 ### Migrating Database
-The migration from the sqlite database to postgres database on DigitalOcean gave us troube, when moving the old data to the new database, as the format of sqlite and postgres did not match. We solved this by converting the sqlite dump to csv-files, which could then be converted into posgres dumps in the correct format. 
+The migration from the sqlite database to postgres database on DigitalOcean gave us troube, when moving the old data to the new database, as the format of sqlite and postgres are incompatible. At the same time postgres had issues with names used for tables such as Cheeps, modifying them to be cheeps, breaking our queries. We solved this by converting the sqlite dump to csv-files, which could then be converted into postgres dumps in the correct format. 
 
 ### Logging
 Logging has been a consitant issue. Logs would "dissapear" after a while using Grafana log drilldown, only showing logs for one or two of out entities. We instead made a log dashboard, like the minitwit dashboard, fixing the problem. 
 
-### Terraform
-Terraform
-
-## Learned lessons
+## Learned lessons and improvements
 ### Test-server
-Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production. This also holds true for the database, as we often had to be very cautious out of fear that we would overwrite or delete data. 
+Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production. This also holds true for the database, as we often had to be very cautious out of fear that we would overwrite or delete data. We did make another DigitalOcean project near the end of the project, to test docker swarm, however this never got added to our pipeline.
 
 ### Importance of good logging
-Having more indept logging, would have made it easier to spot errors in our program. We often had to check the logs on the server, by ssh into it, instead of using the grafana dashboard. Having more logs show up in grafana, for example statistics about queries to the database, could have given us more information about the more niche parts of our program and errors.   
+Having more indept logging, would have made it easier to spot errors in our program. We often had to check the logs on the server, by ssh into it, instead of using the grafana dashboard. Having more logs show up in grafana, for example statistics about queries to the database, could have given us more information about the more niche parts of our program and errors.
+
+### Updating test-file
+Our current test run on an old docker compose file, from before we introduced terraform and docker swarm. It would probably be better practice to use the stack file for the tests, rather than the compose file.
 
 # Use of Generative AI
 Generative AI has been used to help solve issues with debugging errors and helped with parts of the coding. Used Ais are ChatGPT and Claude AI. They have been co-aurthored when they have been used, often with a small message, explaining what they did.
