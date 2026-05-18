@@ -79,8 +79,9 @@ The application can be scaled in two different ways: <br>
 
 
 # Reflection Perspective
-This section will focus on our reflections about the process, some of our major issues and what we could have done better. 
-## Biggest issues
+This section will focus on our reflections about the process, some of our major issues and what we have learned for improving the process in the future. 
+
+## Biggest issues during development
 ### Migrating Database
 The migration from the sqlite database to postgres database on DigitalOcean gave us troube, when moving the old data to the new database, as the format of sqlite and postgres did not match. We solved this by converting the sqlite dump to csv-files, which could then be converted into posgres dumps in the correct format. 
 
@@ -92,7 +93,7 @@ Terraform
 
 ## Learned lessons
 ### Test-server
-Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production.
+Having a test-server would have been benefitial for this project, as we currently only have our "main" server. This would have allowed us to further test new features or fixes, before they ended up in production. This also holds true for the database, as we often had to be very cautious out of fear that we would overwrite or delete data. 
 
 ### Importance of good logging
 Having more indept logging, would have made it easier to spot errors in our program. We often had to check the logs on the server, by ssh into it, instead of using the grafana dashboard. Having more logs show up in grafana, for example queries to the database, could have given us more information about the more niche parts of our program.   
