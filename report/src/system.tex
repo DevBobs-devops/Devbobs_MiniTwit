@@ -13,7 +13,7 @@ systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
 
 The architecture of MiniTwit follows, as Chirp, the onion architecture. 
 The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
-The architecture strives to achieve both high-availability and the possibility for scaling when needed. 
+The architecture strives to achieve both high-availability by having a swarm of five nodes,
 A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80, which redirects to 443.
 The request will reach the Leader node and will then get loadbalanced by Caddy between the four instances of MiniTwit running.
 MiniTwit is also available on port 8080 with http. The request will in this case be loadbalanced by the docker ingress routing mesh.
@@ -31,7 +31,7 @@ The architecture have a single point of failure, which will be explained in sect
 The dependencies our the MiniTwit system is listed below on different levels of abstractions. 
 
 \paragraph{NuGet Dependencies}
-The dependencies the MiniTwit application depends are as follows.
+The dependencies of the MiniTwit application are as follows.
 \begin{itemize}
     \item Microsoft.AspNetCore.DataProtection.EntityFrameworkCore      8.0.*       8.0.26  
     \item Microsoft.AspNetCore.Identity.EntityFrameworkCore            8.0.10      8.0.10  
@@ -50,7 +50,7 @@ The dependencies the MiniTwit application depends are as follows.
 \end{itemize}
 
 \paragraph{Docker Dependencies}
-The external dependencies that our services uses are as follow.
+The external docker dependencies are as follow.
 \begin{itemize}
     \item mcr.microsoft.com/dotnet/aspnet:8.0
     \item mcr.microsoft.com/dotnet/sdk:8.0
@@ -71,7 +71,7 @@ The internal dependencies that is created when deploying are as follows. The DOC
 
 
 \paragraph{Github Action Dependencies}
-The dependencies of our CI/CD pipeline.
+The dependencies of our CI/CD pipeline are as follows.
 \begin{itemize}
     \item actions/checkout 2.*.*
     \item actions/checkout 3.*.*
@@ -88,7 +88,7 @@ The dependencies of our CI/CD pipeline.
 \end{itemize}
 
 \paragraph{Infrastructure and deployment dependencies}
-The dependencies of our infrastructure and deployment.
+The dependencies of our infrastructure and deployment are as follows.
 \begin{itemize}
     \item DigitalOcean - The platform used to host the MiniTwit system
     \item Terraform - Tool used to manage our infrastructure as code
@@ -96,15 +96,17 @@ The dependencies of our infrastructure and deployment.
     \item Docker - Tool used to package different parts of the MiniTwit system and run as containers on Droplets on DigitalOcean
 \end{itemize}
 
+In reflection we have many dependencies, which could be reduced to ease later maintaince (e.g.: we have three different versions of the checkout actions in our GitHub Actions).
+
 \subsection{Current state of system}\label{current-state-of-system}
 \textit{marho@itu.dk} \\
 
 To keep software quality high and later ease maintainability of the application we follow several practices and use a set of different tooling. 
 
 \subsubsection{Practices}
-The first practice is code reviews. No code gets pushed to main before it has been approved by atleast one other group member. This is done though GitHub's pull-requests.
+The first practice is code reviews. No code gets pushed to main before it has been approved by atleast one other group member. This is done though GitHub pull-requests.
 Combined with the use of GitHub issues, this gives a clear picture of why, what and how a feature have been implemented.
-The use of conventional commits like: \texttt{feat:}, \texttt{chore:}, \texttt{note:}, have been used to give a clearer view of what each commit in the git history do. 
+The use of conventional commits like: \texttt{feat:}, \texttt{chore:}, \texttt{note:}, have been used to give a clear view of what each commit in the git history do. 
 
 \subsubsection{Tooling}
 Tooling have been used to assist keeping quality high.
@@ -115,7 +117,7 @@ These can be seen in \ref{build-and-test}. \\
 
 Next we have SonarQube which is used to analyse code quality and security issues as seen in \ref{sonarqube}.
 The current state of the system, according to SonarQube, is acceptable - SonarQube scores Security: C, Reliability: A and Maintainability: A, as seen in Figure~\ref{sonarqube-report}.
-The low score on security fails the SonarQube Quality Gate, which is an issue.
+The low score on security fails means we fail SonarQube's Quality Gate, which is an issue.
 \begin{figure}
     \includegraphics[width=\textwidth]{images/Quality-Gate.png}
     \caption{SonarQube Quality Gate Report}
