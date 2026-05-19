@@ -6,7 +6,8 @@ DevOps, Software Evolution and Software Maintenance, BSc (Spring 2026) - Group "
 > refactor and migrate it to the languages and technologies of their liking. All subsequent DevOps, software evolution and software maintenance activities will be performed directly on the systems of the students.
 
 # Link to MiniTwit
-[link](http://devbobs.tech/)
+A live hosted version of MiniTwit can be found at: 
+[devbobs.tech](http://devbobs.tech/)
 
 # Running it locally
 To run it locally you need to have docker installed

@@ -20,7 +20,7 @@ The request will reach the Leader node and will then get loadbalanced by Caddy b
 MiniTwit is also available on port 8080 with http. The request will in this case be loadbalanced by the docker ingress routing mesh.
 The architecture have a single point of failure, which will be explained in section \ref{availability}. \\
 
-\begin{figure}
+\begin{figure} [H]
     \pumlfile{deployment-diagram.puml}
     \caption{Deployment diagram of MiniTwit}
     \label{deployment-diagram}
@@ -29,7 +29,7 @@ The architecture have a single point of failure, which will be explained in sect
 
 \subsection{Dependencies}\label{dependencies}
 \textit{marho@itu.dk} \\
-The dependencies our the MiniTwit system is listed below on different levels of abstractions.
+The dependencies our the MiniTwit system is listed below on different levels of abstractions. 
 
 \paragraph{NuGet Dependencies}
 The dependencies the MiniTwit application depends are as follows.
@@ -61,13 +61,13 @@ The external dependencies that our services uses are as follow.
     \item grafana/grafana:12.1
     \item lucaslorentz/caddy-docker-proxy:ci-alpine
 \end{itemize}
-The internal dependencies that is created when deploying are as follows. The DOCKER_USERNAME is the name used on DockerHub
+The internal dependencies that is created when deploying are as follows. The DOCKER\_USERNAME is the name used on DockerHub
 \begin{itemize}
-    \item DOCKER_USERNAME/minitwitimage
-    \item DOCKER_USERNAME/minitwit-prometheus
-    \item DOCKER_USERNAME/minitwit-alloy
-    \item DOCKER_USERNAME/minitwit-loki
-    \item DOCKER_USERNAME/minitwit-grafana
+    \item DOCKER\_USERNAME/minitwitimage
+    \item DOCKER\_USERNAME/minitwit-prometheus
+    \item DOCKER\_USERNAME/minitwit-alloy
+    \item DOCKER\_USERNAME/minitwit-loki
+    \item DOCKER\_USERNAME/minitwit-grafana
 \end{itemize}
 
 
