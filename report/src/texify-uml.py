@@ -1,9 +1,16 @@
-input = open("./diagrams/plantuml-test-file.puml","r")
+import os
 
-out = open("./plantuml-test-file-puml.tex","w")
-out.write("\\begin{plantuml}\n")
+p = r"./diagrams/"
 
-for line in input:
-    out.write(line)
+for e in os.scandir(p):
+    if e.is_file():
+        with open(e.path, "r") as input:
+            out = open(r"./"+e.name+".tex","w")
+            out.write("\\begin{plantuml}\n")
 
-out.write("\\end{plantuml}")
+            for line in input:
+                out.write(line)
+
+            out.write("\\end{plantuml}")
+
+print("texify done")
