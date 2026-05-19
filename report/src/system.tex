@@ -30,7 +30,75 @@ The architecture have a single point of failure, which will be explained in sect
 
 package and deliver services = docker containers (has all dependencies).
 Nuget dependencies. Github action dependencies (Hadolint, Csharpier, ).
-Docker.
+Docker. \\
+
+The dependencies our the MiniTwit system is listed below on different levels of abstractions.
+
+\paragraph{NuGet Dependencies}
+The dependencies the MiniTwit application depends are as follows.
+\begin{itemize}
+    \item Microsoft.AspNetCore.DataProtection.EntityFrameworkCore      8.0.*       8.0.26  
+    \item Microsoft.AspNetCore.Identity.EntityFrameworkCore            8.0.10      8.0.10  
+    \item Microsoft.AspNetCore.Identity.UI                             8.0.10      8.0.10  
+    \item Microsoft.CodeAnalysis.NetAnalyzers                          10.0.201    10.0.201
+    \item Microsoft.EntityFrameworkCore.Design                         8.0.10      8.0.10  
+    \item Microsoft.EntityFrameworkCore.Sqlite                         8.0.10      8.0.10 
+    \item Microsoft.EntityFrameworkCore.SqlServer                      8.0.10      8.0.10  
+    \item Microsoft.EntityFrameworkCore.Tools                          8.0.10      8.0.10  
+    \item Microsoft.Playwright.NUnit                                   1.49.0      1.49.0 
+    \item Microsoft.VisualStudio.Web.CodeGeneration.Design             8.0.6       8.0.6    
+    \item Npgsql.EntityFrameworkCore.PostgreSQL                        8.0.4       8.0.4 
+    \item prometheus-net                                               8.2.1       8.2.1    
+    \item prometheus-net.AspNetCore                                    8.2.1       8.2.1 
+    \item Swashbuckle.AspNetCore                                       10.1.2      10.1.2  
+\end{itemize}
+
+\paragraph{Docker Dependencies}
+The external dependencies that our services uses are as follow.
+\begin{itemize}
+    \item mcr.microsoft.com/dotnet/aspnet:8.0
+    \item mcr.microsoft.com/dotnet/sdk:8.0
+    \item grafana/loki:3.6.7
+    \item prom/prometheus:v3.5.1
+    \item grafana/alloy:latest 
+    \item grafana/grafana:12.1
+    \item lucaslorentz/caddy-docker-proxy:ci-alpine
+\end{itemize}
+The internal dependencies that is created when deploying are as follows. The DOCKER_USERNAME is the name used on DockerHub
+\begin{itemize}
+    \item DOCKER_USERNAME/minitwitimage
+    \item DOCKER_USERNAME/minitwit-prometheus
+    \item DOCKER_USERNAME/minitwit-alloy
+    \item DOCKER_USERNAME/minitwit-loki
+    \item DOCKER_USERNAME/minitwit-grafana
+\end{itemize}
+
+
+\paragraph{Github Action Dependencies}
+The dependencies of our CI/CD pipeline.
+\begin{itemize}
+    \item actions/checkout 2.*.*
+    \item actions/checkout 3.*.*
+    \item actions/checkout 4.*.*
+    \item docker/build-push-action 6.*.*
+    \item docker/build-push-action d08e5c354a6adb9ed34480a06d141179aa583294
+    \item docker/login-action 3.*.*
+    \item docker/setup-buildx-action 3.*.*
+    \item actions/setup-dotnet 4.*.*
+    \item actions/setup-python 5.*.*
+    \item actions/upload-artifact 4.*.*
+    \item guibranco/github-csharpier-linter-action a5214a476742ce4a0f755611581276c50081527a
+    \item hadolint/hadolint-action 2332a7b74a6de0dda2e2221d575162eba76ba5e5
+\end{itemize}
+
+\paragraph{Infrastructure and deployment dependencies}
+The dependencies of our infrastructure and deployment.
+\begin{itemize}
+    \item DigitalOcean - The platform used to host the MiniTwit system
+    \item Terraform - Tool used to manage our infrastructure as code
+    \item DockerHub - Platform used to store our docker images
+    \item Docker - Tool used to package different parts of the MiniTwit system and run as containers on Droplets on DigitalOcean
+\end{itemize}
 
 \subsection{Current state of system}\label{current-state-of-system}
 
