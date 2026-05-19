@@ -2,12 +2,25 @@
 
 This section will give description and illustrations of the design and
 architecture of our Mini-twit system, dependencies and the current state
-of out system.
+of out system. \\
+
+The application is based on Chirp - a c\# application made in the course Analysis, Design and Software Architecture at ITU. 
+We chose to base the project on Chirp as all of knew the codebase.
+
 
 \subsection{Design and architecture of our ITU-MiniTwit
 systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
 
-The architecture of the system can
+The architecture of MiniTwit follows, as Chirp, the onion architecture. 
+The deployment architecture of the MiniTwit system can be seen in figure UML\_DIAGRAM.
+The architecture strives to achieve both high-availability and the possibility for scaling when needed. 
+A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80, which redirects to 443.
+The request will reach the Leader node and will then get loadbalanced between the four instances of MiniTwit running.
+MiniTwit is also available on port 8080 with http. The request will in this case be loadbalanced by the docker ingress routing mesh.
+The architecture have a single point of failure, as will be explained in \ref{availability}.
+
+
+
 
 \subsection{Dependencies}\label{dependencies}
 
