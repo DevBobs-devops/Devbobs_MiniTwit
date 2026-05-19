@@ -55,8 +55,7 @@ the application for Windows, Mac and Linux.
 \textit{marho@itu.dk} \\
 
 The system monitoring uses Prometheus to scrape data and Grafana to visualises and displays the information.
-Monitoring is done on a business level, application level, and
-infrastructure level.
+Monitoring is done on a business level, application level, and infrastructure level.
 
 \subsubsection{Business monitoring}\label{business-monitoring}
 
@@ -64,7 +63,7 @@ On a business level we monitor:
 \begin{itemize}
     \item Number of created accounts
     \item Average follower count per user
-    \item Total cheeps over time
+    \item Total number of cheeps over time
 \end{itemize}
 
 \includegraphics[width=\textwidth]{images/monitoring_business.png}
@@ -74,9 +73,9 @@ On a business level we monitor:
 On a application level we monitor the durations of different database queries that
 MiniTwit makes:
 \begin{itemize}
-    \item GetCheeps
-    \item GetCheepsFromAuthor
-    \item AddCheep
+    \item GetCheeps - Gets cheeps for a given page
+    \item GetCheepsFromAuthor - Getting an Authors cheeps
+    \item AddCheep - Create a cheep
 \end{itemize}
 
 \includegraphics[width=\textwidth]{./images/monitoring_queries.png}
