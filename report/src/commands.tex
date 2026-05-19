@@ -12,9 +12,9 @@
     local content = fin:read("*all")
     fin:close()
 
-    -- Write the raw content into a lua string TeX can load with \luaexec
+    local newline = string.char(10)
     tex.print("\\begin{plantuml}")
-    for line in content:gmatch("[^\n]+") do
+    for line in content:gmatch("[^" .. newline .. "]+") do
       tex.print(line)
     end
     tex.print("\\end{plantuml}")
