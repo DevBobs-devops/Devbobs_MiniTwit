@@ -13,11 +13,12 @@ systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
 
 The architecture of MiniTwit follows, as Chirp, the onion architecture. 
 The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
-The architecture strives to achieve both high-availability by having a swarm of five nodes,
+The architecture strives to achieve high-availability by having a swarm of five nodes.
 A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80, which redirects to 443.
 The request will reach the Leader node and will then get loadbalanced by Caddy between the four instances of MiniTwit running.
 MiniTwit is also available on port 8080 with http. The request will in this case be loadbalanced by the docker ingress routing mesh.
-The architecture have a single point of failure, which will be explained in section \ref{availability}. \\
+The architecture have a single point of failure, which will be explained in section \ref{availability}.
+The rest of the services, like Grafana, can be reached on their corresponding port using the floating ip or any of the nodes IP. \\
 
 \begin{figure} [H]
     \pumlfile{deployment-diagram.puml}
@@ -47,6 +48,12 @@ The dependencies of the MiniTwit application are as follows.
     \item prometheus-net                                               8.2.1       8.2.1    
     \item prometheus-net.AspNetCore                                    8.2.1       8.2.1 
     \item Swashbuckle.AspNetCore                                       10.1.2      10.1.2  
+    \item coverlet.collector                                           3.2.0       3.2.0  
+    \item Microsoft.AspNetCore.Mvc.Testing      8.0.8       8.0.8  
+    \item Microsoft.NET.Test.Sdk                17.8.0      17.8.0  
+    \item xunit                                 2.4.2       2.4.2   
+    \item xunit.runner.visualstudio             2.4.5       2.4.5   
+    \item NUnit3TestAdapter               4.5.0       4.5.0  
 \end{itemize}
 
 \paragraph{Docker Dependencies}
@@ -88,7 +95,7 @@ The dependencies of our CI/CD pipeline are as follows.
 \end{itemize}
 
 \paragraph{Infrastructure and deployment dependencies}
-The dependencies of our infrastructure and deployment are as follows.
+The dependencies that we use for infrastructure and deployment are as follows.
 \begin{itemize}
     \item DigitalOcean - The platform used to host the MiniTwit system
     \item Terraform - The tool used to manage our infrastructure as code
@@ -118,7 +125,7 @@ These can be seen in \ref{build-and-test}. \\
 Next we have SonarQube which is used to analyse code quality and security issues as seen in \ref{sonarqube}.
 The current state of the system, according to SonarQube, is acceptable - SonarQube scores Security: C, Reliability: A and Maintainability: A, as seen in Figure~\ref{sonarqube-report}.
 The low score on security fails means we fail SonarQube's Quality Gate, which is an issue.
-\begin{figure}
+\begin{figure} [H]
     \includegraphics[width=\textwidth]{images/Quality-Gate.png}
     \caption{SonarQube Quality Gate Report}
     \label{sonarqube-report}
