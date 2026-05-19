@@ -4,7 +4,12 @@
 
 The CI/CD pipeline consists of three stages. The pipeline can be seen in
 \code{/.github/workflows/}. All workflows are run on
-\code{ubuntu-24.04}. A complete illustration can be seen HERE (IMAGE).
+\code{ubuntu-24.04}. A complete illustration can be seen here.
+%TODO: Which standard does this diagram follow?
+%TODO split up diagram
+%TODO fix: maybe building the artefact is actually considered CI?
+
+\pumlfile{cicd-diagram.puml}
 
 \subsubsection{Build and test}\label{build-and-test}
 
@@ -14,7 +19,7 @@ parrallel:
 \begin{enumerate}
     \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. This helps ensure that the layout is alike thoughout the codebase. It does not automaticly apply layout changes, as we wanted control.
     \item \textbf{Dockerfile linter with Hadolint}: Lints the Minitwit dockerfile. % WE SHOULD LINT MORE THAN ONLY THIS?
-    \item \textbf{Build the application}: Builds the applications and runs test:
+    \item \textbf{Build the application}: Builds the applications and runs tests:
     \begin{itemize}
         \item Run unit and intergreation tests
         \item Run tests on the API / simulator endpoint.
@@ -27,12 +32,12 @@ The CI/CD workflow runs on a succesfull Build and Test workflow and push to main
 \begin{enumerate}
     \item \textbf{Dockerhub}:
     \begin{itemize}
-        \item Builds and pushes the \code{Minitwit}, \code{Grafana}, \code{Alloy}, \code{Loki} and \code{Prometheus} docker images to Dockerhub.
+        \item Github Actions builds and pushes the \code{Minitwit}, \code{Grafana}, \code{Alloy}, \code{Loki} and \code{Prometheus} docker images to Dockerhub.
     \end{itemize}
     \item \textbf{SSH and Deploy}
     \begin{itemize}
         \item SSH into the node named leader in the swarm.
-        \item Copy the stack file \code{/itu-minitwit/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} to the node.
+        \item Copy the stack file \path{/itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml} to the node.
         \item Deploy to the swarm.
     \end{itemize}
 \end{enumerate}
@@ -43,9 +48,11 @@ The release workflow runs on a successfull CI/CD run. It builds and zips
 the application for Windows, Mac and Linux.
 
 \subsubsection{SonarQube}\label{sonarqube}
+%TODO
 
 \subsection{Monitoring}\label{monitoring}
 
+The system monitoring uses Prometheus to scrape data and Grafana to visualises and displays the information.
 Monitoring is done on a business level, application level, and
 infrastructure level.
 
@@ -54,22 +61,18 @@ infrastructure level.
 On a business level we monitor:
 \begin{itemize}
     \item Number of created accounts
-    \item Average
-    \item follower count per user
+    \item Average follower count per user
     \item Total cheeps over time
 \end{itemize}
 
-\begin{figure}
-    \includegraphics[width=\textwidth]{images/monitoring_business.png}
-\end{figure}
-
+\includegraphics[width=\textwidth]{images/monitoring_business.png}
 
 \subsubsection{Application monitoring}\label{application-monitoring}
 
-On a application level we monitor different database queries that
+On a application level we monitor the durations of different database queries that
 MiniTwit makes:
 \begin{itemize}
-    \item GetCheeps query durations
+    \item GetCheeps
     \item GetCheepsFromAuthor
     \item AddCheep
 \end{itemize}
@@ -79,12 +82,12 @@ MiniTwit makes:
 \subsubsection{Infrastructure
 monitoring}\label{infrastructure-monitoring}
 
-On a infrastructure level we monitor:
+On an infrastructure level we monitor:
 \begin{itemize}
     \item The status of nodes
     \item Memory usage of nodes
     \item CPU usage of nodes
-    \item HTTP per minutte for each node
+    \item HTTP requests per minute for each node
 \end{itemize}
 
 \includegraphics[width=\textwidth]{./images/system_status.png}
