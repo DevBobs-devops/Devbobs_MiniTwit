@@ -1,19 +1,25 @@
+\newcount\pumlcounter
+\pumlcounter=0
+
 \def\pumlfile#1{%
   %TC:ignore
+  \global\advance\pumlcounter by 1
   \directlua{%
     local filename = "\luaescapestring{#1}"
-    local inpath  = "diagrams/" .. filename
-    local outpath = filename .. ".ltx"
+    local count = "\the\pumlcounter"
+    local outpath = filename .. "." .. count .. ".ltx"
 
-    local fin = assert(io.open(inpath, "rb"))
+    local fin = assert(io.open("diagrams/" .. filename, "rb"))
     local content = fin:read("*all")
     fin:close()
 
     local fout = assert(io.open(outpath, "w"))
     fout:write("\string\\begin{plantuml}\string\n" .. content .. "\string\\end{plantuml}")
     fout:close()
+
+    texio.write_nl("pumlcounter: " .. count .. " -> " .. outpath)
   }%
-  \input{"\luaescapestring{#1}.ltx"}%
+  \input{"\luaescapestring{#1}.\the\pumlcounter.ltx"}%
   %TC:endignore
 }
 
