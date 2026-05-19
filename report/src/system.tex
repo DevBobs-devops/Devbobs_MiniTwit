@@ -1,27 +1,29 @@
 \section{System's Perspective}\label{systems-perspective}
 
 This section will give description and illustrations of the design and
-architecture of our Mini-twit system, dependencies and the current state
-of out system. \\
+architecture of our MiniTwit system, dependencies and the current state
+of our system. \\
 
-The application is based on Chirp - a c\# application made in the course Analysis, Design and Software Architecture at ITU. 
-We chose to base the project on Chirp as all of knew the codebase.
+The application is based on Chirp - a C\# application made in the course Analysis, Design and Software Architecture at ITU. 
+We chose to base the project on Chirp as we all knew the codebase.
 
 
 \subsection{Design and architecture of our ITU-MiniTwit
 systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
 
 The architecture of MiniTwit follows, as Chirp, the onion architecture. 
-The deployment architecture of the MiniTwit system can be seen in figure DEPLOYMENT\_DIAGRAM.
+The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
 The architecture strives to achieve both high-availability and the possibility for scaling when needed. 
 A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80, which redirects to 443.
 The request will reach the Leader node and will then get loadbalanced by Caddy between the four instances of MiniTwit running.
 MiniTwit is also available on port 8080 with http. The request will in this case be loadbalanced by the docker ingress routing mesh.
-The architecture have a single point of failure, as will be explained in \ref{availability}. \\
+The architecture have a single point of failure, which will be explained in section \ref{availability}. \\
 
-\pumlfile{deployment-diagram.puml}
-
-
+\begin{figure}
+    \pumlfile{deployment-diagram.puml}
+    \caption{Deployment diagram of MiniTwit}
+    \label{deployment-diagram}
+\end{figure}
 
 
 \subsection{Dependencies}\label{dependencies}
@@ -31,7 +33,6 @@ Nuget dependencies. Github action dependencies (Hadolint, Csharpier, ).
 Docker.
 
 \subsection{Current state of system}\label{current-state-of-system}
-\textit{Describe the current state of your systems, for example using results of static analysis and quality assessments.} \\
 
 To keep software quality high and later ease maintainability of the application we follow several practices and use a set of different tooling. 
 
@@ -48,7 +49,7 @@ This is done in our continous intergration (CI) pipeline: Build and Test, which 
 These can be seen in \ref{build-and-test}. \\
 
 Next we have SonarQube which is used to analyse code quality and security issues as seen in \ref{sonarqube}.
-The current state of the system, according to SonarQube, is acceptable. SonarQube gives Security: C, Reliability: A and Maintainability: A, as seen in Figure ~\ref{sonarqube-report}
+The current state of the system, according to SonarQube, is acceptable - SonarQube scores Security: C, Reliability: A and Maintainability: A, as seen in Figure~\ref{sonarqube-report}.
 The low score on security fails the SonarQube Quality Gate, which is an issue.
 \begin{figure}
     \includegraphics[width=\textwidth]{images/Quality-Gate.png}
