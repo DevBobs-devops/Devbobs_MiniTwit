@@ -6,20 +6,21 @@
   \global\advance\pumlcounter by 1
   \directlua{%
     local filename = "\luaescapestring{#1}"
-    local count = "\the\pumlcounter"
-    local outpath = filename .. "." .. count .. ".ltx"
+    local count    = "\the\pumlcounter"
 
     local fin = assert(io.open("diagrams/" .. filename, "rb"))
     local content = fin:read("*all")
     fin:close()
 
-    local fout = assert(io.open(outpath, "w"))
-    fout:write("\string\\begin{plantuml}\string\n" .. content .. "\string\\end{plantuml}")
-    fout:close()
+    -- Write the raw content into a lua string TeX can load with \luaexec
+    tex.print("\\begin{plantuml}")
+    for line in content:gmatch("[^\n]+") do
+      tex.print(line)
+    end
+    tex.print("\\end{plantuml}")
 
-    texio.write_nl("pumlcounter: " .. count .. " -> " .. outpath)
+    texio.write_nl("pumlcounter: " .. count .. " -> " .. filename)
   }%
-  \input{"\luaescapestring{#1}.\the\pumlcounter.ltx"}%
   %TC:endignore
 }
 
