@@ -127,20 +127,22 @@ Swarm is used.
 
 \subsubsection{Availability}\label{availability}
 The application consists of five nodes that are a part of a swarm
-cluster, 2 workers, 2 managers and 1 leader, that together run four replicated minitwit services, 
-with the leader running one more, being Caddy. See
+cluster, 2 workers, 2 managers and 1 leader, that together run four replicated minitwit services.
+All nodes run Alloy.
+The "Leader" node also runs Caddy, Grafana, Prometheus and Loki. See
 \code{terraform/minitwit\_swarm\_cluster.tf} and
 \code{docker\_swarm/stack/minitwit\_stack.yml} under
-\code{/infrastructure} for the code. This ensures that even if a docker service or swarm node
+\code{/infrastructure} for the code. Having multiple services running MiniTwit ensures that even if a docker service or swarm node
 fails, the application is still available.
 
-\textbf{Single Point of Failure}: We currently only have one Caddy loadbalancer service,
-living on the leader node, that takes https requests on our
+\textbf{Single Point of Failure}: Multiple services like Caddy and Grafana are pinned to the "Leader" node. This creates SPOF for those services. 
+As we only have one Caddy loadbalancer service,
+living on the "Leader" node, that takes https requests on our
 \code{devbobs.tech} domain. This is a single point of failure for
 accessing the application from \code{devbobs.tech} and using https. If
-the leader goes down, it is still possible to access the other nodes
+the "Leader" node goes down, it is still possible to access the other nodes
 IP's on port :8080 without https. The docker ingress routing mesh
-will take care of loadbalancing, instead of Caddy.
+will in that case take care of loadbalancing, instead of Caddy.
 
 \subsubsection{Scaling}\label{scaling}
 
