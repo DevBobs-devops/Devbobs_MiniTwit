@@ -31,14 +31,6 @@ terraform validate
 echo -e "\n--> Creating Infrastructure\n"
 terraform apply -auto-approve
 
-# generate loadbalancer configuration
-echo -e "\n--> Generating loadbalancer configuration\n"
-bash scripts/gen_load_balancer_config.sh
-
-# scp loadbalancer config to all nodes
-echo -e "\n--> Copying loadbalancer configuration to nodes\n"
-bash scripts/scp_load_balancer_config.sh
-
 # create env file for leader to use. Got help from ClaudeAI
 LEADER=$(terraform output -raw minitwit-swarm-leader-ip-address)
 CONNECTION_STRING=$(terraform output -raw ConnectionStrings__DefaultConnection)
