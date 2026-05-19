@@ -1,4 +1,5 @@
 \def\pumlfile#1{%
+  %TC:ignore
   \directlua{%
     local filename = "\luaescapestring{#1}"
     local f = assert(io.open("diagrams/" .. filename, "rb"))
@@ -8,7 +9,9 @@
     f2:write("\string\\begin{plantuml}\string\n" .. content .. "\string\\end{plantuml}")
     f2:close()
   }%
-  \input{"../out/#1.ltx"}}
+  \input{"../out/#1.ltx"}%
+  %TC:endignore 
+  }
 
 \newcommand{\code}[1]{%
 \texttt{#1}%
