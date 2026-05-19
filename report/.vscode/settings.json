@@ -14,9 +14,15 @@
         "-synctex=1",
         "-interaction=nonstopmode",
         "-file-line-error",
-        "-output-directory=%OUTDIR%",
-        "-aux-directory=%AUXDIR%",
         "%DOC%",
+      ],
+      "env": {},
+    },
+    {
+      "name": "texify-uml",
+      "command": "python",
+      "args": [
+        "texify-uml.py",
       ],
       "env": {},
     },
@@ -30,11 +36,9 @@
   "latex-workshop.latex.recipes": [
     {
       "name": "lualatex ",
-      "tools": ["lualatex"],
+      "tools": ["texify-uml","lualatex"],
     },
   ],
   "workbench.colorTheme": "Dark Modern",
-  "latex-workshop.latex.outDir": "%DIR%/../out/",
-  "latex-workshop.latex.auxDir": "%OUTDIR%/aux/",
   "latex-workshop.formatting.latex": "none",
 }
