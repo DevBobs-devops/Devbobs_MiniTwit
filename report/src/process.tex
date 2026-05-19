@@ -3,12 +3,15 @@
 \subsection{CI/CD Pipelines}\label{cicd-pipelines}
 \textit{marho@itu.dk} \\
 
-The CI/CD pipeline consists of three stages. The pipeline can be seen in
+The CI/CD pipeline consists of three GitHub Action workflows, which can be seen in
 \code{/.github/workflows/}. All workflows are run on
-\code{ubuntu-24.04}. A complete illustration can be seen here.
+\code{ubuntu-24.04}. The CI/CD pipeline runs on a push to main e.g. with a pull-request to main. 
+The following section will give a description of each workflow and how a feature goes to production. This is also illustrated in (FIGURE)
 %TODO: Which standard does this diagram follow?
 %TODO split up diagram
 %TODO fix: maybe building the artefact is actually considered CI?
+
+
 
 \pumlfile{cicd-diagram.puml}
 
@@ -19,7 +22,7 @@ The build and test workflow is run on \code{push} to main and on
 parrallel: 
 \begin{enumerate}
     \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. This helps ensure that the layout is alike thoughout the codebase. It does not automaticly apply layout changes, as we wanted control.
-    \item \textbf{Dockerfile linter with Hadolint}: Lints the Minitwit dockerfile. % WE SHOULD LINT MORE THAN ONLY THIS?
+    \item \textbf{Dockerfile linter with Hadolint}: Lints the Minitwit dockerfile.
     \item \textbf{Build the application}: Builds the applications and runs tests:
     \begin{itemize}
         \item Run unit and intergreation tests
@@ -57,7 +60,9 @@ error handling.
 \subsection{Monitoring}\label{monitoring}
 \textit{marho@itu.dk} \\
 
-The system monitoring uses Prometheus to scrape data and Grafana to visualises and displays the information.
+The system uses Prometheus for monitoring. 
+Prometheus scrapes the \code{/metrics} endpoint on each MiniTwit service instance.
+Grafana then queries Prometheus, which display and visualise the data. 
 Monitoring is done on a business level, application level, and infrastructure level.
 
 \subsubsection{Business monitoring}\label{business-monitoring}
@@ -99,19 +104,16 @@ On an infrastructure level we monitor:
 \subsection{Logging}\label{processlogging}
 \textit{Marius} \\
 
-\emph{(HUSK AT ÆNDRE URL TIL LOGGING) pushed, loki, alloy, logs for
-services, logs for nodes?
-vi kan overveje node exporter}
 The application uses a Grafana-loki-alloy stack to log all services.
 
 \subsubsection{What we log}\label{what-we-log}
-We curretnly log the logs from each docker service in
-\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml}. \emph{In reflection more should be logged?}
-(BURDE VI HAVE MERE???)
+We currently log the logs from each docker service, as described in our 
+\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} file. As will be discussed in \ref{importance-of-good-logging}, 
+more comprehensive logging would have been beneficial.
+
 
 \subsubsection{Aggregation of logs}\label{aggregation-of-logs}
-We use Alloy to push logs from each node to Loki, which collects them
-(UML IMAGE? ift. flowet). The logs are displayed on grafana, which can
+We use Alloy to push logs from each node to Loki, which collects them. The logs are displayed on grafana, which can
 be seen in the logging dashboard:
 
 \begin{figure}
@@ -121,6 +123,7 @@ be seen in the logging dashboard:
 \end{figure}
 
 \subsection{Security hardening}\label{security-hardening}
+\textit{Jonas} 
 
 \subsection{Availability and scaling}\label{availability-and-scaling}
 \textit{Marius \& Morten} \\
