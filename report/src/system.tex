@@ -12,12 +12,14 @@ We chose to base the project on Chirp as all of knew the codebase.
 systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
 
 The architecture of MiniTwit follows, as Chirp, the onion architecture. 
-The deployment architecture of the MiniTwit system can be seen in figure UML\_DIAGRAM.
+The deployment architecture of the MiniTwit system can be seen in figure DEPLOYMENT\_DIAGRAM.
 The architecture strives to achieve both high-availability and the possibility for scaling when needed. 
 A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80, which redirects to 443.
-The request will reach the Leader node and will then get loadbalanced between the four instances of MiniTwit running.
+The request will reach the Leader node and will then get loadbalanced by Caddy between the four instances of MiniTwit running.
 MiniTwit is also available on port 8080 with http. The request will in this case be loadbalanced by the docker ingress routing mesh.
-The architecture have a single point of failure, as will be explained in \ref{availability}.
+The architecture have a single point of failure, as will be explained in \ref{availability}. \\
+
+\pumlfile{deployment-diagram.puml}
 
 
 
@@ -29,3 +31,27 @@ Nuget dependencies. Github action dependencies (Hadolint, Csharpier, ).
 Docker.
 
 \subsection{Current state of system}\label{current-state-of-system}
+\textit{Describe the current state of your systems, for example using results of static analysis and quality assessments.} \\
+
+To keep software quality high and later ease maintainability of the application we follow several practices and use a set of different tooling. 
+
+\subsubsection{Practices}
+The first practice is code reviews. No code gets pushed to main before it has been approved by atleast one other group member. This is done though GitHub's pull-requests.
+Combined with the use of GitHub issues, this gives a clear picture of why, what and how a feature have been implemented.
+The use of conventional commits like: \texttt{feat:}, \texttt{chore:}, \texttt{note:}, have been used to give a clearer view of what each commit in the git history do. 
+
+\subsubsection{Tooling}
+Tooling have been used to assist keeping quality high.
+This is especially usefull as the project grew bigger. 
+First, we use automatic testing, which have caught many problems. 
+This is done in our continous intergration (CI) pipeline: Build and Test, which runs tests, a formater and a linter.
+These can be seen in \ref{build-and-test}. \\
+
+Next we have SonarQube which is used to analyse code quality and security issues as seen in \ref{sonarqube}.
+The current state of the system, according to SonarQube, is acceptable. SonarQube gives Security: C, Reliability: A and Maintainability: A, as seen in Figure ~\ref{sonarqube-report}
+The low score on security fails the SonarQube Quality Gate, which is an issue.
+\begin{figure}
+    \includegraphics[width=\textwidth]{images/Quality-Gate.png}
+    \caption{SonarQube Quality Gate Report}
+    \label{sonarqube-report}
+\end{figure}

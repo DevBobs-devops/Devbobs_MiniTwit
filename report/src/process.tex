@@ -12,8 +12,8 @@ The build and test workflow is run on \code{push} to main and on
 \code{pull-requests} and consists of the following steps that run in
 parrallel: 
 \begin{enumerate}
-    \item \textbf{Code linter with Csharpier}: Checks the format of the code and reports. Does not automaticly apply the format. 
-    \item \textbf{Dockerfile linter with Hadolint}: Checks the format of the Minitwit dockerfile. % WE SHOULD LINT MORE THAN ONLY THIS?
+    \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. This helps ensure that the layout is alike thoughout the codebase. It does not automaticly apply layout changes, as we wanted control.
+    \item \textbf{Dockerfile linter with Hadolint}: Lints the Minitwit dockerfile. % WE SHOULD LINT MORE THAN ONLY THIS?
     \item \textbf{Build the application}: Builds the applications and runs test:
     \begin{itemize}
         \item Run unit and intergreation tests
