@@ -128,7 +128,8 @@ Swarm is used.
 
 \subsubsection{Availability}\label{availability}
 The application consists of five nodes that are a part of a swarm
-cluster, 2 workers, 2 managers and 1 leader, that together run four replicated minitwit services. See
+cluster, 2 workers, 2 managers and 1 leader, that together run four replicated minitwit services, 
+with the leader running one more, being Caddy. See
 \code{terraform/minitwit\_swarm\_cluster.tf} and
 \code{docker\_swarm/stack/minitwit\_stack.yml} under
 \code{/infrastructure} for the code. This ensures that even if a docker service or swarm node
