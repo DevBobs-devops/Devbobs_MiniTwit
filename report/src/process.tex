@@ -95,7 +95,7 @@ On an infrastructure level we monitor:
 \includegraphics[width=\textwidth]{./images/system_status.png}
 
 \subsection{Logging}\label{processlogging}
-\textit{marho@itu.dk} \\
+\textit{Marius} \\
 
 \emph{(HUSK AT ÆNDRE URL TIL LOGGING) pushed, loki, alloy, logs for
 services, logs for nodes?
@@ -103,14 +103,11 @@ vi kan overveje node exporter}
 The application uses a Grafana-loki-alloy stack to log all services.
 
 \subsubsection{What we log}\label{what-we-log}
-
-Logs from each docker service in
-\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} are
-logged. \emph{In reflection more should be logged?}
+We curretnly log the logs from each docker service in
+\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml}. \emph{In reflection more should be logged?}
 (BURDE VI HAVE MERE???)
 
 \subsubsection{Aggregation of logs}\label{aggregation-of-logs}
-
 We use Alloy to push logs from each node to Loki, which collects them
 (UML IMAGE? ift. flowet). The logs are displayed on grafana, which can
 be seen in the logging dashboard:
@@ -124,27 +121,26 @@ be seen in the logging dashboard:
 \subsection{Security hardening}\label{security-hardening}
 
 \subsection{Availability and scaling}\label{availability-and-scaling}
-\textit{marho@itu.dk} \\
+\textit{Marius & Morten} \\
 
 To scale and ensure availability of the application Terraform and Docker
 Swarm is used.
 
 \subsubsection{Availability}\label{availability}
-
 The application consists of five nodes that are a part of a swarm
-cluster, 2 workers, 2 managers and 1 leader, that together run four replicated minitwit services, see
+cluster, 2 workers, 2 managers and 1 leader, that together run four replicated minitwit services. See
 \code{terraform/minitwit\_swarm\_cluster.tf} and
 \code{docker\_swarm/stack/minitwit\_stack.yml} under
-\code{/infrastructure}. This ensures that even if a service or node
-fails, the application is still available
+\code{/infrastructure} for the code. This ensures that even if a docker service or swarm node
+fails, the application is still available.
 
-\textbf{SPOF}: We currently only have one Caddy loadbalancer service,
+\textbf{Single Point of Failure}: We currently only have one Caddy loadbalancer service,
 living on the leader node, that takes https requests on our
 \code{devbobs.tech} domain. This is a single point of failure for
-accessing the application from \code{devbobs.tech} and with https. If
+accessing the application from \code{devbobs.tech} and using https. If
 the leader goes down, it is still possible to access the other nodes
-IP's on port :8080 without https, where the docker ingress routing mesh
-will take care of loadbalancing.
+IP's on port :8080 without https. The docker ingress routing mesh
+will take care of loadbalancing, instead of Caddy.
 
 \subsubsection{Scaling}\label{scaling}
 
@@ -155,4 +151,5 @@ node in DigitalOcean or changing the \code{size} field in
 \textbf{Horizontal scaling}: The deployment of the application can be
 scaled horizontal by increasing the amount of nodes in the cluster. This
 can be done by increasing the \code{count} number of e.g.~a Worker
-node and then make it join the swarm, by running the \code{bootstrap.sh} script again.
+node and then make it join the swarm, by running the \code{bootstrap.sh} script 
+again, which apply the change with terraform.
