@@ -87,7 +87,7 @@ On an infrastructure level we monitor:
     \item The status of nodes
     \item Memory usage of nodes
     \item CPU usage of nodes
-    \item HTTP requests per minute for each node
+    \item HTTP requests per minutte for each node
 \end{itemize}
 
 \includegraphics[width=\textwidth]{./images/system_status.png}
@@ -110,7 +110,7 @@ logged. \emph{In reflection more should be logged?}
 
 We use Alloy to push logs from each node to Loki, which collects them
 (UML IMAGE? ift. flowet). The logs are displayed on grafana, which can
-be seen:
+be seen in the logging dashboard:
 
 \begin{figure}
 \centering
@@ -128,7 +128,7 @@ Swarm is used.
 \subsubsection{Availability}\label{availability}
 
 The application consists of five nodes that are a part of a swarm
-cluster, that together run four replicated minitwit services, see
+cluster, 2 workers, 2 managers and 1 leader, that together run four replicated minitwit services, see
 \code{terraform/minitwit\_swarm\_cluster.tf} and
 \code{docker\_swarm/stack/minitwit\_stack.yml} under
 \code{/infrastructure}. This ensures that even if a service or node
@@ -139,7 +139,7 @@ living on the leader node, that takes https requests on our
 \code{devbobs.tech} domain. This is a single point of failure for
 accessing the application from \code{devbobs.tech} and with https. If
 the leader goes down, it is still possible to access the other nodes
-ip's on port :8080 without https, where the docker ingress routing mesh
+IP's on port :8080 without https, where the docker ingress routing mesh
 will take care of loadbalancing.
 
 \subsubsection{Scaling}\label{scaling}
