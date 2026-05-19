@@ -255,3 +255,9 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 - link to Docker-Caddy github repository: https://github.com/lucaslorentz/caddy-docker-proxy
 
+# Report
+
+5/5 - 14:02: Compiling LaTeX locally
+
+To compile LaTeX locally, with UML diagrams, be sure to live up to the preconditions described here:
+https://koppor.github.io/plantuml/
