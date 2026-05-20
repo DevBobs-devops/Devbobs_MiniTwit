@@ -23,7 +23,8 @@ jobs:
       - name: Setup LaTeX
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: report/src/main.tex
+          root_file: main.tex
+          working_directory: report/src
           latexmk_use_lualatex: true
           extra_system_packages: inkscape
         env:
