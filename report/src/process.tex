@@ -67,6 +67,7 @@ The system uses Prometheus for monitoring.
 Prometheus scrapes the \code{/metrics} endpoint on each MiniTwit service instance.
 Grafana then queries Prometheus, which display and visualise the data. 
 Monitoring is done on a business level, application level, and infrastructure level.
+The monitoring setup can be seen in figure \ref{mon-diagram}
 
 \subsubsection{Business monitoring}\label{business-monitoring}
 
@@ -107,7 +108,7 @@ On an infrastructure level we monitor:
 \subsection{Logging}\label{processlogging}
 \textit{Marius} \\
 
-The application uses a Grafana-loki-alloy stack to log all services.
+The application uses a Grafana-loki-alloy stack to log all services. The logging setup can be seen in figure \ref{mon-diagram}
 
 \subsubsection{What we log}\label{what-we-log}
 We currently log the logs from each docker service, as described in our 
@@ -118,6 +119,12 @@ more comprehensive logging would have been beneficial.
 \subsubsection{Aggregation of logs}\label{aggregation-of-logs}
 We use Alloy to push logs from each node to Loki, which collects them. The logs are displayed on grafana, which can
 be seen in the logging dashboard:
+
+\begin{figure} [H]
+    \pumlfile{monitoring.puml}
+    \caption{Diagram of monitoring and logging setup}
+    \label{mon-diagram}
+\end{figure}
 
 \begin{figure}
 \centering
