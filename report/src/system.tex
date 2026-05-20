@@ -14,11 +14,12 @@ systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
 The architecture of MiniTwit follows, as Chirp, the onion architecture. 
 The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
 The architecture strives to achieve high-availability by having a swarm of five nodes.
-A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80, which redirects to 443.
-The request will reach the Leader node and will then get loadbalanced by Caddy between the four instances of MiniTwit running.
-MiniTwit is also available on port 8080 with http. The request will in this case be loadbalanced by the docker ingress routing mesh.
-The architecture have a single point of failure, which will be explained in section \ref{availability}.
-The rest of the services, like Grafana, can be reached on their corresponding port using the floating ip or any of the nodes IP. \\
+A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80.
+The request will reach the "Leader" node and will then get loadbalanced by Caddy between the four instances of MiniTwit running.
+The "Leader" node also handles the logging and monitoring stack, which consists of Grafana, Loki and Prometheus.
+MiniTwit is also available on port 8080 with http. The request will in this case be loadbalanced by the docker ingress routing mesh. 
+The same goes for Grafana, which is available on port 3000 and Prometheus on 9090. These can be reached with the floating ip or any of the nodes IP
+The architecture have a single point of failure, which will be explained in section \ref{availability}. \\
 
 \begin{figure} [H]
     \pumlfile{deployment-diagram.puml}
