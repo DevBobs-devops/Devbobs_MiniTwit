@@ -5,55 +5,47 @@ actor User
 
 frame "Deployment MiniTwit" {
     
-
-    node "<<node>> Swarm 'Leader'" {
-        port ":443" as 443
-        port ":80" as 80
+    frame "Docker swarm custer" as cluster {
         port ":8080" as 8080m1
         port ":9090" as 9090
         port ":3000" as 3000
 
-        component MiniTwit as minitwit_leader{
-            portin ":8080" as min_1
-        }
-        component Caddy {
-            portout "8080" as cad_out
-        }
-        component Grafana
-        component Loki
-        component Alloy as alloy_leader
-        component Promethues
+        node "<<node>> Swarm 'Leader'" {
+            port ":443" as 443
+            port ":80" as 80
+
+            component MiniTwit as minitwit_leader{
+                portin ":8080" as min_1
+            }
+            
+            component Grafana
+            component Loki
+            component Alloy as alloy_leader
+            component Promethues
+            component Caddy {
+                portout "8080" as cad_out
+            }
     }
 
     circle "." as circle
 
     together {
-        node "<<node>> Swarm Manager" as manager1 {
+        node "<<node x2>> Swarm Manager"  as manager1 {
             portin ":8080" as 8080m2
             component "MiniTwit" as minitwit_manager1
             component Alloy as alloy_manager1
     
         }
-
-        node "<<node>> Swarm Manager" as manager2 {
-            portin ":8080" as 8080m3
-            component MiniTwit as minitwit_manager2
-            component Alloy as alloy_manager2
-        }
-
-        node "<<node>> Swarm Worker" as worker1 {
+        node "<<node x2>>  Swarm Worker" as worker1 {
             portin ":8080" as 8080m4
             component MiniTwit as minitwit_worker1
 
             component Alloy as alloy_worker1
         }
-
-        node "<<node>> Swarm Worker" as worker2 {
-            portin ":8080" as 8080m5
-            component MiniTwit as minitwit_worker2
-            component Alloy as alloy_worker2
-        }
     }
+    }
+
+    
     
 
     database Postgres {
@@ -74,16 +66,10 @@ User --> 9090
 
 cad_out --> circle
 
-
 circle --> 8080m2
-circle --> 8080m3
 circle --> 8080m4
-circle --> 8080m5
-
 minitwit_leader --> Postgres
 minitwit_manager1 --> Postgres
-minitwit_manager2 --> Postgres
 minitwit_worker1 --> Postgres
-minitwit_worker2 --> Postgres
 @enduml
 
