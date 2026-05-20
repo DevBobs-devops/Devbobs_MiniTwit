@@ -69,8 +69,8 @@ User --> 3100
 
 Caddy --> minitwit_0 : :8080 
 Caddy --> minitwit_1 : :8080 
-minitwit_0 --> 25060 : <<TCP/IP>>
-minitwit_1 --> 25060 : <<TCP/IP>>
+minitwit_0 --> 25060 
+minitwit_1 --> 25060 
 
 
 
