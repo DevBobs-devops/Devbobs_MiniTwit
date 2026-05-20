@@ -14,25 +14,25 @@ frame "MiniTwit"{
         port ":443"  as 443
 
         node "Swarm Leader" as leader {
+            label "RAM: 2GB\nDisk: 50GB \nOS: Ubuntu 22.4 " as label_0
 
-                component Grafana
-                component Loki
-                component Alloy as alloy_0
-                component Prometheus 
-                component Caddy
+            component Grafana
+            component Loki
+            component Alloy as alloy_0
+            component Prometheus                 
+            component Caddy
         }
 
-        
-        
-            node "Swarm Manager" as manager {
-
+    
+            node "Swarm Manager" as manager_1 {
+                label "RAM: 1GB\nDisk: 25GB \nOS: Ubuntu 22.4 " as label_1
                 component Alloy as alloy_1
                 component MiniTwit as minitwit_0
             
             }
 
             node "Swarm Worker" as worker {
-
+                label "RAM: 1GB\nDisk: 25GB \nOS: Ubuntu 22.4 " as label_2
                 component Alloy as alloy_2
                 component MiniTwit as minitwit_1
             
@@ -42,11 +42,11 @@ frame "MiniTwit"{
 }    
 
     database "MiniTwit Database" as db{
-        port ":25060" as 25060
-        
-        
+        label "RAM: 1GB \nDisk: 10GB \nVersion: PostgreSQL 15"
+        port ":25060" as 25060        
     }
 }
+
 
 
 User --> 80 
