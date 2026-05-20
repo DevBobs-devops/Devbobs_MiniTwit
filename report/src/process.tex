@@ -65,7 +65,7 @@ error handling.
 
 The system uses Prometheus for monitoring. 
 Prometheus scrapes the \code{/metrics} endpoint on each MiniTwit service instance.
-Grafana then queries Prometheus, which display and visualise the data. 
+Grafana then queries Prometheus, which displays and visualises the data. 
 Monitoring is done on a business level, application level, and infrastructure level.
 
 \subsubsection{Business monitoring}\label{business-monitoring}
@@ -81,7 +81,7 @@ On a business level we monitor:
 
 \subsubsection{Application monitoring}\label{application-monitoring}
 
-On a application level we monitor the durations of different database queries that
+On an application level we monitor the durations of different database queries that
 MiniTwit makes:
 \begin{itemize}
     \item GetCheeps - Gets cheeps for a given page
@@ -99,7 +99,7 @@ On an infrastructure level we monitor:
     \item The status of nodes
     \item Memory usage of nodes
     \item CPU usage of nodes
-    \item HTTP requests per minutte for each node
+    \item HTTP requests per minute for each node
 \end{itemize}
 
 \includegraphics[width=\textwidth]{./images/system_status.png}
