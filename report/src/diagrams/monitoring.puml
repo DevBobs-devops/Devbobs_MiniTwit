@@ -1,16 +1,20 @@
 @startuml 
+skinparam linetype polyline
 
  frame "Docker swarm custer" as cluster {
     node " <<node>> Swarm Leader" as leader{
         
-        component "Prometheues" as prom{
-            port "prometheus:9090" as promp
+        node "<<container>> Prometheues" as prom {
+            component "<<service>> \n  marho/minitwit-prometheus"{
         }
-        component Grafana as graf {
+        }
+        
+        node "<<container>> \n grafana" as graf {
+            component "              <<service>> \n  marho/minitwit-grafana"
         }
 
-        component Loki {
-
+        node "<<container>> \n loki" as loki {
+            component "         <<service>> \n marho/minitwit-loki"
         }
         
 
@@ -19,14 +23,22 @@
 
     node "<<node x4>> Swarm worker" as workers {
         
-        component "MiniTwit" as mini{
-            port "localhost:8080/metrics" as metrics
+         node "<<container>> \n Alloy" as alloy {
+            component "           <<service>> \n marho/minitwit-alloy"
+
         }
+        node "<<container>> \n MiniTwit" as mini{
+            component "           <<service>> \n marho/minitwitimage"
+        }
+       
     }
     note left of workers : Managers are seen \n as workers \n and have all four \n minitwit services \n for simplicity
 
-    prom --> metrics : Scrape every 20s
-    graf --> promp : Query promethues \n on request
+    prom --> mini : <<https GET>> \n Scrape /metrics every 20s
+    alloy --> loki : <<http POST>> \nhttp://minitwit_loki:3100/\nloki/api/v1/push
+    graf --> prom : <<query>> \n http://prometheus:9090
+    graf --> loki : <<query>> \n  http://loki:3100
+
  }
 @enduml
 
