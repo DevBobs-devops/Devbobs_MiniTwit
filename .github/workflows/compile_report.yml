@@ -9,9 +9,10 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y graphviz default-jre texlive-luatex texlive-latex-extra inkscape perl
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: graphviz default-jre texlive-luatex texlive-latex-extra inkscape perl
+          version: 1.0
 
       - name: Download PlantUML JAR
         run: |
