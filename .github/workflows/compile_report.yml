@@ -26,6 +26,8 @@ jobs:
           root_file: report/src/main.tex
           latexmk_use_lualatex: true
           extra_system_packages: inkscape
+        env:
+          TEXINPUTS: ".:report/src/:"
 
       - name: Print Folder Tree
         uses: jaywcjlove/github-action-folder-tree@main
