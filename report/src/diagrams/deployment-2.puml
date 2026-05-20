@@ -13,13 +13,13 @@ frame "MiniTwit"{
         port ":80"   as 80
         port ":443"  as 443
 
-        node "Swarm Leader" as leader{
+        node "Swarm Leader" as leader {
 
-            component Grafana
-            component Loki
-            component Alloy as alloy_0
-            component Prometheus 
-            component Caddy
+                component Grafana
+                component Loki
+                component Alloy as alloy_0
+                component Prometheus 
+                component Caddy
         }
 
         
@@ -42,11 +42,18 @@ frame "MiniTwit"{
 }    
 
     database "MiniTwit Database" as db{
+        port ":25060" as 25060
+        
         
     }
 }
 
 
+User --> 80 
+User --> 443 
+User --> 9090
+User --> 3000
+User --> 3100 
 3000 --> Grafana 
 3100 --> Loki
 9090 --> Prometheus
@@ -54,8 +61,10 @@ frame "MiniTwit"{
 443 --> Caddy 
 
 
-Caddy --> minitwit_0 : :8080
-Caddy --> minitwit_1 : :8080
+Caddy --> minitwit_0 : :8080 
+Caddy --> minitwit_1 : :8080 
+minitwit_0 --> 25060 : <<TCP/IP>>
+minitwit_1 --> 25060 : <<TCP/IP>>
 
 
 @enduml

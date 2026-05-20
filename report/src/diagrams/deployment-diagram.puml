@@ -65,5 +65,6 @@ circle --> 8080m4
 minitwit_manager1 --> Postgres
 minitwit_worker1 --> Postgres
 
+
 @enduml
 
