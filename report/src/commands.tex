@@ -9,7 +9,9 @@
     f2:write("\string\\begin{plantuml}\string\n" .. content .. "\string\\end{plantuml}")
     f2:close()
   }%
+  \begin{adjustwidth}{-2.5cm}{-2.5cm}%
   \input{"../out/#1.ltx"}%
+  \end{adjustwidth}%
   %TC:endignore 
   }
 
