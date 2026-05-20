@@ -1,0 +1,27 @@
+@startuml 
+
+ frame "Docker swarm custer" as cluster {
+    node " <<node>> Swarm Leader"{
+        
+        component "Prometheues" as prom{
+            port "prometheus:9090" as promp
+        }
+        component Grafana as graf {
+        }
+
+
+    }
+
+    node "<<node x4>> Swarm worker" as workers {
+        
+        component "MiniTwit" as mini{
+            port "localhost:8080/metrics" as metrics
+        }
+    }
+    note left of workers : Managers are seen \n as workers \n and have all four \n minitwit services \n for simplicity
+
+    prom --> metrics : Scrape every 20s
+    graf --> promp : Query promethues \n on request
+ }
+@enduml
+
