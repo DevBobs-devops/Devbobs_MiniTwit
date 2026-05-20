@@ -136,7 +136,11 @@ be seen in the logging dashboard (figure~\ref{logging-dashboard}).
 \subsection{Security hardening}\label{security-hardening}
 To protect against supply line attacks, we would select docker hardened images from \url{dhi.io} to use for our dependencies; Prometheus, Alloy, Loki, Grafana.
 We would also go through our Minitwit application and adjust it to comply with the rules at \url{https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html}.
-However, we did not manage to fully implement this, so it is not used in produciton.
+However, we did not manage to fully implement this, so it is not used in produciton. \\
+
+The system uses a reverse proxy, which takes HTTPS request and decrypts them.
+This is done with Caddy, as was seen in figure \ref{deployment-diagram}.
+In reflection more of the system, and the information it exposes, should have been hidden behind the reverse proxy and had firewalls, as many ports can still be reached with HTTP.
 
 \subsection{Availability and scaling}\label{availability-and-scaling}
 To scale and ensure availability of the application Terraform and Docker
