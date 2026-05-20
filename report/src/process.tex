@@ -112,17 +112,25 @@ On an infrastructure level we monitor:
 \subsection{Logging}\label{processlogging}
 \textit{Marius} \\
 
-The application uses a Grafana-loki-alloy stack to log all services. The logging setup can be seen in figure \ref{mon-diagram}
+The application uses a Grafana-loki-alloy stack to log all services. The logging setup can be seen in figure \ref{mon-diagram}.
 
 \subsubsection{What we log}\label{what-we-log}
 We currently log the logs from each docker service, as described in our 
-\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} file. As will be discussed in \ref{importance-of-good-logging}, 
+\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} file. As will be discussed in \ref{reflection-logging}, 
 more comprehensive logging would have been beneficial.
 
 
 \subsubsection{Aggregation of logs}\label{aggregation-of-logs}
 We use Alloy to push logs from each node to Loki, which collects them. The logs are displayed on grafana, which can
-be seen in the logging dashboard:
+be seen in the logging dashboard (figure~\ref{logging-dashboard}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{./images/logging_dashboard.png}
+\caption{logging\_dashboard}
+\label{logging-dashboard}
+\end{figure}
+
 
 \begin{figure} [H]
     \pumlfile{monitoring.puml}
@@ -130,11 +138,7 @@ be seen in the logging dashboard:
     \label{mon-diagram}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{./images/logging_dashboard.png}
-\caption{logging\_dashboard}
-\end{figure}
+
 
 \subsection{Security hardening}\label{security-hardening}
 \textit{Jonas} 
