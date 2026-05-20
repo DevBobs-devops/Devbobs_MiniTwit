@@ -177,3 +177,5 @@ scaled horizontal by increasing the amount of nodes in the cluster. This
 can be done by increasing the \code{count} number of e.g.~a Worker
 node and then make it join the swarm, by running the \code{bootstrap.sh} script 
 again, which apply the change with terraform.
+Horizontal scaling can also be achieved by increasing the amount of minitwit instances per node, increasing redundancy.
+When scaling horisontally the load balancer distributes the requests.
