@@ -8,20 +8,6 @@ start
 |Github Actions (Build and Test)|
 :Receives push event;
 :Triggers Build and Test workflow;
-fork
-    :CSharpier;
-fork again
-    :Hadolint;
-fork again
-    :Restores .NET dependencies;
-    :Builds .NET solution;
-    :Runs unit and integration tests;
-    :Starts app via Docker Compose;
-    ' Also waits for app to start, should this be included?
-    :Runs API tests;
-    :Runs end-to-end tests;
-    :Tears down test environment;
-end fork
 
 if (Build and Test succeeded?) then (Yes)
 else (No)
