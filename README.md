@@ -7,7 +7,9 @@ DevOps, Software Evolution and Software Maintenance, BSc (Spring 2026) - Group "
 
 # Link to MiniTwit
 A live hosted version of MiniTwit can be found at: 
-[devbobs.tech](http://devbobs.tech/)
+[devbobs.tech](http://devbobs.tech/) <br>
+
+Gifs of Deploying, running the CI/CD pipeline and showcase of monitoring and logging can be seen at the bottom of the README.
 
 # Running it locally
 To run it locally you need to have docker installed
@@ -125,3 +127,11 @@ To see the workflow, see the files in  `.github/workflows`.
 
 # The notebook
 To make work more visible, we have decided to create `notebook.md`. Here changes can be seen together with  **what went wrong**, **where** we found a **solution**.
+
+# Gifs showcasing the MiniTwit System
+
+
+[Deployment of minitwit](/report/src/images/IfaC-in-action.gif) <br>
+[CI/CD pipeline in action](/report/src/images/CICD-in-action.gif) <br>
+[Monitoring dashboard](/report/src/images/monitoring-in-action.gif) <br>
+[Logging dashboard](/report/src/images/logging-in-action.gif) <br>
