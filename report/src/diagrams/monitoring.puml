@@ -1,7 +1,7 @@
 @startuml 
 
  frame "Docker swarm custer" as cluster {
-    node " <<node>> Swarm Leader"{
+    node " <<node>> Swarm Leader" as leader{
         
         component "Prometheues" as prom{
             port "prometheus:9090" as promp
@@ -9,8 +9,13 @@
         component Grafana as graf {
         }
 
+        component Loki {
+
+        }
+        
 
     }
+    note right of leader: Alloy on Leader node \n is disregarded \n for simplicity
 
     node "<<node x4>> Swarm worker" as workers {
         
