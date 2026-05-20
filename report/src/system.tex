@@ -10,16 +10,16 @@ We chose to base the project on Chirp as we all had a general knowledge about th
 \subsection{Design and architecture of our ITU-MiniTwit
 systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
 
-The architecture of MiniTwit follows, as Chirp, the onion architecture. 
+The software architecture of MiniTwit follows, as Chirp, the onion architecture. 
 The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
 The architecture strives to achieve high-availability by having a swarm of five nodes.
 A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80.
 The request will reach the Leader node and will then get load-balanced by Caddy between the four instances of MiniTwit running.
 The Leader node also handles the logging and monitoring stack, which consists of Grafana, Loki and Prometheus. Alloy is on every node to push logs to Loki.
-MiniTwit is also available on port 8080 with http. The request will in this case be load-balanced by the docker ingress routing mesh. 
-The same goes for Grafana, which is available on port 3000 and Prometheus on 9090. These can be reached with the floating ip or any of the nodes IP
+MiniTwit is also available on port 8080 with HTTP. The request will in this case be load-balanced by the docker ingress routing mesh. 
+The same goes for Grafana, which is available on port 3000 and Prometheus on 9090. These can be reached with the floating IP or any of the nodes IP.
 A PostgreSQL database is hosted on DigitalOcean.
-The architecture have a single point of failure, which will be explained in section \ref{availability}. \\
+The architecture has a single point of failure, which will be explained in section \ref{availability}. \\
 
 \begin{figure} [H]
     \pumlfile{deployment.puml}
@@ -31,7 +31,8 @@ The architecture have a single point of failure, which will be explained in sect
 The dependencies our the MiniTwit system is listed below on different levels of abstractions. 
 
 \paragraph{NuGet Dependencies}
-The dependencies of the MiniTwit application are as follows.
+The dependencies of the MiniTwit application, listed using \code{dotnet list package}, are as follows.
+
 \begin{itemize}
     \item Microsoft.AspNetCore.DataProtection.EntityFrameworkCore      8.0.*       8.0.26  
     \item Microsoft.AspNetCore.Identity.EntityFrameworkCore            8.0.10      8.0.10  
@@ -83,14 +84,14 @@ The dependencies of our CI/CD pipeline are as follows.
     \item actions/checkout 3.*.*
     \item actions/checkout 4.*.*
     \item docker/build-push-action 6.*.*
-    \item docker/build-push-action d08e5c354a6adb9ed34480a06d141179aa583294
+    \item docker/build-push-action \\d08e5c354a6adb9ed34480a06d141179aa583294
     \item docker/login-action 3.*.*
     \item docker/setup-buildx-action 3.*.*
     \item actions/setup-dotnet 4.*.*
     \item actions/setup-python 5.*.*
     \item actions/upload-artifact 4.*.*
-    \item guibranco/github-csharpier-linter-action a5214a476742ce4a0f755611581276c50081527a
-    \item hadolint/hadolint-action 2332a7b74a6de0dda2e2221d575162eba76ba5e5
+    \item guibranco/github-csharpier-linter-action\\ a5214a476742ce4a0f755611581276c50081527a
+    \item hadolint/hadolint-action \\2332a7b74a6de0dda2e2221d575162eba76ba5e5
 \end{itemize}
 
 \paragraph{Infrastructure and deployment dependencies}
