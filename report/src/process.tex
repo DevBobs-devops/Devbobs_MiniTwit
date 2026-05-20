@@ -23,7 +23,7 @@ The following section will give a description of each workflow and how a feature
 The first part of our CI pipeline (Build and Test workflow) consists of the following steps that run in parrallel: 
 \begin{enumerate}
     \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. 
-    This helps ensure that the layout is alike thoughout the codebase. It does not automaticly apply layout changes, but reports it back on GitHub.
+    This helps ensure that the layout is alike throughout the codebase. It does not automatically apply layout changes, but reports it back on GitHub.
     \item \textbf{Dockerfile linter with Hadolint}: Lints the MiniTwit dockerfile.
     \item \textbf{Build the application}: Builds the applications and:
     \begin{itemize}
@@ -34,7 +34,7 @@ The first part of our CI pipeline (Build and Test workflow) consists of the foll
 \end{enumerate}
 
 \subsubsection{CI/CD}
-The CI/CD workflow runs on a succesfull Build and Test workflow and push to main. It consists of the following steps that run sequentially:
+The CI/CD workflow runs on a successful Build and Test workflow and push to main. It consists of the following steps that run sequentially:
 \begin{enumerate}
     \item \textbf{Dockerhub}:
     \begin{itemize}
@@ -50,7 +50,7 @@ The CI/CD workflow runs on a succesfull Build and Test workflow and push to main
 
 \subsubsection{Release}\label{release}
 
-The release workflow runs on a successfull CI/CD run. It builds and zips
+The release workflow runs on a successful CI/CD run. It builds and zips
 the application for Windows, Mac and Linux.
 
 \subsubsection{SonarQube}\label{sonarqube}
@@ -58,7 +58,7 @@ SonarQube runs on pull requests as a step in our CI pipeline. It checks for secu
 SonarQube also gives a Quality Gate, that fails if the threshold for the pull-request is too low 
 e.g. Security, Reliability and Maintainability.
 SonarQube is not blocking 
-meaning we could still merge, even if SonarQube fails, it more used as a reminder of better coding practices and 
+meaning we could still merge, even if SonarQube fails. It's more used as a reminder of better coding practices and 
 error handling.   
 
 \subsection{Monitoring}\label{monitoring}
@@ -114,7 +114,7 @@ more comprehensive logging would have been beneficial.
 
 
 \subsubsection{Aggregation of logs}\label{aggregation-of-logs}
-We use Alloy to push logs from each node to Loki, which collects them. The logs are displayed on grafana, which can
+We use Alloy to collect logs from each node and forward them to Loki. The logs are displayed on grafana, which can
 be seen in the logging dashboard (figure~\ref{logging-dashboard}).
 
 \begin{figure}[H]
