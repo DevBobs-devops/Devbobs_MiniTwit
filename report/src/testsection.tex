@@ -1,20 +1,6 @@
-% Preamble
-\documentclass[11pt]{article}
-\usepackage{plantuml}
-\usepackage[hidelinks]{hyperref}
-\usepackage{float}
-\usepackage{changepage}
+\section{testsection}
 
-\input{commands.tex}
 
-% Document
-\begin{document}
-
-\begin{figure} [H]
-    \pumlfile{plantuml-test-file.puml}
-    \caption{UML activity diagram of CI/CD pipeline. Swim lanes indicate responsible system or actor for each action.}
-    \label{test-diagram0}
-\end{figure}
 And now the funniest thing you've ever seen, from really far away
 \begin{figure} [H]
     \pumlfile{cicd.puml}
@@ -33,12 +19,9 @@ Say apple
     \caption{UML activity diagram of CI/CD pipeline. Swim lanes indicate responsible system or actor for each action.}
     \label{cicd-diagram}
 \end{figure}
-
-\include{title}
-\include{system}
-\include{process}
-\include{reflection}
-\include{ai}
-\include{testsection}
-
-\end{document}
+And now at the end
+\begin{figure} [H]
+    \pumlfile{plantuml-test-file.puml}
+    \caption{UML activity diagram of CI/CD pipeline. Swim lanes indicate responsible system or actor for each action.}
+    \label{test-diagram0}
+\end{figure}
