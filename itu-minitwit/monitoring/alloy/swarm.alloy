@@ -1,0 +1,51 @@
+
+// 1. Discover running Swarm tasks
+discovery.dockerswarm "swarm" {
+  host             = "unix:///var/run/docker.sock"
+  role             = "tasks"
+  refresh_interval = "15s"
+
+}
+
+// 2. Relabel: map Swarm metadata to useful Loki labels
+discovery.relabel "swarm_logs" {
+  targets = discovery.dockerswarm.swarm.targets
+
+  // Use the service name as a stable label (survives restarts/rescheduling)
+  rule {
+    source_labels = ["__meta_dockerswarm_service_name"]
+    target_label  = "service"
+  }
+
+  // Optionally expose the stack name (if you use docker stack deploy)
+  rule {
+    source_labels = ["__meta_dockerswarm_service_label_com_docker_stack_namespace"]
+    target_label  = "stack"
+  }
+
+  // Map the task's container ID to the docker log path
+  rule {
+    source_labels = ["__meta_dockerswarm_task_container_id"]
+    target_label  = "__path__"
+    replacement   = "/var/lib/docker/containers/$1/$1-json.log"
+  }
+
+  // Node the task is running on
+  rule {
+    source_labels = ["__meta_dockerswarm_node_hostname"]
+    target_label  = "node"
+  }
+}
+
+// 3. Read logs from the discovered file paths
+loki.source.file "swarm_tasks" {
+  targets    = discovery.relabel.swarm_logs.output
+  forward_to = [loki.write.local.receiver]
+}
+
+// 4. Write to Loki
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

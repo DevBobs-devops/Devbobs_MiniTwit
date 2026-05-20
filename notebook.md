@@ -209,3 +209,26 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 - Added metrics for some of our queries. Used Claude to help understand how to setup/understand some of the queries Grafana proposed.
 12/04: 11:45: Added an index on timestamp on cheeps. 
 - Up until now, we sorted cheeps on the homepage by timestamp. We did this without an index, so it would sort though it all. Added an index on the timestamp so our database can use that instead. ClaudeAI helped with debugging and understanding.
+
+# Lecutre 11
+14/04: 12:00: We decided to go with docker swarm and terraform as out guarantees of higher availanility, as we had a choice between this and the dual load balancers. We are a bit behind, from the previous weeks and we deem it easier to implement it in a pile, than doing a lot of small steps, some which would potentially be redundant with new features and tools.
+
+
+
+# Lecture 13
+7/5 - 15:25: finally figured out what caused our broken domain url
+- discovered that none of our dockerswarm nodes were listening at ports 80 (default http) and 443 (default https). It was only listening at port 8080. This is why the url devbobs.tech/ (which is directed to port 80 automatically) always terminated due to slow response time. If the same request was sent to port 8080 (devbobs.tech:8080/) the minitwit webpage loaded as expected. 
+- used the command `sudo ss -tlnp | grep :80` and `sudo ss -tlnp | grep :443`from one of our droplets terminals to verify that no process was listening at the expected ports. 
+- This was fixed by removing and then adding the ports manually in one of the manager nodes terminal. To remove ports `docker service update minitwit_loadbalancer --publish-rm 80` and `docker service update minitwit_loadbalancer --publish-rm 443`. Then followed by `docker service update minitwit_loadbalancer --publish-add 80:80` and `docker service update minitwit_loadbalancer --publish-add 443:443`
+- This did indeed fix the http:devbobs.tech, but there is still problems with the https:devbobs.tech. We suspect that this is due to tls certificates. 
+
+13/05 9:30: Trying to fix https. Tried traefik but could not get it to work. Then switched to Caddy, which for now works locally. We will still have a single point of failure as the floating ip will be pointing to the leader only, but now the leader should be able to ude caddy to take in request on port 80 and 433 and decrypt. It would be: internet -> floating ip -> leader 80 or 433 -> caddy -> minitwit containers (load balanced). We have to check up on this exactly!
+- link to Docker-Caddy github repository: https://github.com/lucaslorentz/caddy-docker-proxy
+
+
+17/5 - 12:15: No logs from minitwit service appears in grafana after deploying new alloy config
+- After updating the alloy service in our production environment, the logs from minitwit dissappeared. Turns out that the worker nodes, which contains the minitwit service, doens't have the needed permissions to use the discovery.dockerswarm module. This was confirmed by running the command `docker service logs minitwit_alloy 2>&1 | grep -i "error\|config\|failed"`, which output included the following error message numerous time: `minitwit_alloy.0.nl5a73h8kas3@minitwit-swarm-worker-1    | ts=2026-05-17T10:03:59 level=error msg="Unable to refresh target groups" component_path=/ component_id=discovery.dockerswarm.swarm err="error while listing swarm services: Error response from daemon: This node is not a swarm manager. Worker nodes can't be used to view or modify cluster state. Please run this command on a manager node or promote the current node to a manager."`
+
+- In less technincal terms, the discovery.dockerswarm module attempts to discover the tasks present on each node via querying the cluster state, but worker nodes are not permitted to view the cluster state. This means the alloy service, even if it's deployed as a global service, is prohibited from discovering the tasks on our worker nodes. 
+
+- To solve this issue, we had to switch back the the old discovery.docker module in our alloy config. 

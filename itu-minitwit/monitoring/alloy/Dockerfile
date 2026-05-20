@@ -1,3 +1,3 @@
 #figure out which version to use
 FROM grafana/alloy:latest 
-COPY ./config.alloy /etc/alloy/config.alloy
+COPY ./newconfig.alloy /etc/alloy/newconfig.alloy
