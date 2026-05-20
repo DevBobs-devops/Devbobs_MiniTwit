@@ -5,7 +5,8 @@
 
 The CI/CD pipeline consists of three GitHub Action workflows, which can be seen in
 \code{/.github/workflows/}. All workflows are run on
-\code{ubuntu-24.04}. The CI/CD pipeline runs on a push to main e.g. with a pull-request to main. 
+\code{ubuntu-24.04}. The first part of our CI pipeline (Build and test workflow) runs on pull-request to main. 
+The whole pipeline is run on push to main. 
 The following section will give a description of each workflow and how a feature goes to production. This is also illustrated in (FIGURE)
 %TODO: Which standard does this diagram follow?
 %TODO split up diagram
@@ -17,13 +18,12 @@ The following section will give a description of each workflow and how a feature
 
 \subsubsection{Build and test}\label{build-and-test}
 
-The build and test workflow is run on \code{push} to main and on
-\code{pull-requests} and consists of the following steps that run in
-parrallel: 
+The first part of our CI pipeline (Build and Test workflow) consists of the following steps that run in parrallel: 
 \begin{enumerate}
-    \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. This helps ensure that the layout is alike thoughout the codebase. It does not automaticly apply layout changes, as we wanted control.
-    \item \textbf{Dockerfile linter with Hadolint}: Lints the Minitwit dockerfile.
-    \item \textbf{Build the application}: Builds the applications and runs tests:
+    \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. 
+    This helps ensure that the layout is alike thoughout the codebase. It does not automaticly apply layout changes, but reports it back on GitHub.
+    \item \textbf{Dockerfile linter with Hadolint}: Lints the MiniTwit dockerfile.
+    \item \textbf{Build the application}: Builds the applications and:
     \begin{itemize}
         \item Run unit and intergreation tests
         \item Run tests on the API / simulator endpoint.
@@ -53,7 +53,10 @@ the application for Windows, Mac and Linux.
 
 \subsubsection{SonarQube}\label{sonarqube}
 \textit{Morten}
-SonarQube runs on pull requests, checking for errors in the source code. SonarQube is not blocking 
+SonarQube runs on pull requests as a step in our CI pipeline. It checks for security issues, code smells and the quality of the code.
+SonarQube also gives a Quality Gate, that fails if the threshold for the pull-request is too low 
+e.g. Security, Reliability and Maintainability.
+SonarQube is not blocking 
 meaning we could still merge, even if SonarQube fails, it more used as a reminder of better coding practices and 
 error handling.   
 
