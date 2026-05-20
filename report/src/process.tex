@@ -7,14 +7,18 @@ The CI/CD pipeline consists of three GitHub Action workflows, which can be seen 
 \code{/.github/workflows/}. All workflows are run on
 \code{ubuntu-24.04}. The first part of our CI pipeline (Build and test workflow) runs on pull-request to main. 
 The whole pipeline is run on push to main. 
-The following section will give a description of each workflow and how a feature goes to production. This is also illustrated in (FIGURE)
+The following section will give a description of each workflow and how a feature goes to production. This is also illustrated in figure~\ref{cicd-diagram}.
 %TODO: Which standard does this diagram follow?
 %TODO split up diagram
 %TODO fix: maybe building the artefact is actually considered CI?
 
 
+\begin{figure} [H]
+    \pumlfile{cicd.puml}
+    \caption{Diagram of CI/CD pipeline}
+    \label{cicd-diagram}
+\end{figure}
 
-\pumlfile{cicd.puml}
 
 \subsubsection{Build and test}\label{build-and-test}
 
