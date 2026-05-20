@@ -8,36 +8,24 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v6
 
-      - name: Install dependencies
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: graphviz default-jre texlive-luatex texlive-latex-extra inkscape perl
-          version: 1.0
-
-      - name: Regenerate TeX formats if restored from cache
-        run: |
-          sudo fmtutil-sys --all
 
       - name: Download PlantUML JAR
         run: |
           mkdir -p /opt/plantuml
           wget -O /opt/plantuml/plantuml.jar https://sourceforge.net/projects/plantuml/files/plantuml.jar/download
 
-      - name: Compile LaTeX document
-        run: |
-          cd report/src
-          lualatex -interaction=nonstopmode -shell-escape --jobname=BSc_group_k main.tex
-        env:
-          PLANTUML_JAR: /opt/plantuml/plantuml.jar
-          TEXINPUTS: ".:**:"
+      - name: Install dependencies (non-LaTeX)
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: graphviz default-jre inkscape perl
+          version: 1.0
 
-      - name: Recompile LaTeX document
-        run: |
-          cd report/src
-          lualatex -interaction=nonstopmode -shell-escape --jobname=BSc_group_k main.tex
-        env:
-          PLANTUML_JAR: /opt/plantuml/plantuml.jar
-          TEXINPUTS: ".:**:"
+      - name: Setup LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: report/src/main.tex
+          latexmk_use_lualatex: true
+          extra_system_packages: inkscape
 
       - name: Print Folder Tree
         uses: jaywcjlove/github-action-folder-tree@main
