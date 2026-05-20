@@ -23,8 +23,68 @@ And now the funniest thing you've ever seen, from really far away
 \end{figure}
 Say apple
 \begin{figure} [H]
-    \pumlfile{cicd.puml}
-    \caption{UML activity diagram of CI/CD pipeline. Swim lanes indicate responsible system or actor for each action.}
+    \begin{plantuml}
+      @startuml cicd_pipeline
+
+|Developer|
+start
+:Pushes to main branch;
+' Also triggers on pull requests on main, but it might too much to write in the diagram
+
+|Github Actions (Build and Test)|
+:Receives push event;
+:Triggers Build and Test workflow;
+fork
+    :CSharpier;
+fork again
+    :Hadolint;
+fork again
+    :Restores .NET dependencies;
+    :Builds .NET solution;
+    :Runs unit and integration tests;
+    :Starts app via Docker Compose;
+    ' Also waits for app to start, should this be included?
+    :Runs API tests;
+    :Runs end-to-end tests;
+    :Tears down test environment;
+end fork
+
+if (Build and Test succeeded?) then (Yes)
+else (No)
+    :Abort;
+    stop
+endif
+
+|Github Actions (CI/CD)|
+:Logs into Docker Hub;
+
+':Builds and pushes minitwit;
+'Should the 'm' in 'minitwit' be capitalized?
+':Builds and pushes Alloy;
+':Builds and pushes Loki;
+':Builds and pushes Prometheus;
+':Builds and pushes Grafana;
+'This can maybe be shortened if we want the diagram to be smaller.
+:Builds and pushes all images to Docker Hub;
+
+
+|Docker Hub|
+:Stores images;
+
+|Github Actions (CI/CD)|
+:Sets up SSH key;
+:Copies stack file to server;
+:Connects to swarm leader via SSH;
+
+
+|Swarm leader|
+:Pulls images from Docker Hub;
+:Runs docker stack deploy;
+
+
+@enduml
+    \end{plantuml}
+    \caption{Inline plantuml of cicd}
     \label{cicd-diagram}
 \end{figure}
 
