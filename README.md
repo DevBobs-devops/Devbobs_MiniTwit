@@ -6,7 +6,10 @@ DevOps, Software Evolution and Software Maintenance, BSc (Spring 2026) - Group "
 > refactor and migrate it to the languages and technologies of their liking. All subsequent DevOps, software evolution and software maintenance activities will be performed directly on the systems of the students.
 
 # Link to MiniTwit
-[link](http://devbobs.tech/)
+A live hosted version of MiniTwit can be found at: 
+[devbobs.tech](http://devbobs.tech/) <br>
+
+Gifs of Deploying, running the CI/CD pipeline and showcase of monitoring and logging can be seen at the bottom of the README.
 
 # Running it locally
 To run it locally you need to have docker installed
@@ -21,21 +24,10 @@ $ git clone https://github.com/DevBobs-devops/Devbobs_MiniTwit.git
 ```
 
 ## Prerequesites
-To deploy MiniTwit, make sure you have a digitalocean account.
-Have docker installed
+To deploy MiniTwit, make sure you have a digitalocean account and Docker installed.
 
 ## Setup
 To get everything up and running, please do the following
-
-### Install jq
-
-`jq` is a cli tool for parsing JSON. Some of the scripts use it.
-
-Can on ubunuty be installed with:
-
-```bash
-sudo apt update && sudo apt install -y jq
-```
 
 ### Install Terraform
 Follow instructions from https://learn.hashicorp.com/tutorials/terraform/install-cli
@@ -88,7 +80,7 @@ export AWS_SECRET_ACCESS_KEY=<access_key_secret>
 ```
 
 #### Terraform state file
-?
+Create a terraform.tfstate file and set its path. For example `minitwit/terraform.tfstate`.
 
 #### Floating IP
 Create a floating ip. Follow: https://www.digitalocean.com/blog/floating-ips-start-architecting-your-applications-for-high-availability
@@ -101,19 +93,13 @@ This ip needs to be set in the `/ip.tf` file at <IP>
 - Instead of using your actual DockerHub password, you can setup a [Access Token](https://docs.docker.com/security/access-tokens/) for DockerHub.
 - Lastly, create a [repository](https://docs.docker.com/docker-hub/repos/create/) named `minitwitimage`, one named `minitwit-grafana`, one named `minitwit-alloy`, one named `minitwit-loki `and one named `minitwit-prometheus`.
 
-
-To deploy MiniTwit, make sure you have Vagrant installed, the [vagrant-digitalocean](https://www.digitalocean.com/community/tools/vagrant-digitalocean-2) plugin and:
-1. To have a pair of SSH keys, if not follow [this tutorial](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-1804). Your ssh keys have to be in the directory.`~/.ssh/id_rsa`
-2. Register at DigitalOcean
-3. [Registered your public SSH key at DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/to-account/).
-4. Setup the two environment variables `$SSH_KEY_NAME` and `$DIGITAL_OCEAN_TOKEN` in `src/Vagrantfile`. 
-  - `$SSH_KEY_NAME` is the name of the key you registered at Digitalocean at step 3.
-  - `$DIGITAL_OCEAN_TOKEN` is the API token you get from DigitalOceanm, see: [tutorial](https://www.digitalocean.com/docs/api/create-personal-access-token/).
+#### Domain
+If you own a domain e.g. `Devbobs.tech`, make sure to point it at your floating ip on DigitalOcean and set it in `/itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml` file in the minitwit service instead of `devbobs.tech`. If you do not own a domain, please outcomment this line.
 
 ## Deploying the infrastructure.
 You can now deploy everything!
 
-_note: if you have not yet pushed the five images to DockerHub you will have to do. Later this will done by the CI/CD pipeline_
+_note: if you have not yet pushed the five images to DockerHub you will have to do this. After deploying, this will be handled by the CI/CD pipeline._
 -  `minitwitimage`, `minitwit-grafana`, `minitwit-alloy`, `minitwit-loki `, `minitwit-prometheus`
 
 Do deploy the infrastructure run `./bootstrap.sh`.
@@ -137,7 +123,25 @@ Setup the following secrets on github, see [here](https://docs.github.com/en/act
 ## Trigger the workflow
 To trigger the workflow and start the pipeline, make a commit to the `main` branch, or [manually run the workflow](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
 
-To see the workflow, see `cicd.yaml`. 
+To see the workflow, see the files in  `.github/workflows`. 
 
 # The notebook
 To make work more visible, we have decided to create `notebook.md`. Here changes can be seen together with  **what went wrong**, **where** we found a **solution**.
+
+# Gifs showcasing the MiniTwit System
+
+## Infrastructure as code in action
+Showcase of deploying the infrastucture with Terraform. Gif is cut to keep it short.
+![Deployment of minitwit](/report/src/images/IfaC-in-action.gif) <br>
+
+## CI/CD pipeline in action
+Showcase of the CI/CD pipeline of going from a feature branch to production. Gif is sped up to keep it short.
+![CI/CD pipeline in action](/report/src/images/CICD-in-action.gif) <br>
+
+## Monitoring dashboard in action
+The simulator was stopped at the time of the recording. We therefore show a manuel Cheep being made.
+![Monitoring dashboard](/report/src/images/monitoring-in-action.gif) <br>
+
+## Logging dashboard in action
+The simulator was stopped at the time of the recording. We therefore show that the logging happend within the last 5 minutes.
+![Logging dashboard](/report/src/images/logging-in-action.gif) <br>

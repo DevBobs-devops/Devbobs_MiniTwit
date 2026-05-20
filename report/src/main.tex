@@ -1,12 +1,15 @@
 % Preamble
 \documentclass[11pt]{article}
 \usepackage{plantuml}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{changepage}
 
 \input{commands.tex}
 
 % Document
 \begin{document}
-
+\include{title}
 \include{system}
 \include{process}
 \include{reflection}

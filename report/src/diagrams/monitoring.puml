@@ -1,0 +1,44 @@
+@startuml 
+skinparam linetype polyline
+
+ frame "Docker swarm custer" as cluster {
+    node " <<node>> Swarm Leader" as leader{
+        
+        node "<<container>> Prometheues" as prom {
+            component "<<service>> \n  marho/minitwit-prometheus"{
+        }
+        }
+        
+        node "<<container>> \n grafana" as graf {
+            component "              <<service>> \n  marho/minitwit-grafana"
+        }
+
+        node "<<container>> \n loki" as loki {
+            component "         <<service>> \n marho/minitwit-loki"
+        }
+        
+
+    }
+    note right of leader: Alloy on Leader node \n is disregarded \n for simplicity
+
+    node "<<node x4>> Swarm worker" as workers {
+        
+         node "<<container>> \n Alloy" as alloy {
+            component "           <<service>> \n marho/minitwit-alloy"
+
+        }
+        node "<<container>> \n MiniTwit" as mini{
+            component "           <<service>> \n marho/minitwitimage"
+        }
+       
+    }
+    note left of workers : Managers are seen \n as workers \n and have all four \n minitwit services \n for simplicity
+
+    prom --> mini : <<https GET>> \n Scrape /metrics every 20s
+    alloy --> loki : <<http POST>> \nhttp://minitwit_loki:3100/\nloki/api/v1/push
+    graf --> prom : <<query>> \n http://prometheus:9090
+    graf --> loki : <<query>> \n  http://loki:3100
+
+ }
+@enduml
+
