@@ -10,14 +10,9 @@ frame "Deployment MiniTwit" {
         port ":9090" as 9090
         port ":3000" as 3000
 
-        node "<<node>> Swarm 'Leader'" {
+        node "<<node>> Swarm 'Leader'" as leader {
             port ":443" as 443
             port ":80" as 80
-
-            component MiniTwit as minitwit_leader{
-                portin ":8080" as min_1
-            }
-            
             component Grafana
             component Loki
             component Alloy as alloy_leader
@@ -25,7 +20,9 @@ frame "Deployment MiniTwit" {
             component Caddy {
                 portout "8080" as cad_out
             }
-    }
+        }
+        note right of leader : For simplicity of the \n diagram the all \n minitwit services are \n shown on nthe \n workers and managers
+
 
     circle "." as circle
 
@@ -43,9 +40,8 @@ frame "Deployment MiniTwit" {
             component Alloy as alloy_worker1
         }
     }
-    }
-
     
+    }
     
 
     database Postgres {
@@ -68,8 +64,8 @@ cad_out --> circle
 
 circle --> 8080m2
 circle --> 8080m4
-minitwit_leader --> Postgres
 minitwit_manager1 --> Postgres
 minitwit_worker1 --> Postgres
+
 @enduml
 
