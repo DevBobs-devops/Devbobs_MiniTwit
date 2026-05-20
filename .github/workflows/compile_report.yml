@@ -14,6 +14,12 @@ jobs:
           packages: graphviz default-jre texlive-luatex texlive-latex-extra inkscape perl
           version: 1.0
 
+      - name: Regenerate TeX formats if restored from cache
+        run: |
+          if ! lualatex --version &>/dev/null; then
+            sudo fmtutil-sys --all
+          fi
+
       - name: Download PlantUML JAR
         run: |
           mkdir -p /opt/plantuml
