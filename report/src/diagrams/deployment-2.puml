@@ -38,15 +38,17 @@ frame "MiniTwit"{
             
             }
     
-
-}    
+    
+}   
 
     database "MiniTwit Database" as db{
         label "RAM: 1GB \nDisk: 10GB \nVersion: PostgreSQL 15"
         port ":25060" as 25060        
     }
-}
 
+    note bottom of DockerSwarm: For simplicity, we have chosen \n to only include 1 manager \n and 1 worker. The real setup \n contains 2 identical manager nodes \n and 2 identical worker nodes. 
+    
+}
 
 
 User --> 80 
@@ -65,6 +67,7 @@ Caddy --> minitwit_0 : :8080
 Caddy --> minitwit_1 : :8080 
 minitwit_0 --> 25060 : <<TCP/IP>>
 minitwit_1 --> 25060 : <<TCP/IP>>
+
 
 
 @enduml
