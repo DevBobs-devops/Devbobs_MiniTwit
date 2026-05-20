@@ -1,8 +1,6 @@
 \section{Process Perspective}\label{process-perspective}
 
 \subsection{CI/CD Pipelines}\label{cicd-pipelines}
-\textit{marho@itu.dk} \\
-
 The CI/CD pipeline consists of three GitHub Action workflows, which can be seen in
 \code{/.github/workflows/}. All workflows are run on
 \code{ubuntu-24.04}. The first part of our CI pipeline (Build and test workflow) runs on pull-request to main. 
@@ -56,7 +54,6 @@ The release workflow runs on a successfull CI/CD run. It builds and zips
 the application for Windows, Mac and Linux.
 
 \subsubsection{SonarQube}\label{sonarqube}
-\textit{Morten}
 SonarQube runs on pull requests as a step in our CI pipeline. It checks for security issues, code smells and the quality of the code.
 SonarQube also gives a Quality Gate, that fails if the threshold for the pull-request is too low 
 e.g. Security, Reliability and Maintainability.
@@ -65,8 +62,6 @@ meaning we could still merge, even if SonarQube fails, it more used as a reminde
 error handling.   
 
 \subsection{Monitoring}\label{monitoring}
-\textit{marho@itu.dk} \\
-
 The system uses Prometheus for monitoring. 
 Prometheus scrapes the \code{/metrics} endpoint on each MiniTwit service instance.
 Grafana then queries Prometheus, which displays and visualises the data. 
@@ -110,8 +105,6 @@ On an infrastructure level we monitor:
 \includegraphics[width=\textwidth]{./images/system_status.png}
 
 \subsection{Logging}\label{processlogging}
-\textit{Marius} \\
-
 The application uses a Grafana-loki-alloy stack to log all services. The logging setup can be seen in figure \ref{mon-diagram}.
 
 \subsubsection{What we log}\label{what-we-log}
@@ -141,15 +134,11 @@ be seen in the logging dashboard (figure~\ref{logging-dashboard}).
 
 
 \subsection{Security hardening}\label{security-hardening}
-\textit{Jonas} 
-
 To protect against supply line attacks, we would select docker hardened images from \url{dhi.io} to use for our dependencies; Prometheus, Alloy, Loki, Grafana.
 We would also go through our Minitwit application and adjust it to comply with the rules at \url{https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html}.
 However, we did not manage to fully implement this, so it is not used in produciton.
 
 \subsection{Availability and scaling}\label{availability-and-scaling}
-\textit{Marius \& Morten} \\
-
 To scale and ensure availability of the application Terraform and Docker
 Swarm is used.
 
@@ -175,7 +164,6 @@ IPs on port :8080 without HTTPS. The docker ingress routing mesh
 will in that case take care of load balancing, instead of Caddy.
 
 \subsubsection{Scaling}\label{scaling}
-
 The application can be scaled in two different ways: \textbf{Vertical
 scaling}: A single node can be scaled vertically either by rezising the
 node in DigitalOcean or changing the \code{size} field in
