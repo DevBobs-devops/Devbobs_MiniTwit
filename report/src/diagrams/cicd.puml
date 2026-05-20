@@ -1,4 +1,4 @@
-@startuml cicd_pipeline
+@startuml cicd-pipeline
 
 |Developer|
 start
