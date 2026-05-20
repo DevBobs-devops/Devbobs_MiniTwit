@@ -1,0 +1,111 @@
+version: '3.3'
+
+services:
+
+  minitwit:
+    image: ${DOCKER_USERNAME}/minitwitimage
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production #specified for clarity
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+    ports:
+      - '8080:8080'
+    networks:
+      - caddy
+      - default
+    deploy:
+      replicas: 4
+      labels:
+        caddy: devbobs.tech # host name 
+        caddy.reverse_proxy: "{{upstreams 8080}}" #where to send traffic
+
+  prometheus:
+    image: ${DOCKER_USERNAME}/minitwit-prometheus
+    volumes:
+      - prometheus-storage:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == minitwit-swarm-leader
+
+  alloy:
+    image: ${DOCKER_USERNAME}/minitwit-alloy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/newconfig.alloy
+    ports: 
+      - 12345:12345
+    deploy:
+      mode: global
+
+  loki:
+    image: ${DOCKER_USERNAME}/minitwit-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki-storage:/loki
+    command: "--config.file=/etc/loki/loki.yml"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == minitwit-swarm-leader
+
+  grafana:
+    image: ${DOCKER_USERNAME}/minitwit-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == minitwit-swarm-leader
+
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    ports: #Debugged with Claude AI
+    - target: 80
+      published: 80
+      protocol: tcp
+      mode: host
+    - target: 443
+      published: 443
+      protocol: tcp
+      mode: host
+    environment:
+      - CADDY_INGRESS_NETWORKS=minitwit_caddy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+    restart: unless-stopped
+    networks:
+      - caddy
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == minitwit-swarm-leader
+      labels:
+        caddy.email: ${CADDY_EMAIL}
+
+volumes:
+  loki-storage: {}
+  grafana-storage: {} 
+  prometheus-storage: {}
+  caddy_data: {}
+
+networks:
+  caddy:
+    driver: overlay
+    attachable: true

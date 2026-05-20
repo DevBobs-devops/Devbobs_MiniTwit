@@ -1,7 +1,10 @@
 # version: '3'
+
+#THIS FILE IS USED IN CI/CD only
 services:
   minitwit:
     build: . # build the image from the Dockerfile
+    image: minitwit_image
     environment:
       - ASPNETCORE_ENVIRONMENT=Development #Ensure that locally run env is Development. Fix found here: https://oneuptime.com/blog/post/2026-01-25-docker-compose-development-environments/view & here https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-10.0
       - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=default_database;Username=username;Password=password
@@ -27,6 +30,7 @@ services:
       - "9090:9090"
 
  # taken from: https://github.com/gaelgthomas/docker-compose-with-postgresql/blob/main/docker-compose.yml
+
   database:
     image: "postgres:latest"
     ports:
@@ -45,6 +49,7 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./monitoring/alloy
+    image: alloy_image
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # IMPORTANT: This actually allows Alloy to connect to the docker.sock file which exists on your container's host machine
     container_name: alloy

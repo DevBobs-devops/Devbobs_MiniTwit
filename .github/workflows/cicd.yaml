@@ -85,12 +85,24 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
 
-      - name: Deploy to server
-        # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
+
+      - name: Copy stack file
         run: >
-          ssh $SSH_USER@$SSH_HOST
-          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
-          '/minitwit/deploy.sh'
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ./itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml $SSH_USER@$SSH_HOST:/root/
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
+          
+
+      - name: Deploy to server
+        # SSH in and deploy the stack
+        run: >
+          ssh $SSH_USER@$SSH_HOST
+          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
+          "DOCKER_USERNAME='$DOCKER_USERNAME' CADDY_EMAIL='$CADDY_EMAIL' ConnectionStrings__DefaultConnection='$CONNECTION_STRING' docker stack deploy minitwit -c /root/minitwit_stack.yml"
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          CONNECTION_STRING: ${{secrets.CONNECTION_STRING}}
+          CADDY_EMAIL: ${{secrets.CADDY_EMAIL}}

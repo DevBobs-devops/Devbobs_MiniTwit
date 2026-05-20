@@ -3,6 +3,8 @@ using Chirp.Infrastructure.Chirp.Repositories;
 using Chirp.Infrastructure.Chirp.Services;
 using Chirp.Infrastructure.data;
 using Chirp.Web;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
 
@@ -14,8 +16,10 @@ string? connectionString = builder.Configuration.GetConnectionString("DefaultCon
 Console.WriteLine("postgres");
 builder.Services.AddDbContext<CheepDbContext>(options => options.UseNpgsql(connectionString));
 
+builder.Services.AddDataProtection().PersistKeysToDbContext<CheepDbContext>();
+
 builder
-    .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = true)
+    .Services.AddDefaultIdentity<Author>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<CheepDbContext>();
 
 builder.Services.AddSession();

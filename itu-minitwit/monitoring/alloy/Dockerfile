@@ -1,3 +1,3 @@
 #figure out which version to use
-FROM dhi.io/alloy:1 
-COPY ./config.alloy /etc/alloy/config.alloy
+FROM grafana/alloy:latest 
+COPY ./newconfig.alloy /etc/alloy/newconfig.alloy
