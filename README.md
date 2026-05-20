@@ -130,8 +130,18 @@ To make work more visible, we have decided to create `notebook.md`. Here changes
 
 # Gifs showcasing the MiniTwit System
 
+## Infrastructure as code in action
+Showcase of deploying the infrastucture with Terraform. Gif is cut to keep it short.
+![Deployment of minitwit](/report/src/images/IfaC-in-action.gif) <br>
 
-[Deployment of minitwit](/report/src/images/IfaC-in-action.gif) <br>
-[CI/CD pipeline in action](/report/src/images/CICD-in-action.gif) <br>
-[Monitoring dashboard](/report/src/images/monitoring-in-action.gif) <br>
-[Logging dashboard](/report/src/images/logging-in-action.gif) <br>
+## CI/CD pipeline in action
+Showcase of the CI/CD pipeline of going from a feature branch to production. Gif is sped up to keep it short.
+![CI/CD pipeline in action](/report/src/images/CICD-in-action.gif) <br>
+
+## Monitoring dashboard in action
+The simulator was stopped at the time of the recording. We therefore show a manuel Cheep being made.
+![Monitoring dashboard](/report/src/images/monitoring-in-action.gif) <br>
+
+## Logging dashboard in action
+The simulator was stopped at the time of the recording. We therefore show that the logging happend within the last 5 minutes.
+![Logging dashboard](/report/src/images/logging-in-action.gif) <br>
