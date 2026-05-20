@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p /opt/plantuml
           wget -O /opt/plantuml/plantuml.jar \
-          https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar
+          https://github.com/plantuml/plantuml/releases/download/v1.2025.2/plantuml-1.2025.2.jar
 
       - name: Compile LaTeX document
         run: |
