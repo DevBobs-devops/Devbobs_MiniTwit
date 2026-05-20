@@ -1,7 +1,7 @@
 @startuml 
 skinparam linetype polyline
 
- frame "Docker swarm custer" as cluster {
+ frame "Docker swarm cluster" as cluster {
     node " <<node>> Swarm Leader" as leader{
         
         node "<<container>> Prometheues" as prom {
@@ -32,9 +32,10 @@ skinparam linetype polyline
         }
        
     }
-    note left of workers : Managers are seen \n as workers \n and have all four \n minitwit services \n for simplicity
 
-    prom --> mini : <<https GET>> \n Scrape /metrics every 20s
+    note left of workers : For simplicity \n managers are labaled \n as workers and run \n all four minitwit services.\n Here 4 swarm workers\n each running MiniTwit\n and loki
+
+    prom --> mini : <<http GET>> \n Scrape /metrics every 20s
     alloy --> loki : <<http POST>> \nhttp://minitwit_loki:3100/\nloki/api/v1/push
     graf --> prom : <<query>> \n http://prometheus:9090
     graf --> loki : <<query>> \n  http://loki:3100
