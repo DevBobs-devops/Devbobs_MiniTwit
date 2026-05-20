@@ -23,7 +23,6 @@ frame "Deployment MiniTwit" {
         }
         note right of leader : For simplicity of the \n diagram the all \n minitwit services are \n shown on nthe \n workers and managers
 
-
     circle "." as circle
 
     together {
@@ -31,7 +30,6 @@ frame "Deployment MiniTwit" {
             portin ":8080" as 8080m2
             component "MiniTwit" as minitwit_manager1
             component Alloy as alloy_manager1
-    
         }
         node "<<node x2>>  Swarm Worker" as worker1 {
             portin ":8080" as 8080m4

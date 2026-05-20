@@ -1,0 +1,61 @@
+@startuml 
+
+actor User
+
+frame "MiniTwit"{
+
+    frame "DockerSwarm Cluster" as DockerSwarm{
+         
+         
+        port ":9090" as 9090
+        port ":3000" as 3000
+        port ":3100" as 3100
+        port ":80"   as 80
+        port ":443"  as 443
+
+        node "Swarm Leader" as leader{
+
+            component Grafana
+            component Loki
+            component Alloy as alloy_0
+            component Prometheus 
+            component Caddy
+        }
+
+        
+        
+            node "Swarm Manager" as manager {
+
+                component Alloy as alloy_1
+                component MiniTwit as minitwit_0
+            
+            }
+
+            node "Swarm Worker" as worker {
+
+                component Alloy as alloy_2
+                component MiniTwit as minitwit_1
+            
+            }
+    
+
+}    
+
+    database "MiniTwit Database" as db{
+        
+    }
+}
+
+
+3000 --> Grafana 
+3100 --> Loki
+9090 --> Prometheus
+80 --> Caddy
+443 --> Caddy 
+
+
+Caddy --> minitwit_0 : :8080
+Caddy --> minitwit_1 : :8080
+
+
+@enduml
