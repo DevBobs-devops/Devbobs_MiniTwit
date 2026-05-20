@@ -24,7 +24,7 @@ jobs:
           lualatex -interaction=nonstopmode -shell-escape --jobname=BSc_group_k main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
-          TEXINPUTS: ".:../out:**:"
+          TEXINPUTS: ".:**:"
 
       - name: Print Folder Tree
         uses: jaywcjlove/github-action-folder-tree@main
