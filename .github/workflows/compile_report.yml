@@ -8,27 +8,44 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v6
 
+      - name: Install dependencies
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: graphviz default-jre texlive-luatex texlive-latex-extra inkscape perl
+          version: 1.0
+
+      - name: Cache TeX Live formats
+        id: cache-texlive
+        uses: actions/cache@v4
+        with:
+          path: /var/lib/texmf
+          key: texlive-formats-${{ runner.os }}-v1
+
+      - name: Rebuild TeX formats if not cached
+        if: steps.cache-texlive.outputs.cache-hit != 'true'
+        run: |
+          sudo fmtutil-sys --all --fmtdir /var/lib/texmf/web2c
 
       - name: Download PlantUML JAR
         run: |
           mkdir -p /opt/plantuml
           wget -O /opt/plantuml/plantuml.jar https://sourceforge.net/projects/plantuml/files/plantuml.jar/download
 
-      - name: Install dependencies (non-LaTeX)
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: graphviz default-jre inkscape perl
-          version: 1.0
-
-      - name: Setup LaTeX
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: main.tex
-          working_directory: report/src
-          latexmk_use_lualatex: true
-          extra_system_packages: inkscape
+      - name: Compile LaTeX document
+        run: |
+          cd report/src
+          lualatex -interaction=nonstopmode -shell-escape --jobname=BSc_group_k main.tex
         env:
-          TEXINPUTS: ".:report/src/:"
+          PLANTUML_JAR: /opt/plantuml/plantuml.jar
+          TEXINPUTS: ".:**:"
+
+      - name: Recompile LaTeX document
+        run: |
+          cd report/src
+          lualatex -interaction=nonstopmode -shell-escape --jobname=BSc_group_k main.tex
+        env:
+          PLANTUML_JAR: /opt/plantuml/plantuml.jar
+          TEXINPUTS: ".:**:"
 
       - name: Print Folder Tree
         uses: jaywcjlove/github-action-folder-tree@main
