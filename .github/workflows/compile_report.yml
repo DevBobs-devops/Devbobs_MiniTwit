@@ -16,9 +16,7 @@ jobs:
 
       - name: Regenerate TeX formats if restored from cache
         run: |
-          if ! lualatex --version &>/dev/null; then
-            sudo fmtutil-sys --all
-          fi
+          sudo fmtutil-sys --all
 
       - name: Download PlantUML JAR
         run: |
