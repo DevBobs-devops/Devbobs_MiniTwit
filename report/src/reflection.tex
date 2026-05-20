@@ -22,13 +22,13 @@ We will touch more on this in \ref{reflection-logging}.
 \subsection{Biggest challenges during
 development}\label{biggest-issues-during-development}
 \subsubsection{Migrating Database}\label{migrating-database}
-As mentioned we used our old Chirp porject, which used a sqlite database, which gave us difficulties 
-when migrating to our DigitalOcean postgres database. At the same time postgres had issues with names used for 
-tables such as 'Cheeps', modifying them to be cheeps, breaking our queries. We solved this by
-converting the sqlite dump to csv-files, which could then be converted into postgres dumps in the correct format. 
+The project started by using our old Chirp project with a sqlite database. 
+This gave us some difficulties when migrating database, as data in the old database did not fit the new Postgres database. 
+We solved this by converting the sqlite dump to csv-files, which could then be converted into postgres dumps in the correct format. 
+In reflection using Postgres from the beginning would have been better if we knew the project would grow big, as the Sqlite database would create technical debt we later had to pay for.
+This we could not have know at the time we built Chirp, but shows how evolution of a system will require refactoring later if such evolution was not thought of when building the system.
+We also updated our old source code to adapt to the new changes when relevant, attempting to remove possible errors caused by our old source code.
 
-This shows how one needs to pay attention, whenever one addapts old systems to newer ones. We also updated our old
-source code, to adapt to the new changes when relevant, attempting to remove possible errors caused by our old source code.  
 
 \subsubsection{Logging}\label{reflection-logging}
 
@@ -51,14 +51,14 @@ currently only have our ``main'' server. This would have allowed us to
 further test new features or fixes, before they ended up in production.
 This also holds true for the database, as we often had to be very
 cautious out of fear that we would overwrite or delete data. We did make
-another DigitalOcean project near the end of the project, to test docker
+another DigitalOcean project near the end of the project, to test Terraform and docker
 swarm, however this never got added to our pipeline.
 
 \subsubsection{Updating test-file}\label{updating-test-file}
 
 Our current test run on an old docker compose file, from before we
-introduced terraform and docker swarm. It would probably be better
-practice to use the stack file for the tests, rather than the compose
+introduced terraform and docker swarm. It would be better
+practice to use the stack file for tests, rather than the compose
 file, for more reflective test results. This highlights the importance of active
 updating older services, to remove outdated legacy code. 
 
