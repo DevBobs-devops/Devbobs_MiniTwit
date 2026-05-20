@@ -495,3 +495,4 @@ itu-minitwit/minitwit/data/
 *plantuml.txt
 *plantuml.tex
 *.aux
+*.puml.ltx
