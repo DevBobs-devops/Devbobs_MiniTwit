@@ -31,7 +31,8 @@ The architecture has a single point of failure, which will be explained in secti
 The dependencies our the MiniTwit system is listed below on different levels of abstractions. 
 
 \paragraph{NuGet Dependencies}
-The dependencies of the MiniTwit application are as follows.
+The dependencies of the MiniTwit application, listed using \code{dotnet list package}, are as follows.
+
 \begin{itemize}
     \item Microsoft.AspNetCore.DataProtection.EntityFrameworkCore      8.0.*       8.0.26  
     \item Microsoft.AspNetCore.Identity.EntityFrameworkCore            8.0.10      8.0.10  
@@ -83,14 +84,14 @@ The dependencies of our CI/CD pipeline are as follows.
     \item actions/checkout 3.*.*
     \item actions/checkout 4.*.*
     \item docker/build-push-action 6.*.*
-    \item docker/build-push-action d08e5c354a6adb9ed34480a06d141179aa583294
+    \item docker/build-push-action \\d08e5c354a6adb9ed34480a06d141179aa583294
     \item docker/login-action 3.*.*
     \item docker/setup-buildx-action 3.*.*
     \item actions/setup-dotnet 4.*.*
     \item actions/setup-python 5.*.*
     \item actions/upload-artifact 4.*.*
-    \item guibranco/github-csharpier-linter-action a5214a476742ce4a0f755611581276c50081527a
-    \item hadolint/hadolint-action 2332a7b74a6de0dda2e2221d575162eba76ba5e5
+    \item guibranco/github-csharpier-linter-action\\ a5214a476742ce4a0f755611581276c50081527a
+    \item hadolint/hadolint-action \\2332a7b74a6de0dda2e2221d575162eba76ba5e5
 \end{itemize}
 
 \paragraph{Infrastructure and deployment dependencies}
