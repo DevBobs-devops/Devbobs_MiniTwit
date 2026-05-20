@@ -19,8 +19,7 @@ The following section will give a description of each workflow and how a feature
 
 
 \subsubsection{Build and test}\label{build-and-test}
-
-The first part of our CI pipeline (Build and Test workflow) consists of the following steps that run in parrallel: 
+The first workflow ("\textit{Build and Test}"), forms the continous intergration of our pipeline and consists of the following steps that run in parrallel
 \begin{enumerate}
     \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. 
     This helps ensure that the layout is alike throughout the codebase. It does not automatically apply layout changes, but reports it back on GitHub.
@@ -34,7 +33,7 @@ The first part of our CI pipeline (Build and Test workflow) consists of the foll
 \end{enumerate}
 
 \subsubsection{CI/CD}
-The CI/CD workflow runs on a successful Build and Test workflow and push to main. It consists of the following steps that run sequentially:
+The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a successful \textit{Build and Test} workflow and push to main. It consists of the following steps that run sequentially
 \begin{enumerate}
     \item \textbf{Dockerhub}:
     \begin{itemize}
@@ -50,7 +49,7 @@ The CI/CD workflow runs on a successful Build and Test workflow and push to main
 
 \subsubsection{Release}\label{release}
 
-The release workflow runs on a successful CI/CD run. It builds and zips
+The "\textit{release}" workflow runs on a successful CI/CD run. It builds and zips
 the application for Windows, Mac and Linux.
 
 \subsubsection{SonarQube}\label{sonarqube}
@@ -62,7 +61,7 @@ meaning we could still merge, even if SonarQube fails. It's more used as a remin
 error handling.   
 
 \subsection{Monitoring}\label{monitoring}
-The system uses Prometheus for monitoring. 
+The system uses Prometheus and Grafana for monitoring. 
 Prometheus scrapes the \code{/metrics} endpoint on each MiniTwit service instance.
 Grafana then queries Prometheus, which displays and visualises the data. 
 Monitoring is done on a business level, application level, and infrastructure level.
@@ -148,7 +147,7 @@ Swarm is used.
 
 \subsubsection{Availability}\label{availability}
 The application consists of five nodes that are a part of a swarm
-cluster, 2 workers, 2 managers and 1 leader, that together run four replicated minitwit services.
+cluster, 2 workers, 2 managers and 1 leader, creating redundancy, that together run four replicated minitwit services.
 All nodes run Alloy.
 The ``Leader'' node also runs Caddy, Grafana, Prometheus and Loki.
 Figure \ref{deployment-diagram} illustrates this.

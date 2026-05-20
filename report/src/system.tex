@@ -106,7 +106,7 @@ The dependencies that we use for infrastructure and deployment are as follows.
 In hindsight we have many dependencies, which could be reduced to ease later maintaince (e.g.: we have three different versions of the checkout actions in our GitHub Actions).
 
 \subsection{Current state of system}\label{current-state-of-system}
-To keep software quality high and later ease maintainability of the application we follow several practices and use a set of different tooling. 
+To keep software quality high, avoid technical debt and later ease maintainability of the application we follow several practices and use a set of different tooling. 
 
 \subsubsection{Practices}
 The first practice is code reviews. No code gets pushed to main before it has been approved by atleast one other group member. This is done though GitHub pull-requests.
@@ -117,8 +117,8 @@ The use of conventional commits like: \texttt{feat:}, \texttt{chore:}, \texttt{n
 Tooling have been used to assist keeping quality high.
 This is especially usefull as the project grew bigger. 
 First, we use automatic testing, which have caught many problems. 
-This is done in our continous intergration (CI) pipeline: Build and Test, which runs tests, a formater and a linter.
-These can be seen in \ref{build-and-test}. \\
+This is done in our continous intergration (CI) pipeline.
+The pipeline also runs a formater and linter, which will be touched upon in \ref{build-and-test} \\
 
 For static analysis we use SonarQube, which is used to analyse code quality, code smells and security issues.
 The current state of the system, according to SonarQube, is acceptable - SonarQube scores for our project are - Security: C, Reliability: A and Maintainability: A, as seen in Figure~\ref{sonarqube-report}.
