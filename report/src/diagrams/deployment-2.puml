@@ -2,7 +2,7 @@
 
 actor User
 
-frame "MiniTwit"{
+frame "MiniTwit" as MiniTwit {
 
     frame "DockerSwarm Cluster" as DockerSwarm{
          
@@ -46,8 +46,12 @@ frame "MiniTwit"{
         port ":25060" as 25060        
     }
 
-    note bottom of DockerSwarm: For simplicity, we have chosen \n to only include 1 manager \n and 1 worker. The real setup \n contains 2 identical manager nodes \n and 2 identical worker nodes. 
-    
+    note bottom of DockerSwarm
+        For simplicity, we have chosen
+        to only include 1 manager and 1 worker. 
+        The real setup contains 2 identical 
+        manager nodes and 2 identical worker nodes. 
+    end note
 }
 
 
