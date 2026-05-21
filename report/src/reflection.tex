@@ -1,0 +1,57 @@
+\section{Reflection Perspective}\label{reflection-perspective}
+
+This section will focus on our reflections about the process, some of
+our major issues and what we have learned for improving the process in
+the future.
+
+\subsection{Devops-style work}
+This project has shown how powerful it can be to bridge the gap between development and operations.
+By automating processes, such as a full CI/CD pipeline, the distance and complexity of going from a feature branch to development have become small and manageable.
+The project created a short feedback loop, which helped opening up for more continuous work, both in the world of development, Devops and operations.
+To help enable a short feedback loop, we have tried to keep our work visible. 
+This was done through the use of conventional commits, a developer notebook for progress and changes, a project board, and group chat for emergencies.
+This also allowed for showing changes and thereby fueling continual, organisational learning when local discoveries occurred. 
+An example of an issue in our project board can be seen here \url{https://github.com/DevBobs-devops/Devbobs_MiniTwit/pull/66}. \\
+
+As the project grew it became harder to diagnose and understand why something failed.
+With the monitoring and logging setup this became easier, as everything was collected in one place and allowed for quicker feedback. 
+In retrospect, our setup could have been better, which mostly comes down to refining the dashboards.
+We will touch more on this in \ref{reflection-logging}.
+
+
+
+\subsection{Biggest challenges during
+development}\label{biggest-issues-during-development}
+This section will touch on some of the biggest issues we had with regards to evolution, and refactoring and operation, and maintenance.
+\subsubsection{Refactoring and evolution}\label{migrating-database}
+The project is based on our old Chirp project with a sqlite database. 
+This gave us some difficulties when migrating database, as data in the old database did not fit the new Postgres database.  
+Upon reflection, using Postgres from the beginning would have been better if we knew the project would grow big, as the Sqlite database would not be sufficient for a proper system.
+This we could not have known at the time we built Chirp, but shows how evolution of a system will require refactoring later if such evolution was not thought of when building the system.
+As the project went on, we updated our old source code to adapt to the new changes when relevant, attempting to remove possible errors caused by our old source code.
+An example of outdated legacy code, that is still being used, is our docker-compose file. 
+It is only used in our CI for testing, whereas in production we use our new stack file, that deploys our docker swarm.
+
+\subsubsection{Logging}\label{reflection-logging}
+
+Logging has been a constant issue. Logs would ``dissapear'' after a
+while using Grafana log drilldown, only showing logs for one or two of
+our containers. We instead made a log dashboard to show the logs, like the MiniTwit
+dashboard, fixing the problem. 
+
+As a consequence of these problems with drilldown, we often had to check the logs on the server, we would ssh into
+it, instead of using the grafana dashboard. Having more logs show up in
+grafana, for example more statistics about queries to the database, could
+have given us more information about the more niche parts of our program
+and errors.
+
+\subsubsection{Test-server}\label{test-server}
+
+Having a test-server would have been beneficial for this project, as we
+currently only have our ``main'' server. This would have allowed us to
+further test new features or fixes, before they ended up in production.
+This also holds true for the database, as we often had to be very
+cautious out of fear that we would overwrite or delete data. We did make
+another DigitalOcean project near the end of the project, to test Terraform and docker
+swarm, however this never got added to our pipeline.
+

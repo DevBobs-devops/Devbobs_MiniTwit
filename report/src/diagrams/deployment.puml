@@ -1,0 +1,83 @@
+@startuml 
+
+actor User
+
+frame "MiniTwit System" as MiniTwit {
+
+    frame "DockerSwarm Cluster" as DockerSwarm{
+         
+         
+        port ":9090" as 9090
+        port ":3000" as 3000
+        port ":3100" as 3100
+        port ":80"   as 80
+        port ":443"  as 443
+        port ":8080" as 8080
+
+        node "Swarm Leader" as leader <<Droplet>>{
+            label "RAM: 2GB\nDisk: 50GB \nOS: Ubuntu 22.4 " as label_0
+
+            component Grafana
+            component Loki
+            component Alloy as alloy_0
+            component Prometheus                 
+            component Caddy
+        }
+
+    
+            node "Swarm Manager" as manager_1 <<Droplet>>{
+                label "RAM: 1GB\nDisk: 25GB \nOS: Ubuntu 22.4 " as label_1
+                component Alloy as alloy_1
+                component MiniTwit as minitwit_0
+            
+            }
+
+            node "Swarm Worker" as worker <<Droplet>>{
+                label "RAM: 1GB\nDisk: 25GB \nOS: Ubuntu 22.4 " as label_2
+                component Alloy as alloy_2
+                component MiniTwit as minitwit_1
+            
+            }
+    
+    
+}   
+
+    together{
+
+        card card [
+            For simplicity, we have chosen
+            to only include 1 manager and 1 worker.     
+            The real setup contains 2 identical 
+            manager nodes and 2 identical worker nodes.
+        ]
+
+        database "MiniTwit Database" as db {
+            label "RAM: 1GB \nDisk: 10GB \nVersion: PostgreSQL 15"
+            port ":25060" as 25060        
+        }
+    }
+}
+
+
+User --> 80 
+User --> 443 
+User --> 9090
+User --> 3000
+User --> 3100 
+User --> 8080
+3000 --> Grafana 
+3100 --> Loki
+9090 --> Prometheus
+80 --> Caddy
+443 --> Caddy 
+
+8080 --> minitwit_0
+8080 --> minitwit_1
+Caddy --> minitwit_0 : :8080 
+Caddy --> minitwit_1 : :8080 
+minitwit_0 --> 25060 
+minitwit_1 --> 25060 
+
+
+
+@enduml

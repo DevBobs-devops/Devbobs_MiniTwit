@@ -1,0 +1,63 @@
+\section{Dependencies}\label{appendix:dependencies}
+\subsection*{NuGet Dependencies}
+The dependencies of the MiniTwit application, listed using \code{dotnet list package}, are as follows.
+\begin{itemize}
+    \item Microsoft.AspNetCore.DataProtection.EntityFrameworkCore      8.0.*       8.0.26  
+    \item Microsoft.AspNetCore.Identity.EntityFrameworkCore            8.0.10      8.0.10  
+    \item Microsoft.AspNetCore.Identity.UI                             8.0.10      8.0.10  
+    \item Microsoft.CodeAnalysis.NetAnalyzers                          10.0.201    10.0.201
+    \item Microsoft.EntityFrameworkCore.Design                         8.0.10      8.0.10  
+    \item Microsoft.EntityFrameworkCore.Sqlite                         8.0.10      8.0.10 
+    \item Microsoft.EntityFrameworkCore.SqlServer                      8.0.10      8.0.10  
+    \item Microsoft.EntityFrameworkCore.Tools                          8.0.10      8.0.10  
+    \item Microsoft.Playwright.NUnit                                   1.49.0      1.49.0 
+    \item Microsoft.VisualStudio.Web.CodeGeneration.Design             8.0.6       8.0.6    
+    \item Npgsql.EntityFrameworkCore.PostgreSQL                        8.0.4       8.0.4 
+    \item prometheus-net                                               8.2.1       8.2.1    
+    \item prometheus-net.AspNetCore                                    8.2.1       8.2.1 
+    \item Swashbuckle.AspNetCore                                       10.1.2      10.1.2  
+    \item coverlet.collector                                           3.2.0       3.2.0  
+    \item Microsoft.AspNetCore.Mvc.Testing      8.0.8       8.0.8  
+    \item Microsoft.NET.Test.Sdk                17.8.0      17.8.0  
+    \item xunit                                 2.4.2       2.4.2   
+    \item xunit.runner.visualstudio             2.4.5       2.4.5   
+    \item NUnit3TestAdapter               4.5.0       4.5.0  
+\end{itemize}
+
+\subsection*{Docker Dependencies}
+The external docker dependencies are as follows.
+\begin{itemize}
+    \item mcr.microsoft.com/dotnet/aspnet:8.0
+    \item mcr.microsoft.com/dotnet/sdk:8.0
+    \item grafana/loki:3.6.7
+    \item prom/prometheus:v3.5.1
+    \item grafana/alloy:latest 
+    \item grafana/grafana:12.1
+    \item lucaslorentz/caddy-docker-proxy:ci-alpine
+\end{itemize}
+The internal dependencies that is created when deploying are as follows.
+\begin{itemize}
+    \item powsdaws/minitwitimage
+    \item powsdaws/minitwit-prometheus
+    \item powsdaws/minitwit-alloy
+    \item powsdaws/minitwit-loki
+    \item powsdaws/minitwit-grafana
+\end{itemize}
+
+\subsection*{Github Action dependencies}
+The dependencies of our CI/CD pipeline workflows are as follows.
+\begin{itemize}
+    \item actions/checkout 2.*.*
+    \item actions/checkout 3.*.*
+    \item actions/checkout 4.*.*
+    \item docker/build-push-action 6.*.*
+    \item docker/build-push-action \\d08e5c354a6adb9ed34480a06d141179aa583294
+    \item docker/login-action 3.*.*
+    \item docker/setup-buildx-action 3.*.*
+    \item actions/setup-dotnet 4.*.*
+    \item actions/setup-python 5.*.*
+    \item actions/upload-artifact 4.*.*
+    \item guibranco/github-csharpier-linter-action\\ a5214a476742ce4a0f755611581276c50081527a
+    \item hadolint/hadolint-action \\2332a7b74a6de0dda2e2221d575162eba76ba5e5
+\end{itemize}
+

@@ -1,0 +1,67 @@
+All members have participated in the making and editing of this report.
+
+\section{System's Perspective}\label{systems-perspective}
+
+This section will give a description supported by illustrations of the design and
+architecture of our MiniTwit system, the dependencies and the current state
+of our system. \\
+
+The application is based on Chirp - a C\# application made in the course Analysis, Design and Software Architecture at ITU. 
+We chose to base the project on Chirp as we all had a general knowledge about the codebase.
+
+\subsection{Design and architecture of our ITU-MiniTwit
+systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
+ 
+The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
+The architecture strives to achieve high-availability by having a swarm of five nodes.
+The system is deployed on DigitalOcean using Terraform and Docker swarm.
+A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80.
+The request will reach the Leader node and will then get load-balanced by Caddy between the four instances of MiniTwit running.
+The Leader node also handles the logging and monitoring stack, which consists of Grafana, Loki and Prometheus. Alloy exists on every node to push logs to Loki.
+MiniTwit is also available on port 8080 with HTTP. The request will in this case be load-balanced by the docker ingress routing mesh. 
+The same goes for Grafana, which is available on port 3000 and Prometheus on 9090. These can be reached with the floating IP or any of the nodes IPs'.
+A PostgreSQL database is hosted on DigitalOcean.
+The architecture has a single point of failure, which will be explained in section \ref{availability}. \\
+
+\begin{figure} [H]
+    \pumlfile{deployment.puml}
+    \caption{Deployment diagram of MiniTwit}
+    \label{deployment-diagram}
+\end{figure}
+
+\subsection{Dependencies}\label{dependencies}
+MiniTwit has several dependencies in the form of Nuget, Docker and Github Action dependencies.
+They are listed on different levels of abstractions in appendix~\ref{appendix:dependencies}.\\
+MiniTwit also has infrastructure and deployment dependencies, listed here.
+\begin{itemize}
+    \item DigitalOcean - The platform used to host the MiniTwit system
+    \item Terraform - The tool used to manage our infrastructure as code
+    \item DockerHub - The platform used to store our docker images
+    \item Docker - The tool used to package different parts of the MiniTwit system and run as services and containers on Droplets on DigitalOcean
+\end{itemize}
+
+In hindsight we have many dependencies, which could be reduced to ease later maintaince (e.g.: we have three different versions of the checkout actions in our GitHub Actions).
+
+\subsection{Current state of system}\label{current-state-of-system}
+To keep software quality high, catch technical debt and later ease maintainability we follow several practices and use a set of different tooling. 
+
+\subsubsection{Practices}
+The first practice is code reviews. No code gets pushed to main before it has been approved by at least one other group member. This is done though GitHub pull-requests.
+Combined with the use of GitHub issues, this gives a clear picture of why, what and how a feature have been implemented.
+The use of conventional commits like: \texttt{feat:}, \texttt{chore:}, \texttt{note:}, has been used to give a clear view of what each commit in the git history does. 
+
+\subsubsection{Tooling}
+Tooling has been used to assist keeping quality high.
+This was especially useful as the project grew bigger. 
+First, we use automatic testing, which has caught many problems. 
+This is done in our continous intergration (CI) pipeline.
+The pipeline also runs a formatter and linter, which will be touched upon in \ref{build-and-test} \\
+
+For static analysis we use SonarQube, which is used to analyse code quality, code smells and security issues.
+The current state of the system, according to SonarQube, is acceptable - SonarQube scores for our project are - Security: C, Reliability: A and Maintainability: A, as seen in Figure~\ref{sonarqube-report}.
+The low score on security means we fail SonarQube's Quality Gate, which is an issue.
+\begin{figure} [H]
+    \includegraphics[width=\textwidth]{images/Quality-Gate.png}
+    \caption{SonarQube Quality Gate Report}
+    \label{sonarqube-report}
+\end{figure}
