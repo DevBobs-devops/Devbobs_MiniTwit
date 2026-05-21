@@ -42,7 +42,7 @@ The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a su
     \end{itemize}
     \item \textbf{SSH and Deploy}
     \begin{itemize}
-        \item SSH into the node named leader in the swarm.
+        \item SSH into the leader node.
         \item Copy the stack file \path{/itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml} to the node.
         \item Deploy to the swarm.
     \end{itemize}
@@ -51,15 +51,15 @@ The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a su
 \subsubsection{Release}\label{release}
 
 The "\textit{release}" workflow runs on a successful CI/CD run. It builds and zips
-the minitwit application for Windows, Mac and Linux and zips the source code, including this report.
+the minitwit application for Windows, Mac and Linux, zips the source code and this report.
 In hindsight our releases are not perfect.
 We automatically increased the version of each release which is why we ended up with version \texttt{0.0.259}, having no major or minor versions.
-The releases did not contain any description, which creates bad transparency.
+The releases did not contain any description, creating bad transparency.
 Lastly, instead of ziping our Minitwit application, we could have used our docker images to encapsulate each part of the system in releases.
 For now, these can be found at \url{https://hub.docker.com/u/powsdaws}.
 
 \subsubsection{SonarQube}\label{sonarqube}
-SonarQube runs on pull requests as a step in our CI pipeline. It checks for security issues, code smells and the quality of the code.
+SonarQube runs on pull requests as a step in our CI pipeline. It checks for security issues, code smells and code quality.
 SonarQube also gives a Quality Gate, that fails if the threshold for the pull-request is too low 
 e.g. Security, Reliability and Maintainability.
 SonarQube is not blocking 
@@ -163,11 +163,11 @@ fails, the application is still available.
 
 \textbf{Single Point of Failure}: Multiple services like Caddy and Grafana are pinned to the ``Leader'' node. 
 This creates SPOF for those services, e.g. only having one Caddy load balancer service,
-living on the ``Leader'' node, that takes HTTPS requests on our \code{devbobs.tech} domain, 
-means that if the ``Leader'' fails,  HTTPS request would no longer be recieved by the system. 
-If the ``Leader'' node goes down, it is still possible to access the other nodes
+living on the ``Leader'' node, that takes HTTPS requests on our \code{devbobs.tech} domain. So, if the ``Leader'' 
+fails,  HTTPS request would no longer be recieved by the system. 
+If the ``Leader'' goes down, it is still possible to access the other nodes
 IPs on port :8080 without HTTPS. The docker ingress routing mesh
-will in that case take care of load balancing, instead of Caddy.
+will take care of load balancing, instead of Caddy.
 
 \subsubsection{Scaling}\label{scaling}
 The application can be scaled in two different ways: \textbf{Vertical
