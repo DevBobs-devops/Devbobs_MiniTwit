@@ -255,6 +255,14 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 - link to Docker-Caddy github repository: https://github.com/lucaslorentz/caddy-docker-proxy
 
+17/5 - 12:15: No logs from minitwit service appears in grafana after deploying new alloy config
+- After updating the alloy service in our production environment, the logs from minitwit dissappeared. Turns out that the worker nodes, which contains the minitwit service, doens't have the needed permissions to use the discovery.dockerswarm module. This was confirmed by running the command `docker service logs minitwit_alloy 2>&1 | grep -i "error\|config\|failed"`, which output included the following error message numerous time: `minitwit_alloy.0.nl5a73h8kas3@minitwit-swarm-worker-1    | ts=2026-05-17T10:03:59 level=error msg="Unable to refresh target groups" component_path=/ component_id=discovery.dockerswarm.swarm err="error while listing swarm services: Error response from daemon: This node is not a swarm manager. Worker nodes can't be used to view or modify cluster state. Please run this command on a manager node or promote the current node to a manager."`
+
+- In less technincal terms, the discovery.dockerswarm module attempts to discover the tasks present on each node via querying the cluster state, but worker nodes are not permitted to view the cluster state. This means the alloy service, even if it's deployed as a global service, is prohibited from discovering the tasks on our worker nodes. 
+
+- To solve this issue, we had to switch back the the old discovery.docker module in our alloy config. 
+
+
 # Report
 
 5/5 - 14:02: Compiling LaTeX locally
@@ -267,3 +275,5 @@ https://koppor.github.io/plantuml/
 - It turned out that the version of the plantuml package in texlive-latex-extra was outdated.
 - By specifically downloading the current plantuml.sty and plantuml.lua, this was fixed.
 - A file permission issue was also encountered, and solved as in https://github.com/koppor/plantuml/issues/47 
+
+

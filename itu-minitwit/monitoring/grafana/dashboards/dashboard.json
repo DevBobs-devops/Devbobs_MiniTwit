@@ -108,7 +108,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "up{instance=\"10.0.1.89:8080\"}",
+          "expr": "up{job=\"itu-minittwit-swarm\"}",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -552,7 +552,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "total_users",
+          "expr": "sum by(__name__) (total_users)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -759,7 +759,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "cheeps_created_total",
+          "expr": "sum by(__name__) (cheeps_created_total)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
@@ -1167,5 +1167,5 @@
   "timezone": "browser",
   "title": "Minitwit Dashboard",
   "uid": "fegau3n6gywaoa",
-  "version": 1
+  "version": 2
 }
