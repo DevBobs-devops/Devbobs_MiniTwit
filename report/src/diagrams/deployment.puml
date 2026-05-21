@@ -2,7 +2,7 @@
 
 actor User
 
-frame "MiniTwit" as MiniTwit {
+frame "MiniTwit System" as MiniTwit {
 
     frame "DockerSwarm Cluster" as DockerSwarm{
          
@@ -14,7 +14,7 @@ frame "MiniTwit" as MiniTwit {
         port ":443"  as 443
         port ":8080" as 8080
 
-        node "Swarm Leader" as leader {
+        node "Swarm Leader" as leader <<Droplet>>{
             label "RAM: 2GB\nDisk: 50GB \nOS: Ubuntu 22.4 " as label_0
 
             component Grafana
@@ -25,14 +25,14 @@ frame "MiniTwit" as MiniTwit {
         }
 
     
-            node "Swarm Manager" as manager_1 {
+            node "Swarm Manager" as manager_1 <<Droplet>>{
                 label "RAM: 1GB\nDisk: 25GB \nOS: Ubuntu 22.4 " as label_1
                 component Alloy as alloy_1
                 component MiniTwit as minitwit_0
             
             }
 
-            node "Swarm Worker" as worker {
+            node "Swarm Worker" as worker <<Droplet>>{
                 label "RAM: 1GB\nDisk: 25GB \nOS: Ubuntu 22.4 " as label_2
                 component Alloy as alloy_2
                 component MiniTwit as minitwit_1
