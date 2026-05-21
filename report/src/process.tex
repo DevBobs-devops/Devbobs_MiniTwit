@@ -116,7 +116,7 @@ The application uses a Grafana-loki-alloy stack to log all services. The logging
 
 \subsubsection{What we log}\label{what-we-log}
 We currently log the logs from each docker service, as described in our 
-\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} file. As will be discussed in \ref{reflection-logging}, 
+\sloppy\code{/infrastructure/docker\_swarm/stack/minitwit\_stack.yml} file. As will be discussed in \ref{reflection-logging}, 
 more comprehensive logging would have been beneficial.
 
 
@@ -126,7 +126,7 @@ We use Alloy to collect logs from each node and forward them to Loki, see figure
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{./images/logging_dashboard.png}
-\caption{logging\_dashboard}
+\caption{Logging dashboard}
 \label{logging-dashboard}
 \end{figure}
 
@@ -146,7 +146,7 @@ However, we did not manage to fully implement this, so it is not used in product
 
 The system uses a reverse proxy, which takes HTTPS requests and decrypts them.
 This is done with Caddy, as was seen in figure \ref{deployment-diagram}.
-In reflecting more on the system, and the information it exposes, it should have been hidden behind the reverse proxy and had firewalls, as many ports can still be reached with HTTP.
+Upon reflection on the system, and the information it exposes, it should have been hidden behind the reverse proxy and had firewalls, as many ports can still be reached with HTTP.
 
 \subsection{Availability and scaling}\label{availability-and-scaling}
 To scale and ensure availability of the application Terraform and Docker
