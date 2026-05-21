@@ -13,6 +13,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y graphviz default-jre texlive-luatex texlive-latex-extra inkscape perl
 
+      - name: Download plantuml.sty
+        run: |
+          cd report/src
+          wget -O plantuml.sty https://raw.githubusercontent.com/koppor/plantuml/main/plantuml.sty
+          wget -O plantuml.lua https://raw.githubusercontent.com/koppor/plantuml/main/plantuml.lua
+
       - name: Download PlantUML JAR
         run: |
           mkdir -p /opt/plantuml
@@ -21,7 +27,7 @@ jobs:
       - name: Compile LaTeX document
         run: |
           cd report/src
-          lualatex -interaction=nonstopmode -shell-escape --jobname=BSc_group_k main.tex
+          lualatex -interaction=nonstopmode -shell-escape --cnf-line=openout_any=a --jobname=BSc_group_k main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
           TEXINPUTS: ".:**:"
@@ -29,7 +35,7 @@ jobs:
       - name: Recompile LaTeX document
         run: |
           cd report/src
-          lualatex -interaction=nonstopmode -shell-escape --jobname=BSc_group_k main.tex
+          lualatex -interaction=nonstopmode -shell-escape --cnf-line=openout_any=a --jobname=BSc_group_k main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
           TEXINPUTS: ".:**:"
