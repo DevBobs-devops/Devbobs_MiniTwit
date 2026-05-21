@@ -9,7 +9,7 @@ This project has shown how powerful it can be to bridge the gap between developm
 By automating processes, such as a full CI/CD pipeline, the distance and complexity of going from a feature branch to development have become small and manageable.
 The project created a short feedback loop, which helped opening up for more continuous work, both in the world of development, Devops and operations.
 To help enable a short feedback loop, we have tried to keep our work visible. 
-This was done through the use of conventional commits, a notebook for changes, a project board, and group chat for emergencies.
+This was done through the use of conventional commits, a developer notebook for progress and changes, a project board, and group chat for emergencies.
 This also allowed for showing changes and thereby fueling continual, organisational learning when local discoveries occurred. 
 An example of an issue in our project board can be seen here \url{https://github.com/DevBobs-devops/Devbobs_MiniTwit/pull/66}. \\
 
@@ -26,7 +26,7 @@ This section will touch on some of the biggest issues we had with regards to evo
 \subsubsection{Refactoring and evolution}\label{migrating-database}
 The project is based on our old Chirp project with a sqlite database. 
 This gave us some difficulties when migrating database, as data in the old database did not fit the new Postgres database.  
-Upon reflection, using Postgres from the beginning would have been better if we knew the project would grow big, as the Sqlite database would is not sufficient for a proper system.
+Upon reflection, using Postgres from the beginning would have been better if we knew the project would grow big, as the Sqlite database would not be sufficient for a proper system.
 This we could not have know at the time we built Chirp, but shows how evolution of a system will require refactoring later if such evolution was not thought of when building the system.
 As the project went on, we updated our old source code to adapt to the new changes when relevant, attempting to remove possible errors caused by our old source code.
 An example of outdated legacy code, that is still being used, is our docker-compose file. 
