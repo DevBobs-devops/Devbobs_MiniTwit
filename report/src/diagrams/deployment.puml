@@ -42,17 +42,20 @@ frame "MiniTwit" as MiniTwit {
     
 }   
 
-    database "MiniTwit Database" as db{
-        label "RAM: 1GB \nDisk: 10GB \nVersion: PostgreSQL 15"
-        port ":25060" as 25060        
-    }
+    together{
 
-    note bottom of DockerSwarm
-        For simplicity, we have chosen
-        to only include 1 manager and 1 worker. 
-        The real setup contains 2 identical 
-        manager nodes and 2 identical worker nodes. 
-    end note
+        card card [
+            For simplicity, we have chosen
+            to only include 1 manager and 1 worker.     
+            The real setup contains 2 identical 
+            manager nodes and 2 identical worker nodes.
+        ]
+
+        database "MiniTwit Database" as db {
+            label "RAM: 1GB \nDisk: 10GB \nVersion: PostgreSQL 15"
+            port ":25060" as 25060        
+        }
+    }
 }
 
 
