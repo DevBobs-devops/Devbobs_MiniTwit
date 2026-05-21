@@ -20,7 +20,7 @@ The following section will give a description of each workflow and how a feature
 
 
 \subsubsection{Build and test}\label{build-and-test}
-The first workflow ("\textit{Build and Test}"), forms the continous integration of our pipeline and consists of the following steps that run in parrallel.
+The first workflow ("\textit{Build and Test}"), forms the continuous integration of our pipeline and consists of the following steps that run in parrallel.
 \begin{enumerate}
     \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. 
     This helps ensure that the layout is alike throughout the codebase. It does not automatically apply layout changes, but reports it back on GitHub.
@@ -34,7 +34,7 @@ The first workflow ("\textit{Build and Test}"), forms the continous integration 
 \end{enumerate}
 
 \subsubsection{CI/CD}
-The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a successful \textit{Build and Test} workflow and push to main. It consists of the following steps that run sequentially.
+The ("\textit{CI/CD}") workflow, forms our continuous deployment and runs on a successful \textit{Build and Test} workflow and push to main. It consists of the following steps that run sequentially.
 \begin{enumerate}
     \item \textbf{Dockerhub}:
     \begin{itemize}
