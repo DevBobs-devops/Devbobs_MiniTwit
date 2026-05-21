@@ -25,9 +25,6 @@ jobs:
           wget -O /opt/plantuml/plantuml.jar \
           https://github.com/plantuml/plantuml/releases/download/v1.2023.7/plantuml-1.2023.7.jar
 
-      - name: Check plantuml.sty
-        run: find / -name "plantuml.sty" 2>/dev/null
-
       - name: Compile LaTeX document
         run: |
           cd report/src
