@@ -52,7 +52,7 @@ The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a su
 The "\textit{release}" workflow runs on a successful CI/CD run. It builds and zips
 the minitwit application for Windows, Mac and Linux and zips the source code, including this report.
 In hindsight our releases are not perfect.
-We automatically increased the version of each release which is why we ended up with version \textttt{0.0.259}, having no major or minor versions.
+We automatically increased the version of each release which is why we ended up with version \texttt{0.0.259}, having no major or minor versions.
 The releases did not contain any description, which creates bad transparency.
 Lastly, instead of ziping our Minitwit application, we could have used our docker images to encapsulate each part of the system in releases.
 For now, these can be found at \url{https://hub.docker.com/u/powsdaws}.
