@@ -5,11 +5,11 @@ our major issues and what we have learned for improving the process in
 the future.
 
 \subsection{Devops-style work}
-This project have shown how powerful it can be to bridge the gap between developer and operations.
+This project has shown how powerful it can be to bridge the gap between development and operations.
 By automating processes, such as a full CI/CD pipeline, the distance and complexity of going from a feature branch to development have become small and manageable.
-The project created a short feedback loop, which helped opening up for more continous work, both in the world of development, Devops and operations.
+The project created a short feedback loop, which helped opening up for more continuous work, both in the world of development, Devops and operations.
 To help enable a short feedback loop, we have tried to keep our work visible. 
-This was done though the use of conventional commits, a notebook for changes, a project board, and group chat for emergencies.
+This was done through the use of conventional commits, a notebook for changes, a project board, and group chat for emergencies.
 This also allowed for showing changes and thereby fueling continual, organisational learning when local discoveries occurred. 
 An example of an issue in our project board can be seen here \url{https://github.com/DevBobs-devops/Devbobs_MiniTwit/pull/66}. \\
 
@@ -22,7 +22,7 @@ We will touch more on this in \ref{reflection-logging}.
 
 \subsection{Biggest challenges during
 development}\label{biggest-issues-during-development}
-This section will touch some of the biggest issues we had with regards to evolution, and refactoring and operation, and maintenance.
+This section will touch on some of the biggest issues we had with regards to evolution, and refactoring and operation, and maintenance.
 \subsubsection{Migrating Database}\label{migrating-database}
 The project started by using our old Chirp project with a sqlite database. 
 This gave us some difficulties when migrating database, as data in the old database did not fit the new Postgres database. 
@@ -36,10 +36,10 @@ We also updated our old source code to adapt to the new changes when relevant, a
 
 Logging has been a constant issue. Logs would ``dissapear'' after a
 while using Grafana log drilldown, only showing logs for one or two of
-our containers. We instead made a log dashboard to show the logs, like the minitwit
+our containers. We instead made a log dashboard to show the logs, like the MiniTwit
 dashboard, fixing the problem. 
 
-As a consequence of these problems with drilldown, we often had to check the logs on the server, by ssh into
+As a consequence of these problems with drilldown, we often had to check the logs on the server, we would ssh into
 it, instead of using the grafana dashboard. Having more logs show up in
 grafana, for example more statistics about queries to the database, could
 have given us more information about the more niche parts of our program
@@ -47,7 +47,7 @@ and errors.
 
 \subsubsection{Test-server}\label{test-server}
 
-Having a test-server would have been benefitial for this project, as we
+Having a test-server would have been beneficial for this project, as we
 currently only have our ``main'' server. This would have allowed us to
 further test new features or fixes, before they ended up in production.
 This also holds true for the database, as we often had to be very
@@ -57,7 +57,7 @@ swarm, however this never got added to our pipeline.
 
 \subsubsection{Updating test-file}\label{updating-test-file}
 
-Our current test run on an old docker compose file, from before we
+Our current tests run on an old docker compose file, from before we
 introduced terraform and docker swarm. It would be better
 practice to use the stack file for tests, rather than the compose
 file, for more reflective test results. This highlights the importance of active
