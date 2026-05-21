@@ -3,8 +3,8 @@
 \subsection{CI/CD Pipelines}\label{cicd-pipelines}
 The CI/CD pipeline consists of three GitHub Action workflows, which can be seen in
 \code{/.github/workflows/}. All workflows are run on
-\code{ubuntu-24.04}. The first part of our CI pipeline (Build and test workflow) runs on pull-request to main. 
-The whole pipeline is run on push to main. 
+\code{ubuntu-24.04}. The first part of our CI pipeline (Build and test workflow) runs on pull-requests to main. 
+The whole pipeline is run on pushes to main. 
 The following section will give a description of each workflow and how a feature goes to production. This is also illustrated in figure~\ref{cicd-diagram}.
 %TODO: Which standard does this diagram follow?
 %TODO split up diagram
@@ -19,25 +19,25 @@ The following section will give a description of each workflow and how a feature
 
 
 \subsubsection{Build and test}\label{build-and-test}
-The first workflow ("\textit{Build and Test}"), forms the continous intergration of our pipeline and consists of the following steps that run in parrallel
+The first workflow ("\textit{Build and Test}"), forms the continous integration of our pipeline and consists of the following steps that run in parrallel.
 \begin{enumerate}
     \item \textbf{Code formatter with Csharpier}: Checks the layout of the code. 
     This helps ensure that the layout is alike throughout the codebase. It does not automatically apply layout changes, but reports it back on GitHub.
     \item \textbf{Dockerfile linter with Hadolint}: Lints the MiniTwit dockerfile.
     \item \textbf{Build the application}: Builds the applications and:
     \begin{itemize}
-        \item Run unit and intergreation tests
-        \item Run tests on the API / simulator endpoint.
-        \item Runs E2E / Playwright tests
+        \item Runs unit and intergreation tests.
+        \item Runs tests on the API / simulator endpoint.
+        \item Runs E2E / Playwright tests.
     \end{itemize}
 \end{enumerate}
 
 \subsubsection{CI/CD}
-The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a successful \textit{Build and Test} workflow and push to main. It consists of the following steps that run sequentially
+The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a successful \textit{Build and Test} workflow and push to main. It consists of the following steps that run sequentially.
 \begin{enumerate}
     \item \textbf{Dockerhub}:
     \begin{itemize}
-        \item Github Actions builds and pushes the \code{Minitwit}, \code{Grafana}, \code{Alloy}, \code{Loki} and \code{Prometheus} docker images to Dockerhub.
+        \item Github Actions builds and pushes the \code{MiniTwit}, \code{Grafana}, \code{Alloy}, \code{Loki} and \code{Prometheus} docker images to Dockerhub.
     \end{itemize}
     \item \textbf{SSH and Deploy}
     \begin{itemize}
@@ -50,11 +50,11 @@ The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a su
 \subsubsection{Release}\label{release}
 
 The "\textit{release}" workflow runs on a successful CI/CD run. It builds and zips
-the minitwit application for Windows, Mac and Linux and zips the source code, including this report.
+the MiniTwit application for Windows, Mac and Linux and zips the source code, including this report.
 In hindsight our releases are not perfect.
 We automatically increased the version of each release which is why we ended up with version \textttt{0.0.259}, having no major or minor versions.
 The releases did not contain any description, which creates bad transparency.
-Lastly, instead of ziping our Minitwit application, we could have used our docker images to encapsulate each part of the system in releases.
+Lastly, instead of zipping our MiniTwit application, we could have used our docker images to encapsulate each part of the system in releases.
 For now, these can be found at \url{https://hub.docker.com/u/powsdaws}.
 
 \subsubsection{SonarQube}\label{sonarqube}
@@ -69,28 +69,28 @@ error handling.
 The system uses Prometheus and Grafana for monitoring. 
 Prometheus scrapes the \code{/metrics} endpoint on each MiniTwit service instance.
 Grafana then queries Prometheus, which displays and visualises the data. 
-Monitoring is done on a business level, application level, and infrastructure level.
+Monitoring is done on the business level, application level, and infrastructure level.
 The monitoring setup can be seen in figure \ref{mon-diagram}.
 
 \subsubsection{Business monitoring}\label{business-monitoring}
 
-On a business level we monitor:
+On the business level we monitor:
 \begin{itemize}
-    \item Number of created accounts
-    \item Average follower count per user
-    \item Total number of cheeps over time
+    \item Number of created accounts.
+    \item Average follower count per user.
+    \item Total number of cheeps over time.
 \end{itemize}
 
 \includegraphics[width=\textwidth]{images/monitoring_business.png}
 
 \subsubsection{Application monitoring}\label{application-monitoring}
 
-On an application level we monitor the durations of different database queries that
+On the application level, we monitor the durations of different database queries that
 MiniTwit makes:
 \begin{itemize}
-    \item GetCheeps - Gets cheeps for a given page
-    \item GetCheepsFromAuthor - Getting an Authors cheeps
-    \item AddCheep - Create a cheep
+    \item GetCheeps - Gets cheeps for a given page.
+    \item GetCheepsFromAuthor - Getting an Authors cheeps.
+    \item AddCheep - Create a cheep.
 \end{itemize}
 
 \includegraphics[width=\textwidth]{./images/monitoring_queries.png}
@@ -98,12 +98,12 @@ MiniTwit makes:
 \subsubsection{Infrastructure
 monitoring}\label{infrastructure-monitoring}
 
-On an infrastructure level we monitor:
+On the infrastructure level, we monitor:
 \begin{itemize}
-    \item The status of nodes
-    \item Memory usage of nodes
-    \item CPU usage of nodes
-    \item HTTP requests per minute for each node
+    \item The status of nodes.
+    \item Memory usage of nodes.
+    \item CPU usage of nodes.
+    \item HTTP requests per minute for each node.
 \end{itemize}
 
 \includegraphics[width=\textwidth]{./images/system_status.png}
@@ -138,13 +138,13 @@ be seen in the logging dashboard (figure~\ref{logging-dashboard}).
 
 
 \subsection{Security hardening}\label{security-hardening}
-To protect against supply line attacks, we would select docker hardened images from \url{dhi.io} to use for our dependencies; Prometheus, Alloy, Loki, Grafana.
-We would also go through our Minitwit application and adjust it to comply with the rules at \url{https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html}.
+To protect against supply line attacks, we would select docker hardened images from \url{dhi.io} to use for our dependencies; Prometheus, Alloy, Loki and Grafana.
+We would also go through our MiniTwit application and adjust it to comply with the rules at \url{https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html}.
 However, we did not manage to fully implement this, so it is not used in produciton. \\
 
-The system uses a reverse proxy, which takes HTTPS request and decrypts them.
+The system uses a reverse proxy, which takes HTTPS requests and decrypts them.
 This is done with Caddy, as was seen in figure \ref{deployment-diagram}.
-In reflection more of the system, and the information it exposes, should have been hidden behind the reverse proxy and had firewalls, as many ports can still be reached with HTTP.
+In reflecting more on the system, and the information it exposes, it should have been hidden behind the reverse proxy and had firewalls, as many ports can still be reached with HTTP.
 
 \subsection{Availability and scaling}\label{availability-and-scaling}
 To scale and ensure availability of the application Terraform and Docker
@@ -152,7 +152,7 @@ Swarm is used.
 
 \subsubsection{Availability}\label{availability}
 The application consists of five nodes that are a part of a swarm
-cluster, 2 workers, 2 managers and 1 leader, creating redundancy, that together run four replicated minitwit services.
+cluster, 2 workers, 2 managers and 1 leader, creating redundancy, that, together, run four replicated MiniTwit services.
 All nodes run Alloy.
 The ``Leader'' node also runs Caddy, Grafana, Prometheus and Loki.
 Figure \ref{deployment-diagram} illustrates this.
@@ -173,13 +173,13 @@ will in that case take care of load balancing, instead of Caddy.
 
 \subsubsection{Scaling}\label{scaling}
 The application can be scaled in two different ways: \textbf{Vertical
-scaling}: A single node can be scaled vertically either by rezising the
+scaling}: A single node can be scaled vertically either by resizing the
 node in DigitalOcean or changing the \code{size} field in
 \code{minitwit\_swarm\_cluster.tf} and applying it with terraform.
 \textbf{Horizontal scaling}: The deployment of the application can be
-scaled horizontal by increasing the amount of nodes in the cluster. This
+scaled horizontally by increasing the amount of nodes in the cluster. This
 can be done by increasing the \code{count} number of e.g.~a Worker
 node and then make it join the swarm, by running the \code{bootstrap.sh} script 
-again, which apply the change with terraform.
+again, which applies the change with terraform.
 Horizontal scaling can also be achieved by increasing the amount of minitwit instances per node, increasing redundancy.
-When scaling horisontally the load balancer distributes the requests.
+When scaling horizontally the load balancer distributes the requests.
