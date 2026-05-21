@@ -261,3 +261,9 @@ To run the tests against the api, run `pytest minitwit_sim_api_test.py` (while t
 
 To compile LaTeX locally, with UML diagrams, be sure to live up to the preconditions described here:
 https://koppor.github.io/plantuml/
+
+21/05 - 03:40
+- It provided considerable problems to get the puml diagrams to compile on several systems.
+- It turned out that the version of the plantuml package in texlive-latex-extra was outdated.
+- By specifically downloading the current plantuml.sty and plantuml.lua, this was fixed.
+- A file permission issue was also encountered, and solved as in https://github.com/koppor/plantuml/issues/47 
