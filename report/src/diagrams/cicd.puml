@@ -1,5 +1,5 @@
 @startuml cicd_pipeline
-skinparam DefaultFontSize 11
+skinparam DefaultFontSize 9
 
 |Developer|
 start
