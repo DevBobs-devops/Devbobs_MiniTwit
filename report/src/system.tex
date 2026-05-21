@@ -46,16 +46,16 @@ In hindsight we have many dependencies, which could be reduced to ease later mai
 To keep software quality high, catch technical debt and later ease maintainability we follow several practices and use a set of different tooling. 
 
 \subsubsection{Practices}
-The first practice is code reviews. No code gets pushed to main before it has been approved by atleast one other group member. This is done though GitHub pull-requests.
+The first practice is code reviews. No code gets pushed to main before it has been approved by at least one other group member. This is done though GitHub pull-requests.
 Combined with the use of GitHub issues, this gives a clear picture of why, what and how a feature have been implemented.
-The use of conventional commits like: \texttt{feat:}, \texttt{chore:}, \texttt{note:}, have been used to give a clear view of what each commit in the git history do. 
+The use of conventional commits like: \texttt{feat:}, \texttt{chore:}, \texttt{note:}, has been used to give a clear view of what each commit in the git history does. 
 
 \subsubsection{Tooling}
-Tooling have been used to assist keeping quality high.
-This is especially usefull as the project grew bigger. 
-First, we use automatic testing, which have caught many problems. 
+Tooling has been used to assist keeping quality high.
+This was especially useful as the project grew bigger. 
+First, we use automatic testing, which has caught many problems. 
 This is done in our continous intergration (CI) pipeline.
-The pipeline also runs a formater and linter, which will be touched upon in \ref{build-and-test} \\
+The pipeline also runs a formatter and linter, which will be touched upon in \ref{build-and-test} \\
 
 For static analysis we use SonarQube, which is used to analyse code quality, code smells and security issues.
 The current state of the system, according to SonarQube, is acceptable - SonarQube scores for our project are - Security: C, Reliability: A and Maintainability: A, as seen in Figure~\ref{sonarqube-report}.
