@@ -17,7 +17,7 @@ jobs:
         run: |
           cd report/src
           wget -O plantuml.sty https://raw.githubusercontent.com/koppor/plantuml/main/plantuml.sty
-          grep -i "version" plantuml.sty | head -5
+          wget -O plantuml.lua https://raw.githubusercontent.com/koppor/plantuml/main/plantuml.lua
 
       - name: Download PlantUML JAR
         run: |
