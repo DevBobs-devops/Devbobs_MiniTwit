@@ -39,7 +39,7 @@ jobs:
       - name: Recompile LaTeX document
         run: |
           cd report/src
-          lualatex -interaction=nonstopmode -shell-escape --jobname=BSc_group_k main.tex
+          lualatex -interaction=nonstopmode -shell-escape --cnf-line=openout_any=a --jobname=BSc_group_k main.tex
         env:
           PLANTUML_JAR: /opt/plantuml/plantuml.jar
           TEXINPUTS: ".:**:"
