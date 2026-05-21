@@ -11,7 +11,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y graphviz default-jre texlive-luatex texlive-latex-extra inkscape perl
+          sudo apt-get install -y graphviz default-jre texlive-luatex texlive-latex-extra texlive-xetex inkscape perl
 
       - name: Download PlantUML JAR
         run: |
