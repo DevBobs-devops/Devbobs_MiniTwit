@@ -68,9 +68,8 @@ error handling.
 \subsection{Monitoring}\label{monitoring}
 The system uses Prometheus and Grafana for monitoring. 
 Prometheus scrapes the \code{/metrics} endpoint on each MiniTwit service instance.
-Grafana then queries Prometheus, which displays and visualises the data. 
+Grafana then queries Prometheus, which displays and visualises the data, see figure~\ref{mon-diagram}. 
 Monitoring is done on a business level, application level, and infrastructure level.
-The monitoring setup can be seen in figure \ref{mon-diagram}.
 
 \subsubsection{Business monitoring}\label{business-monitoring}
 
@@ -118,8 +117,7 @@ more comprehensive logging would have been beneficial.
 
 
 \subsubsection{Aggregation of logs}\label{aggregation-of-logs}
-We use Alloy to collect logs from each node and forward them to Loki. The logs are displayed on grafana, which can
-be seen in the logging dashboard (figure~\ref{logging-dashboard}).
+We use Alloy to collect logs from each node and forward them to Loki, see figure~\ref{logging-dashboard}. The logs are displayed on grafana.
 
 \begin{figure}[H]
 \centering
@@ -140,7 +138,7 @@ be seen in the logging dashboard (figure~\ref{logging-dashboard}).
 \subsection{Security hardening}\label{security-hardening}
 To protect against supply line attacks, we would select docker hardened images from \url{dhi.io} to use for our dependencies; Prometheus, Alloy, Loki, Grafana.
 We would also go through our Minitwit application and adjust it to comply with the rules at \url{https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html}.
-However, we did not manage to fully implement this, so it is not used in produciton. \\
+However, we did not manage to fully implement this, so it is not used in production. \\
 
 The system uses a reverse proxy, which takes HTTPS request and decrypts them.
 This is done with Caddy, as was seen in figure \ref{deployment-diagram}.
@@ -162,12 +160,11 @@ Figure \ref{deployment-diagram} illustrates this.
 \code{/infrastructure} for the code. Having multiple services running MiniTwit ensures that even if a docker service or swarm node
 fails, the application is still available.
 
-\textbf{Single Point of Failure}: Multiple services like Caddy and Grafana are pinned to the ``Leader'' node. This creates SPOF for those services. 
-As we only have one Caddy load balancer service,
-living on the ``Leader'' node, that takes HTTPS requests on our
-\code{devbobs.tech} domain. This is a single point of failure for
-accessing the application from \code{devbobs.tech} and using HTTPS. If
-the ``Leader'' node goes down, it is still possible to access the other nodes
+\textbf{Single Point of Failure}: Multiple services like Caddy and Grafana are pinned to the ``Leader'' node. 
+This creates SPOF for those services, e.g. only having one Caddy load balancer service,
+living on the ``Leader'' node, that takes HTTPS requests on our \code{devbobs.tech} domain, 
+means that if the ``Leader'' fails,  HTTPS request would no longer be recieved by the system. 
+If the ``Leader'' node goes down, it is still possible to access the other nodes
 IPs on port :8080 without HTTPS. The docker ingress routing mesh
 will in that case take care of load balancing, instead of Caddy.
 
@@ -179,7 +176,7 @@ node in DigitalOcean or changing the \code{size} field in
 \textbf{Horizontal scaling}: The deployment of the application can be
 scaled horizontal by increasing the amount of nodes in the cluster. This
 can be done by increasing the \code{count} number of e.g.~a Worker
-node and then make it join the swarm, by running the \code{bootstrap.sh} script 
+node and then running the \code{bootstrap.sh} script 
 again, which apply the change with terraform.
 Horizontal scaling can also be achieved by increasing the amount of minitwit instances per node, increasing redundancy.
 When scaling horisontally the load balancer distributes the requests.

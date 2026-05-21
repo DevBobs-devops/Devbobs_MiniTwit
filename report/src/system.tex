@@ -11,8 +11,7 @@ We chose to base the project on Chirp as we all had a general knowledge about th
 
 \subsection{Design and architecture of our ITU-MiniTwit
 systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
-
-The software architecture of MiniTwit follows, as Chirp, the onion architecture. 
+ 
 The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
 The architecture strives to achieve high-availability by having a swarm of five nodes.
 A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80.
@@ -69,18 +68,18 @@ The external docker dependencies are as follows.
     \item grafana/grafana:12.1
     \item lucaslorentz/caddy-docker-proxy:ci-alpine
 \end{itemize}
-The internal dependencies that is created when deploying are as follows. The DOCKER\_USERNAME is the name used on DockerHub
+The internal dependencies that is created when deploying are as follows.
 \begin{itemize}
-    \item DOCKER\_USERNAME/minitwitimage
-    \item DOCKER\_USERNAME/minitwit-prometheus
-    \item DOCKER\_USERNAME/minitwit-alloy
-    \item DOCKER\_USERNAME/minitwit-loki
-    \item DOCKER\_USERNAME/minitwit-grafana
+    \item powsdaws/minitwitimage
+    \item powsdaws/minitwit-prometheus
+    \item powsdaws/minitwit-alloy
+    \item powsdaws/minitwit-loki
+    \item powsdaws/minitwit-grafana
 \end{itemize}
 
 
 \paragraph{Github Action Dependencies}
-The dependencies of our CI/CD pipeline are as follows.
+The dependencies of our CI/CD pipeline workflows are as follows.
 \begin{itemize}
     \item actions/checkout 2.*.*
     \item actions/checkout 3.*.*
@@ -97,7 +96,6 @@ The dependencies of our CI/CD pipeline are as follows.
 \end{itemize}
 
 \paragraph{Infrastructure and deployment dependencies}
-The dependencies that we use for infrastructure and deployment are as follows.
 \begin{itemize}
     \item DigitalOcean - The platform used to host the MiniTwit system
     \item Terraform - The tool used to manage our infrastructure as code
