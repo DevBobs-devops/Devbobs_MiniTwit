@@ -5,16 +5,16 @@ skinparam linetype polyline
     node " <<node>> Swarm Leader" as leader{
         
         node "<<container>> Prometheues" as prom {
-            component "<<service>> \n  marho/minitwit-prometheus"{
+            component "               <<service>> \n  powsdaws/minitwit-prometheus"{
         }
         }
         
         node "<<container>> \n grafana" as graf {
-            component "              <<service>> \n  marho/minitwit-grafana"
+            component "              <<service>> \n  powsdaws/minitwit-grafana"
         }
 
         node "<<container>> \n loki" as loki {
-            component "         <<service>> \n marho/minitwit-loki"
+            component "         <<service>> \n powsdaws/minitwit-loki"
         }
         
 
@@ -24,11 +24,11 @@ skinparam linetype polyline
     node "<<node x4>> Swarm worker" as workers {
         
          node "<<container>> \n Alloy" as alloy {
-            component "           <<service>> \n marho/minitwit-alloy"
+            component "           <<service>> \n powsdaws/minitwit-alloy"
 
         }
         node "<<container>> \n MiniTwit" as mini{
-            component "           <<service>> \n marho/minitwitimage"
+            component "           <<service>> \n powsdaws/minitwitimage"
         }
        
     }

@@ -10,12 +10,13 @@ The following section will give a description of each workflow and how a feature
 %TODO split up diagram
 %TODO fix: maybe building the artefact is actually considered CI?
 
-
+\newgeometry{top=1cm, bottom=0cm, left=3cm, right=3cm}
 \begin{figure} [H]
     \pumlfile{cicd.puml}
     \caption{UML activity diagram of CI/CD pipeline. Swim lanes indicate responsible system or actor for each action.}
     \label{cicd-diagram}
 \end{figure}
+\restoregeometry
 
 
 \subsubsection{Build and test}\label{build-and-test}
@@ -41,7 +42,7 @@ The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a su
     \end{itemize}
     \item \textbf{SSH and Deploy}
     \begin{itemize}
-        \item SSH into the node named leader in the swarm.
+        \item SSH into the leader node.
         \item Copy the stack file \path{/itu-minitwit/infrastructure/docker_swarm/stack/minitwit_stack.yml} to the node.
         \item Deploy to the swarm.
     \end{itemize}
@@ -50,15 +51,15 @@ The ("\textit{CI/CD}") workflow, forms our continous deployment and runs on a su
 \subsubsection{Release}\label{release}
 
 The "\textit{release}" workflow runs on a successful CI/CD run. It builds and zips
-the MiniTwit application for Windows, Mac and Linux and zips the source code, including this report.
+the MiniTwit application for Windows, Mac and Linux, zips the source code and this report.
 In hindsight our releases are not perfect.
-We automatically increased the version of each release which is why we ended up with version \textttt{0.0.259}, having no major or minor versions.
-The releases did not contain any description, which creates bad transparency.
-Lastly, instead of zipping our MiniTwit application, we could have used our docker images to encapsulate each part of the system in releases.
+We automatically increased the version of each release which is why we ended up with version \texttt{0.0.259}, having no major or minor versions.
+The releases did not contain any description, creating bad transparency.
+Lastly, instead of zipping our Minitwit application, we could have used our docker images to encapsulate each part of the system in releases.
 For now, these can be found at \url{https://hub.docker.com/u/powsdaws}.
 
 \subsubsection{SonarQube}\label{sonarqube}
-SonarQube runs on pull requests as a step in our CI pipeline. It checks for security issues, code smells and the quality of the code.
+SonarQube runs on pull requests as a step in our CI pipeline. It checks for security issues, code smells and code quality.
 SonarQube also gives a Quality Gate, that fails if the threshold for the pull-request is too low 
 e.g. Security, Reliability and Maintainability.
 SonarQube is not blocking 
@@ -68,9 +69,8 @@ error handling.
 \subsection{Monitoring}\label{monitoring}
 The system uses Prometheus and Grafana for monitoring. 
 Prometheus scrapes the \code{/metrics} endpoint on each MiniTwit service instance.
-Grafana then queries Prometheus, which displays and visualises the data. 
+Grafana then queries Prometheus, which displays and visualises the data, see figure~\ref{mon-diagram}. 
 Monitoring is done on the business level, application level, and infrastructure level.
-The monitoring setup can be seen in figure \ref{mon-diagram}.
 
 \subsubsection{Business monitoring}\label{business-monitoring}
 
@@ -118,8 +118,7 @@ more comprehensive logging would have been beneficial.
 
 
 \subsubsection{Aggregation of logs}\label{aggregation-of-logs}
-We use Alloy to collect logs from each node and forward them to Loki. The logs are displayed on grafana, which can
-be seen in the logging dashboard (figure~\ref{logging-dashboard}).
+We use Alloy to collect logs from each node and forward them to Loki, see figure~\ref{logging-dashboard}. The logs are displayed on grafana.
 
 \begin{figure}[H]
 \centering
@@ -140,7 +139,7 @@ be seen in the logging dashboard (figure~\ref{logging-dashboard}).
 \subsection{Security hardening}\label{security-hardening}
 To protect against supply line attacks, we would select docker hardened images from \url{dhi.io} to use for our dependencies; Prometheus, Alloy, Loki and Grafana.
 We would also go through our MiniTwit application and adjust it to comply with the rules at \url{https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html}.
-However, we did not manage to fully implement this, so it is not used in produciton. \\
+However, we did not manage to fully implement this, so it is not used in production. \\
 
 The system uses a reverse proxy, which takes HTTPS requests and decrypts them.
 This is done with Caddy, as was seen in figure \ref{deployment-diagram}.
@@ -162,14 +161,13 @@ Figure \ref{deployment-diagram} illustrates this.
 \code{/infrastructure} for the code. Having multiple services running MiniTwit ensures that even if a docker service or swarm node
 fails, the application is still available.
 
-\textbf{Single Point of Failure}: Multiple services like Caddy and Grafana are pinned to the ``Leader'' node. This creates SPOF for those services. 
-As we only have one Caddy load balancer service,
-living on the ``Leader'' node, that takes HTTPS requests on our
-\code{devbobs.tech} domain. This is a single point of failure for
-accessing the application from \code{devbobs.tech} and using HTTPS. If
-the ``Leader'' node goes down, it is still possible to access the other nodes
+\textbf{Single Point of Failure}: Multiple services like Caddy and Grafana are pinned to the ``Leader'' node. 
+This creates SPOF for those services, e.g. only having one Caddy load balancer service,
+living on the ``Leader'' node, that takes HTTPS requests on our \code{devbobs.tech} domain. So, if the ``Leader'' 
+fails,  HTTPS request would no longer be recieved by the system. 
+If the ``Leader'' goes down, it is still possible to access the other nodes
 IPs on port :8080 without HTTPS. The docker ingress routing mesh
-will in that case take care of load balancing, instead of Caddy.
+will take care of load balancing, instead of Caddy.
 
 \subsubsection{Scaling}\label{scaling}
 The application can be scaled in two different ways: \textbf{Vertical
@@ -179,7 +177,7 @@ node in DigitalOcean or changing the \code{size} field in
 \textbf{Horizontal scaling}: The deployment of the application can be
 scaled horizontally by increasing the amount of nodes in the cluster. This
 can be done by increasing the \code{count} number of e.g.~a Worker
-node and then make it join the swarm, by running the \code{bootstrap.sh} script 
+node and then running the \code{bootstrap.sh} script 
 again, which applies the change with terraform.
 Horizontal scaling can also be achieved by increasing the amount of minitwit instances per node, increasing redundancy.
 When scaling horizontally the load balancer distributes the requests.

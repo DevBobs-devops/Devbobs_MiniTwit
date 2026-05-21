@@ -1,3 +1,5 @@
+All members have participated in the making and editing of this report.
+
 \section{System's Perspective}\label{systems-perspective}
 
 This section will give a description supported by illustrations of the design and
@@ -9,13 +11,13 @@ We chose to base the project on Chirp as we all had a general knowledge about th
 
 \subsection{Design and architecture of our ITU-MiniTwit
 systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
-
-The software architecture of MiniTwit follows, as Chirp, the onion architecture. 
+ 
 The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
 The architecture strives to achieve high-availability by having a swarm of five nodes.
+The system is deployed on DigitalOcean using Terraform and Docker swarm.
 A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80.
 The request will reach the Leader node and will then get load-balanced by Caddy between the four instances of MiniTwit running.
-The Leader node also handles the logging and monitoring stack, which consists of Grafana, Loki and Prometheus. Alloy is on every node to push logs to Loki.
+The Leader node also handles the logging and monitoring stack, which consists of Grafana, Loki and Prometheus. Alloy exists on every node to push logs to Loki.
 MiniTwit is also available on port 8080 with HTTP. The request will in this case be load-balanced by the docker ingress routing mesh. 
 The same goes for Grafana, which is available on port 3000 and Prometheus on 9090. These can be reached with the floating IP or any of the nodes IP.
 A PostgreSQL database is hosted on DigitalOcean.
@@ -28,74 +30,9 @@ The architecture has a single point of failure, which will be explained in secti
 \end{figure}
 
 \subsection{Dependencies}\label{dependencies}
-The dependencies our the MiniTwit system is listed below on different levels of abstractions. 
-
-\paragraph{NuGet Dependencies}
-The dependencies of the MiniTwit application, listed using \code{dotnet list package}, are as follows.
-
-\begin{itemize}
-    \item Microsoft.AspNetCore.DataProtection.EntityFrameworkCore      8.0.*       8.0.26  
-    \item Microsoft.AspNetCore.Identity.EntityFrameworkCore            8.0.10      8.0.10  
-    \item Microsoft.AspNetCore.Identity.UI                             8.0.10      8.0.10  
-    \item Microsoft.CodeAnalysis.NetAnalyzers                          10.0.201    10.0.201
-    \item Microsoft.EntityFrameworkCore.Design                         8.0.10      8.0.10  
-    \item Microsoft.EntityFrameworkCore.Sqlite                         8.0.10      8.0.10 
-    \item Microsoft.EntityFrameworkCore.SqlServer                      8.0.10      8.0.10  
-    \item Microsoft.EntityFrameworkCore.Tools                          8.0.10      8.0.10  
-    \item Microsoft.Playwright.NUnit                                   1.49.0      1.49.0 
-    \item Microsoft.VisualStudio.Web.CodeGeneration.Design             8.0.6       8.0.6    
-    \item Npgsql.EntityFrameworkCore.PostgreSQL                        8.0.4       8.0.4 
-    \item prometheus-net                                               8.2.1       8.2.1    
-    \item prometheus-net.AspNetCore                                    8.2.1       8.2.1 
-    \item Swashbuckle.AspNetCore                                       10.1.2      10.1.2  
-    \item coverlet.collector                                           3.2.0       3.2.0  
-    \item Microsoft.AspNetCore.Mvc.Testing      8.0.8       8.0.8  
-    \item Microsoft.NET.Test.Sdk                17.8.0      17.8.0  
-    \item xunit                                 2.4.2       2.4.2   
-    \item xunit.runner.visualstudio             2.4.5       2.4.5   
-    \item NUnit3TestAdapter               4.5.0       4.5.0  
-\end{itemize}
-
-\paragraph{Docker Dependencies}
-The external docker dependencies are as follows.
-\begin{itemize}
-    \item mcr.microsoft.com/dotnet/aspnet:8.0
-    \item mcr.microsoft.com/dotnet/sdk:8.0
-    \item grafana/loki:3.6.7
-    \item prom/prometheus:v3.5.1
-    \item grafana/alloy:latest 
-    \item grafana/grafana:12.1
-    \item lucaslorentz/caddy-docker-proxy:ci-alpine
-\end{itemize}
-The internal dependencies that is created when deploying are as follows. The DOCKER\_USERNAME is the name used on DockerHub
-\begin{itemize}
-    \item DOCKER\_USERNAME/minitwitimage
-    \item DOCKER\_USERNAME/minitwit-prometheus
-    \item DOCKER\_USERNAME/minitwit-alloy
-    \item DOCKER\_USERNAME/minitwit-loki
-    \item DOCKER\_USERNAME/minitwit-grafana
-\end{itemize}
-
-
-\paragraph{Github Action Dependencies}
-The dependencies of our CI/CD pipeline are as follows.
-\begin{itemize}
-    \item actions/checkout 2.*.*
-    \item actions/checkout 3.*.*
-    \item actions/checkout 4.*.*
-    \item docker/build-push-action 6.*.*
-    \item docker/build-push-action \\d08e5c354a6adb9ed34480a06d141179aa583294
-    \item docker/login-action 3.*.*
-    \item docker/setup-buildx-action 3.*.*
-    \item actions/setup-dotnet 4.*.*
-    \item actions/setup-python 5.*.*
-    \item actions/upload-artifact 4.*.*
-    \item guibranco/github-csharpier-linter-action\\ a5214a476742ce4a0f755611581276c50081527a
-    \item hadolint/hadolint-action \\2332a7b74a6de0dda2e2221d575162eba76ba5e5
-\end{itemize}
-
-\paragraph{Infrastructure and deployment dependencies}
-The dependencies that we use for infrastructure and deployment are as follows.
+MiniTwit has several dependencies in the form of Nuget, Docker and Github Action dependencies.
+They are listed on different levels of abstractions in appendix~\ref{appendix:dependencies}.\\
+MiniTwit also has infrastructure and deployment dependencies, listed here.
 \begin{itemize}
     \item DigitalOcean - The platform used to host the MiniTwit system
     \item Terraform - The tool used to manage our infrastructure as code
@@ -106,7 +43,7 @@ The dependencies that we use for infrastructure and deployment are as follows.
 In hindsight we have many dependencies, which could be reduced to ease later maintaince (e.g.: we have three different versions of the checkout actions in our GitHub Actions).
 
 \subsection{Current state of system}\label{current-state-of-system}
-To keep software quality high, avoid technical debt and later ease maintainability of the application we follow several practices and use a set of different tooling. 
+To keep software quality high, catch technical debt and later ease maintainability we follow several practices and use a set of different tooling. 
 
 \subsubsection{Practices}
 The first practice is code reviews. No code gets pushed to main before it has been approved by atleast one other group member. This is done though GitHub pull-requests.
