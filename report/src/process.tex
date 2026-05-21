@@ -92,7 +92,7 @@ On the application level, we monitor the durations of different database queries
 MiniTwit makes:
 \begin{itemize}
     \item GetCheeps - Gets cheeps for a given page.
-    \item GetCheepsFromAuthor - Getting an Authors cheeps.
+    \item GetCheepsFromAuthor - Getting an Author's cheeps.
     \item AddCheep - Create a cheep.
 \end{itemize}
 
@@ -176,11 +176,11 @@ will take care of load balancing, instead of Caddy.
 The application can be scaled in two different ways: \textbf{Vertical
 scaling}: A single node can be scaled vertically either by resizing the
 node in DigitalOcean or changing the \code{size} field in
-\code{minitwit\_swarm\_cluster.tf} and applying it with terraform.
+\code{minitwit\_swarm\_cluster.tf} and applying it with Terraform.
 \textbf{Horizontal scaling}: The deployment of the application can be
 scaled horizontally by increasing the amount of nodes in the cluster. This
 can be done by increasing the \code{count} number of e.g.~a Worker
 node and then running the \code{bootstrap.sh} script 
-again, which applies the change with terraform.
-Horizontal scaling can also be achieved by increasing the amount of minitwit instances per node, increasing redundancy.
+again, which applies the change with Terraform.
+Horizontal scaling can also be achieved by increasing the amount of MiniTwit instances per node, increasing redundancy.
 When scaling horizontally the load balancer distributes the requests.
