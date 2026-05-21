@@ -5,7 +5,7 @@ start
 :Pushes to main branch;
 ' Also triggers on pull requests on main, but it might too much to write in the diagram
 
-|Github Actions (Build and Test)|
+|Github Actions (CI)|
 :Receives push event;
 :Triggers Build and Test workflow;
 fork
@@ -29,7 +29,7 @@ else (No)
     stop
 endif
 
-|Github Actions (CI/CD)|
+|Github Actions (CD)|
 :Logs into Docker Hub;
 
 ':Builds and pushes minitwit;
@@ -45,7 +45,7 @@ endif
 |Docker Hub|
 :Stores images;
 
-|Github Actions (CI/CD)|
+|Github Actions (CD)|
 :Sets up SSH key;
 :Copies stack file to server;
 :Connects to swarm leader via SSH;
