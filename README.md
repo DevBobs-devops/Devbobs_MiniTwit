@@ -91,9 +91,9 @@ Create a floating ip. Follow: https://www.digitalocean.com/blog/floating-ips-sta
 
 This ip needs to be set in the `/ip.tf` file at <IP>
 
-#### Setup Artifact Store CHECK UP ON THIS SECTION
+#### Setup Artifact Store
 - First register at [Docker Hub](https://hub.docker.com/), which will be where we store the docker image of minitwit.
-- The fill out the <docker_username> in the secrets file with your dockerhub username
+- Then fill out the <docker_username> in the secrets file with your dockerhub username
 - Instead of using your actual DockerHub password, you can setup a [Access Token](https://docs.docker.com/security/access-tokens/) for DockerHub.
 - Lastly, create a [repository](https://docs.docker.com/docker-hub/repos/create/) named `minitwitimage`, one named `minitwit-grafana`, one named `minitwit-alloy`, one named `minitwit-loki `and one named `minitwit-prometheus`.
 
@@ -110,12 +110,12 @@ Do deploy the infrastructure run `./bootstrap.sh`.
 
 This will take a while to run, as it is setting up the infrastructure. When it is finished, you can now access MiniTwit with your floating ip.
 
-In the terminal, some secrets will be written. These you will have setup on Github as secrets to use out CI/CD pipeline.
+In the terminal, some secrets will be written. These you will have setup on Github as secrets to use the CI/CD pipeline that runs with Github Actions.
 
 To take everything down, run `terraform destroy -auto-approve`.
 
 ## Configure Secrets on Github repository.
-Setup the following secrets on github, see [here](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets) for how.
+To get CI/CD up and running, please setup the following secrets on github, see [here](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets) for how.
 
   - `DOCKER_USERNAME` username for hub.docker.com
   - `DOCKER_PASSWORD` access token for username for hub.docker.com
@@ -123,6 +123,7 @@ Setup the following secrets on github, see [here](https://docs.github.com/en/act
   - `SSH_KEY` the **private** SSH key we generated earlier (not the public key, if you followed the instructions it should be located at `~/.ssh/do_ssh_key`)
   - `SSH_HOST` the IP address of the server (or DNS name) we created on DigitalOcean, which you noted down earlier.
   - `CONNECTION_STRING` is the connection string that was created to access your database.
+  - `CADDY_EMAIL` this will be the email Caddy uses to get a certification. Can be ignored if you do not wish to have HTTPS.
 
 ## Trigger the workflow
 To trigger the workflow and start the pipeline, make a commit to the `main` branch, or [manually run the workflow](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow).
