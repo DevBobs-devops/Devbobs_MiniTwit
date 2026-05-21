@@ -9,7 +9,7 @@ DevOps, Software Evolution and Software Maintenance, BSc (Spring 2026) - Group "
 [link](http://devbobs.tech/)
 
 # Running it locally
-To run it locally you need to have docker installed
+To run it locally you need to have docker installed.
 You can then run `deploy_swarm_sh` to deploy a local swarm. see `/itu-minitwit/infrastructure/docker_swarm/local_stack/minitwit_stack.yml`. for details.
 
 # Clone, deploy and setting up our CI/CD pipeline
@@ -21,8 +21,7 @@ $ git clone https://github.com/DevBobs-devops/Devbobs_MiniTwit.git
 ```
 
 ## Prerequesites
-To deploy MiniTwit, make sure you have a digitalocean account.
-Have docker installed
+To deploy MiniTwit, make sure you have a digitalocean account. Make sure to ahve docker installed.
 
 ## Setup
 To get everything up and running, please do the following
@@ -31,7 +30,7 @@ To get everything up and running, please do the following
 
 `jq` is a cli tool for parsing JSON. Some of the scripts use it.
 
-Can on ubunuty be installed with:
+Can on ubunutu be installed with:
 
 ```bash
 sudo apt update && sudo apt install -y jq
@@ -60,15 +59,15 @@ You will now need to fill all fields out. Do the following:
 #### Digital Ocean token
 Go to https://cloud.digitalocean.com and find the API token page (https://cloud.digitalocean.com/account/api/) and generate a new API token.
 - Give it "Full access" or limit it to your needs.
-After creating it, copy the token and fill out the following line in the `secrets` file
+After creating it, copy the token and fill out the following line in the `secrets` file.
 ```bash
 export TF_VAR_do_token=
 ```
 
 #### Digital Ocean Space
-A digital ocean space will be used to store the terraform state file (https://developer.hashicorp.com/terraform/language/state)
+A DigitalOcean space will be used to store the terraform state file (https://developer.hashicorp.com/terraform/language/state)
 
-Go to: https://cloud.digitalocean.com/spaces and click the blue "Create Bucket" button, choose the region closest to you.
+Go to: https://cloud.digitalocean.com/spaces and click the blue "Create Bucket" button. Choose the region closest to you.
 
 Then copy the name of the bucket to the `secrets` file and fill out the <bucket_name>
 
@@ -88,14 +87,17 @@ export AWS_SECRET_ACCESS_KEY=<access_key_secret>
 ```
 
 #### Terraform state file
-?
+The terraform statefile, will be located in the DigitalOcean Space, at the specified location. 
+```bash
+export STATE_FILE=<file_location>
+```
 
 #### Floating IP
 Create a floating ip. Follow: https://www.digitalocean.com/blog/floating-ips-start-architecting-your-applications-for-high-availability
 
 This ip needs to be set in the `/ip.tf` file at <IP>
 
-#### Setup Artifact Store
+#### Setup Artifact Store CHECK UP ON THIS SECTION
 - First register at [Docker Hub](https://hub.docker.com/), which will be where we store the docker image of minitwit.
 - The fill out the <docker_username> in the secrets file with your dockerhub username
 - Instead of using your actual DockerHub password, you can setup a [Access Token](https://docs.docker.com/security/access-tokens/) for DockerHub.
@@ -113,16 +115,16 @@ To deploy MiniTwit, make sure you have Vagrant installed, the [vagrant-digitaloc
 ## Deploying the infrastructure.
 You can now deploy everything!
 
-_note: if you have not yet pushed the five images to DockerHub you will have to do. Later this will done by the CI/CD pipeline_
+_note: if you have not yet pushed the five images to DockerHub you will have to do so. Later this will done by the CI/CD pipeline_
 -  `minitwitimage`, `minitwit-grafana`, `minitwit-alloy`, `minitwit-loki `, `minitwit-prometheus`
 
 Do deploy the infrastructure run `./bootstrap.sh`.
 
-This will take a while to run. When it is finished, you can now access MiniTwit with your floating ip.
+This will take a while to run, as it is setting up the infrastructure. When it is finished, you can now access MiniTwit with your floating ip.
 
 In the terminal, some secrets will be written. These you will have setup on Github as secrets to use out CI/CD pipeline.
 
-To take everything down, run `terraform destroy -auto-approve"`.
+To take everything down, run `terraform destroy -auto-approve`.
 
 ## Configure Secrets on Github repository.
 Setup the following secrets on github, see [here](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets) for how.
