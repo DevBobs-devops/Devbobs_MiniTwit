@@ -12,6 +12,7 @@ frame "MiniTwit" as MiniTwit {
         port ":3100" as 3100
         port ":80"   as 80
         port ":443"  as 443
+        port ":8080" as 8080
 
         node "Swarm Leader" as leader {
             label "RAM: 2GB\nDisk: 50GB \nOS: Ubuntu 22.4 " as label_0
@@ -60,13 +61,15 @@ User --> 443
 User --> 9090
 User --> 3000
 User --> 3100 
+User --> 8080
 3000 --> Grafana 
 3100 --> Loki
 9090 --> Prometheus
 80 --> Caddy
 443 --> Caddy 
 
-
+8080 --> minitwit_0
+8080 --> minitwit_1
 Caddy --> minitwit_0 : :8080 
 Caddy --> minitwit_1 : :8080 
 minitwit_0 --> 25060 
