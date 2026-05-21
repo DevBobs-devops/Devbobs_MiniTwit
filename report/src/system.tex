@@ -14,9 +14,10 @@ systems.}\label{design-and-architecture-of-our-itu-minitwit-systems.}
  
 The deployment architecture of the MiniTwit system can be seen in figure \ref{deployment-diagram}.
 The architecture strives to achieve high-availability by having a swarm of five nodes.
+The system is deployed on DigitalOcean using Terraform and Docker swarm.
 A user can reach MiniTwit with the domain \texttt{Devbobs.tech} on port 433 or 80.
 The request will reach the Leader node and will then get load-balanced by Caddy between the four instances of MiniTwit running.
-The Leader node also handles the logging and monitoring stack, which consists of Grafana, Loki and Prometheus. Alloy is on every node to push logs to Loki.
+The Leader node also handles the logging and monitoring stack, which consists of Grafana, Loki and Prometheus. Alloy exists on every node to push logs to Loki.
 MiniTwit is also available on port 8080 with HTTP. The request will in this case be load-balanced by the docker ingress routing mesh. 
 The same goes for Grafana, which is available on port 3000 and Prometheus on 9090. These can be reached with the floating IP or any of the nodes IP.
 A PostgreSQL database is hosted on DigitalOcean.
@@ -42,7 +43,7 @@ MiniTwit also has infrastructure and deployment dependencies, listed here.
 In hindsight we have many dependencies, which could be reduced to ease later maintaince (e.g.: we have three different versions of the checkout actions in our GitHub Actions).
 
 \subsection{Current state of system}\label{current-state-of-system}
-To keep software quality high, avoid technical debt and later ease maintainability of the application we follow several practices and use a set of different tooling. 
+To keep software quality high, catch technical debt and later ease maintainability we follow several practices and use a set of different tooling. 
 
 \subsubsection{Practices}
 The first practice is code reviews. No code gets pushed to main before it has been approved by atleast one other group member. This is done though GitHub pull-requests.
