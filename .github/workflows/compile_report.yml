@@ -13,6 +13,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y graphviz default-jre texlive-luatex texlive-latex-extra texlive-xetex inkscape perl
 
+      - name: Check plantuml.sty version
+        run: |
+          grep -i "version" plantuml.sty | head -5
+          wget -O plantuml.sty https://mirrors.ctan.org/macros/latex/contrib/plantuml/plantuml.sty
+          grep -i "version" plantuml.sty | head -5
+
       - name: Download PlantUML JAR
         run: |
           mkdir -p /opt/plantuml
